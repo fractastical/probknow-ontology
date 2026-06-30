@@ -1,0 +1,12 @@
+# All nanopublications that use any ProbKnow ontology term.
+# Run against the nanopub network SPARQL endpoint, e.g.
+#   https://query.knowledgepixels.com/  (or virtuoso.nps.petapico.org/sparql)
+PREFIX pk: <https://w3id.org/probknow/ontology/1.0#>
+PREFIX np: <http://www.nanopub.org/nschema#>
+
+SELECT DISTINCT ?np WHERE {
+  GRAPH ?head { ?np a np:Nanopublication ; np:hasAssertion ?a . }
+  GRAPH ?a { ?s ?p ?o . }
+  FILTER(STRSTARTS(STR(?p), STR(pk:)))
+}
+LIMIT 200

@@ -1,0 +1,11 @@
+# Find claims whose weight of evidence (panel-assigned, 0.0–1.0) is high.
+# pk:weightOfEvidence is the probabilistic-evaluation term ProbKnow mints;
+# everything else reuses standard vocabularies (PROV-O, Dublin Core, np schema).
+PREFIX pk: <https://w3id.org/probknow/ontology/1.0#>
+
+SELECT ?claim ?weight WHERE {
+  GRAPH ?a { ?claim pk:weightOfEvidence ?weight . }
+  FILTER(?weight >= 0.8)
+}
+ORDER BY DESC(?weight)
+LIMIT 100

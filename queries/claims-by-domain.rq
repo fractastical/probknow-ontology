@@ -1,0 +1,9 @@
+# Count ProbKnow nanopublications grouped by the frontier-science domain
+# recorded in their publication-info graph (pk:domain).
+PREFIX pk: <https://w3id.org/probknow/ontology/1.0#>
+
+SELECT ?domain (COUNT(?np) AS ?count) WHERE {
+  GRAPH ?pubinfo { ?np pk:domain ?domain . }
+}
+GROUP BY ?domain
+ORDER BY DESC(?count)

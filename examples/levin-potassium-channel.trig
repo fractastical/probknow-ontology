@@ -1,0 +1,37 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix this: <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> .
+@prefix sub: <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/> .
+
+<https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/> {
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.nanopub.org/nschema#Nanopublication> .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> <http://www.nanopub.org/nschema#hasAssertion> <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/assertion> .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> <http://www.nanopub.org/nschema#hasProvenance> <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/provenance> .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> <http://www.nanopub.org/nschema#hasPublicationInfo> <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/pubinfo> .
+}
+
+<https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/assertion> {
+    <potassium channel function modulation> <confers> "hyperproliferative invasive phenotype on embryonic stem cells" .
+    <https://w3id.org/probknow/resource/claim/498e37ee-cfea-4a11-ab11-b6765aa5ffe1> <https://w3id.org/probknow/ontology/1.0#weightOfEvidence> "1.0000"^^<http://www.w3.org/2001/XMLSchema#double> .
+}
+
+<https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/provenance> {
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/assertion> <http://www.w3.org/ns/prov#wasAttributedTo> <https://bioelectricitynexus.com/nanopub-system> .
+}
+
+<https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/pubinfo> {
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> <http://purl.org/dc/terms/created> "2026-06-23T07:06:06.914Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> <http://purl.org/dc/terms/creator> <https://bioelectricitynexus.com/nanopub-system> .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> <http://www.w3.org/ns/prov#wasGeneratedBy> <https://bioelectricitynexus.com/nanopub-system> .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> <https://w3id.org/probknow/ontology/1.0#domain> "levin-lab" .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/sig> <http://purl.org/nanopub/x/hasAlgorithm> "RSA" .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/sig> <http://purl.org/nanopub/x/hasPublicKey> "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlmVqJvSV6wEdZK/lEu48U7GiYJlbUwaw+75q5s5fHwRCkF0Kwt/M6e3TYfdmpmqH4Zf422o/GeY6iPM/z8afWzq+adlLfmdGe89pvHsExh3sw4WYnIIs3MZMsWAmQXEKjQOBJssru+VivtZ+WeBFcF+UowklxPO9vrlvAeQ1cTJK85g/H5Od+9cteRoXhTfaoMQcb/ToCXQ248P8zBdZfGCQC/D571M8JGcr/OM0FTlc0Ix2OscJunH+RDOsW7TjZseNWPzA5yZk67nqoJSEBvHfayngIY95fCpWNSqxeFQzhh/77JL/4YWq5zsOb7G5EafVIs5HNQACvukfPMPkSQIDAQAB" .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/sig> <http://purl.org/nanopub/x/hasSignatureTarget> <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc> .
+    <https://w3id.org/np/RA5TBpyPykBDAL5_YMNGjddpgkEU6ikv4HRP7ZHrR8Euc/sig> <http://purl.org/nanopub/x/hasSignature> "J174u6fn1kb/eAT1GPUgBUKbTpBS7XB5oCF+Olq4PiVpLlzj8NCODxlNMU1lei2i2f9RwRJgmM/85cBQZB6uvG5ydFCO2Zmfh5Rokj1aHsx7ocAsaBAmMXK8W1cWiwWVm/MQg7Vv7gmny+AU8AHbgIQUX8mzDO52SRveJgRKpMAnFcc9q+e5E2BrjS9AiHvV8LbWCAcJsStR+/Ztge+0oTX2lWpZv6dDtGgK1Scza9eilD08DoXNM6xi8925LcIhN8HO1pyjQzkpk4dtD2QqE252OalLAU0XqbJiYlIttk7qp+Ejtu2bixSfUlQRQfQzKnTY1Yk7Rhnx67Ht8AkFsg==" .
+}

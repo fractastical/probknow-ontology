@@ -1,0 +1,139 @@
+{
+  "@context": "https://w3id.org/ro/crate/1.1/context",
+  "@graph": [
+    {
+      "@id": "ro-crate-metadata.json",
+      "@type": "CreativeWork",
+      "conformsTo": { "@id": "https://w3id.org/ro/crate/1.1" },
+      "about": { "@id": "./" }
+    },
+    {
+      "@id": "./",
+      "@type": "Dataset",
+      "name": "ProbKnow Ontology and Nanopublication Examples",
+      "description": "The ProbKnow ontology (T-Box) for representing scientific papers, the discrete claims extracted from them, the hypotheses those claims cluster into, attached economic predictions, and the probabilistic assessments a panel of models assign to each claim across frontier-science domains. Bundled with signed nanopublication examples (the current pk:/pkr: form plus an earlier published urn: wave that is live on the network), ready-to-run SPARQL queries, and a legacy-to-current compatibility crosswalk. Produced by the PKG Aggregator (probknow.com).",
+      "datePublished": "2026-06-23",
+      "license": { "@id": "https://opensource.org/licenses/MIT" },
+      "publisher": { "@id": "https://probknow.com" },
+      "author": { "@id": "https://probknow.com" },
+      "url": "https://github.com/fractastical/probknow-ontology",
+      "keywords": [
+        "ontology",
+        "nanopublication",
+        "knowledge graph",
+        "probabilistic reasoning",
+        "frontier science",
+        "bioelectricity",
+        "RDF",
+        "SPARQL",
+        "linked data",
+        "open science"
+      ],
+      "mainEntity": { "@id": "probknow-1.0.ttl" },
+      "hasPart": [
+        { "@id": "probknow-1.0.ttl" },
+        { "@id": "ONTOLOGY.md" },
+        { "@id": "README.md" },
+        { "@id": "examples/levin-potassium-channel.trig" },
+        { "@id": "examples/levin-P1.legacy.trig" },
+        { "@id": "queries/all-probknow-nanopubs.rq" },
+        { "@id": "queries/claims-by-domain.rq" },
+        { "@id": "queries/high-confidence-claims.rq" },
+        { "@id": "LICENSE" }
+      ]
+    },
+    {
+      "@id": "https://probknow.com",
+      "@type": "Organization",
+      "name": "ProbKnow (PKG Aggregator)",
+      "url": "https://probknow.com"
+    },
+    {
+      "@id": "https://opensource.org/licenses/MIT",
+      "@type": "CreativeWork",
+      "name": "MIT License",
+      "identifier": "MIT"
+    },
+    {
+      "@id": "https://creativecommons.org/licenses/by/4.0/",
+      "@type": "CreativeWork",
+      "name": "Creative Commons Attribution 4.0 International",
+      "identifier": "CC-BY-4.0"
+    },
+    {
+      "@id": "probknow-1.0.ttl",
+      "@type": "File",
+      "name": "ProbKnow ontology (Turtle)",
+      "description": "The OWL ontology / T-Box: classes, properties, the probabilistic-evaluation layer, and the legacy urn:-to-pk: equivalence crosswalk that keeps already-published nanopublications queryable.",
+      "encodingFormat": "text/turtle",
+      "conformsTo": { "@id": "https://w3id.org/probknow/ontology/1.0" },
+      "license": { "@id": "https://creativecommons.org/licenses/by/4.0/" }
+    },
+    {
+      "@id": "https://w3id.org/probknow/ontology/1.0",
+      "@type": ["CreativeWork", "DefinedTermSet"],
+      "name": "ProbKnow: Probabilistic Knowledge Graph Ontology for Frontier Science",
+      "version": "1.0"
+    },
+    {
+      "@id": "ONTOLOGY.md",
+      "@type": "File",
+      "name": "Ontology reference (human-readable)",
+      "description": "Human-readable T-Box reference: classes, properties, design notes, and the legacy-to-canonical crosswalk.",
+      "encodingFormat": "text/markdown"
+    },
+    {
+      "@id": "README.md",
+      "@type": "File",
+      "name": "Repository README",
+      "encodingFormat": "text/markdown"
+    },
+    {
+      "@id": "examples/levin-potassium-channel.trig",
+      "@type": "File",
+      "name": "Nanopublication example (current pk:/pkr: form)",
+      "description": "A signed nanopublication produced by the current probknow signing pipeline, using the pk:/pkr: ontology. Valid trusty-URI nanopublication (RA hash + RSA-SHA256 signature).",
+      "encodingFormat": "application/trig"
+    },
+    {
+      "@id": "examples/levin-P1.legacy.trig",
+      "@type": "File",
+      "name": "Nanopublication example (legacy urn: wave, live on network)",
+      "description": "A signed nanopublication from an earlier published wave, live on the nanopub network and resolvable at https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is. Uses legacy urn:pkg: terms, bridged to pk: by the ontology crosswalk.",
+      "encodingFormat": "application/trig",
+      "subjectOf": { "@id": "https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is" }
+    },
+    {
+      "@id": "https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is",
+      "@type": "CreativeWork",
+      "name": "Live nanopublication (Levin P1 hypothesis)"
+    },
+    {
+      "@id": "queries/all-probknow-nanopubs.rq",
+      "@type": ["File", "SoftwareSourceCode"],
+      "name": "SPARQL: all ProbKnow nanopublications",
+      "encodingFormat": "application/sparql-query",
+      "programmingLanguage": "SPARQL"
+    },
+    {
+      "@id": "queries/claims-by-domain.rq",
+      "@type": ["File", "SoftwareSourceCode"],
+      "name": "SPARQL: nanopublications grouped by domain",
+      "encodingFormat": "application/sparql-query",
+      "programmingLanguage": "SPARQL"
+    },
+    {
+      "@id": "queries/high-confidence-claims.rq",
+      "@type": ["File", "SoftwareSourceCode"],
+      "name": "SPARQL: high weight-of-evidence claims",
+      "encodingFormat": "application/sparql-query",
+      "programmingLanguage": "SPARQL"
+    },
+    {
+      "@id": "LICENSE",
+      "@type": "File",
+      "name": "MIT License",
+      "encodingFormat": "text/plain"
+    }
+  ]
+}

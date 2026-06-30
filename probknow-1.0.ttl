@@ -1,0 +1,262 @@
+@prefix pk:      <https://w3id.org/probknow/ontology/1.0#> .
+@prefix pkr:     <https://w3id.org/probknow/resource/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix cito:    <http://purl.org/spar/cito/> .
+@prefix fabio:   <http://purl.org/spar/fabio/> .
+@prefix np:      <http://www.nanopub.org/nschema#> .
+@prefix npx:     <http://purl.org/nanopub/x/> .
+
+#################################################################
+#  Ontology declaration
+#################################################################
+
+<https://w3id.org/probknow/ontology/1.0> a owl:Ontology ;
+    dcterms:title "ProbKnow: Probabilistic Knowledge Graph Ontology for Frontier Science"@en ;
+    dcterms:description """The vocabulary (T-Box) used by the PKG Aggregator (probknow.com) to
+represent scientific papers, the discrete claims extracted from them, the hypotheses those claims
+cluster into, the economic predictions attached to hypotheses, and the probabilistic assessments
+that a panel of independent models assign to each claim. The ontology reuses PROV-O, SKOS, Dublin
+Core Terms, the SPAR ontologies (CiTO, FaBiO) and the Nanopublication schema wherever a standard
+term exists, and mints terms only for the probabilistic-evaluation layer, which has no settled
+standard."""@en ;
+    owl:versionIRI <https://w3id.org/probknow/ontology/1.0> ;
+    owl:versionInfo "1.0" ;
+    dcterms:creator "PKG Aggregator (probknow.com)" ;
+    dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+    rdfs:seeAlso <http://purl.obolibrary.org/obo/sepio.owl> ,   # SEPIO — evidence & provenance (alignment target)
+                 <http://purl.obolibrary.org/obo/eco.owl> .      # ECO — evidence & conclusion types (alignment target)
+
+#################################################################
+#  Resource (A-Box) namespace policy — documentation only
+#################################################################
+# Individuals are minted under pkr: <https://w3id.org/probknow/resource/> using the pattern
+#   pkr:<type>/<id>     e.g. pkr:hypothesis/3f2a…, pkr:claim/…, pkr:paper/…, pkr:model/claude-opus-4-6,
+#                            pkr:assessment/…, pkr:economic-prediction/…, pkr:platonic/L1
+# This single resource namespace supersedes the legacy, non-dereferenceable identifiers used by
+# earlier export waves: urn:pkg:*, urn:levin-kg:*, https://example.org/levin-kg/*, and the
+# per-wave bases w3id.org/{levin-kg,aif,morphopkg}. See docs/ontology/README.md for the crosswalk.
+
+#################################################################
+#  Classes
+#################################################################
+
+pk:Paper a owl:Class ;
+    rdfs:label "Paper"@en ;
+    rdfs:comment "A scholarly work ingested into the graph (journal article, preprint, etc.). Identified by DOI where available."@en ;
+    rdfs:subClassOf fabio:ResearchPaper ;
+    rdfs:seeAlso <http://purl.org/spar/fabio/ScholarlyWork> .
+
+pk:Concept a owl:Class ;
+    rdfs:label "Concept"@en ;
+    rdfs:comment "A reusable entity, method, or term referenced by claims (e.g. an instrument, gene, or technique)."@en ;
+    rdfs:subClassOf skos:Concept .
+
+pk:Claim a owl:Class ;
+    rdfs:label "Claim"@en ;
+    rdfs:comment "A discrete, atomic assertion extracted from a paper by the multi-LLM pipeline. A Claim is the thing being believed; it is NOT asserted as true by the graph — its credibility is carried by attached pk:Assessment instances."@en ;
+    skos:editorialNote "Stored in the application as 'assertion'. Modelled here as Claim to avoid confusion with the RDF/nanopub notion of an asserted triple."@en ;
+    rdfs:seeAlso <http://purl.obolibrary.org/obo/sepio.owl> .
+
+pk:Hypothesis a owl:Class ;
+    rdfs:label "Hypothesis"@en ;
+    rdfs:comment "A named cluster of related claims forming a testable proposition. Hypotheses are hierarchical (top-level and auto-synthesized children) via skos:broader / skos:narrower."@en ;
+    rdfs:subClassOf skos:Concept .
+
+pk:TestableHypothesis a owl:Class ;
+    rdfs:label "Testable Hypothesis"@en ;
+    rdfs:comment "A hypothesis stated together with an explicit proposed test, a prior probability, and a resolvability score (the 'platonic space of forms' layer)."@en ;
+    rdfs:subClassOf pk:Hypothesis .
+
+pk:EconomicPrediction a owl:Class ;
+    rdfs:label "Economic Prediction"@en ;
+    rdfs:comment "A dated, model-generated forecast tied to a scientific hypothesis, carrying an addressable market size and a time-to-achievement."@en .
+
+pk:EvidenceItem a owl:Class ;
+    rdfs:label "Evidence Item"@en ;
+    rdfs:comment "A single piece of supporting or opposing evidence cited for or against a claim, optionally carrying a statistical test, p-value, and weight of evidence."@en ;
+    rdfs:seeAlso <http://purl.obolibrary.org/obo/eco.owl> .
+
+pk:Assessment a owl:Class ;
+    rdfs:label "Assessment"@en ;
+    rdfs:comment "An evaluation of a hypothesis or claim that yields a probability and/or verdict. Reified as its own resource because the relation is n-ary (subject × evaluator × time × probability × evidence)."@en ;
+    rdfs:subClassOf prov:Entity .
+
+pk:BayesianAssessment a owl:Class ;
+    rdfs:label "Bayesian Assessment"@en ;
+    rdfs:comment "An assessment expressed with Bayesian quantities (Bayes factors, calibration method)."@en ;
+    rdfs:subClassOf pk:Assessment .
+
+pk:LLMClaimAssessment a owl:Class ;
+    rdfs:label "LLM Claim Assessment"@en ;
+    rdfs:comment "An assessment produced by a large language model acting as an evaluator, attributable to a specific model and version."@en ;
+    rdfs:subClassOf pk:Assessment .
+
+pk:Model a owl:Class ;
+    rdfs:label "Model"@en ;
+    rdfs:comment "A language model that produces assessments, treated as a provenance agent for reproducibility (id + version)."@en ;
+    rdfs:subClassOf prov:SoftwareAgent .
+
+#################################################################
+#  Object properties
+#################################################################
+
+pk:hasAssessment a owl:ObjectProperty ;
+    rdfs:label "has assessment"@en ;
+    rdfs:domain pk:Hypothesis ;
+    rdfs:range pk:Assessment ;
+    rdfs:comment "Links a hypothesis (or claim) to one of its probabilistic assessments."@en .
+
+pk:evaluatesHypothesis a owl:ObjectProperty ;
+    rdfs:label "evaluates hypothesis"@en ;
+    rdfs:domain pk:Assessment ;
+    rdfs:range pk:Hypothesis ;
+    owl:inverseOf pk:hasAssessment .
+
+pk:assessedBy a owl:ObjectProperty ;
+    rdfs:label "assessed by"@en ;
+    rdfs:domain pk:Assessment ;
+    rdfs:range pk:Model ;
+    rdfs:subPropertyOf prov:wasAttributedTo .
+
+pk:hasEvidence a owl:ObjectProperty ;
+    rdfs:label "has evidence"@en ;
+    rdfs:range pk:EvidenceItem ;
+    rdfs:comment "Links a claim or assessment to a piece of evidence."@en .
+
+pk:derivedFromPaper a owl:ObjectProperty ;
+    rdfs:label "derived from paper"@en ;
+    rdfs:range pk:Paper ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:comment "Links a claim to the paper it was extracted from."@en .
+
+pk:hasEconomicPrediction a owl:ObjectProperty ;
+    rdfs:label "has economic prediction"@en ;
+    rdfs:domain pk:Hypothesis ;
+    rdfs:range pk:EconomicPrediction .
+
+#################################################################
+#  Datatype properties — probabilistic & evaluation layer
+#################################################################
+
+pk:hasProbability a owl:DatatypeProperty ;
+    rdfs:label "has probability"@en ;
+    rdfs:domain pk:Assessment ;
+    rdfs:range xsd:double ;
+    rdfs:comment "Probability in [0,1] that the evaluated claim is true, as estimated by the assessor."@en .
+
+pk:hasConfidence a owl:DatatypeProperty ;
+    rdfs:label "has confidence"@en ;
+    rdfs:domain pk:Assessment ;
+    rdfs:range xsd:double ;
+    rdfs:comment "The assessor's self-reported confidence in its probability, in [0,1]."@en .
+
+pk:hasPriorProbability a owl:DatatypeProperty ;
+    rdfs:label "has prior probability"@en ;
+    rdfs:domain pk:TestableHypothesis ;
+    rdfs:range xsd:double .
+
+pk:hasResolvability a owl:DatatypeProperty ;
+    rdfs:label "has resolvability"@en ;
+    rdfs:domain pk:TestableHypothesis ;
+    rdfs:range xsd:double ;
+    rdfs:comment "How decidably the hypothesis can be resolved by a feasible test, in [0,1]."@en .
+
+pk:hasVerdict a owl:DatatypeProperty ;
+    rdfs:label "has verdict"@en ;
+    rdfs:domain pk:Assessment ;
+    rdfs:range xsd:string ;
+    rdfs:comment "A short categorical label summarizing the assessment (e.g. 'Plausible')."@en .
+
+pk:evidenceFor a owl:DatatypeProperty ;
+    rdfs:label "evidence for"@en ;
+    rdfs:domain pk:Assessment ;
+    rdfs:range xsd:string ;
+    rdfs:seeAlso cito:supports ;
+    rdfs:comment "A free-text point of evidence supporting the claim. For typed citation use cito:supports."@en .
+
+pk:evidenceAgainst a owl:DatatypeProperty ;
+    rdfs:label "evidence against"@en ;
+    rdfs:domain pk:Assessment ;
+    rdfs:range xsd:string ;
+    rdfs:seeAlso cito:disagreesWith ;
+    rdfs:comment "A free-text point of evidence opposing the claim. For typed citation use cito:disagreesWith."@en .
+
+pk:weightOfEvidence a owl:DatatypeProperty ;
+    rdfs:label "weight of evidence"@en ;
+    rdfs:domain pk:Claim ;
+    rdfs:range xsd:double ;
+    rdfs:comment "Aggregate weight of evidence for a claim, in decibans (10·log10 of the likelihood ratio). May also be attached to an individual pk:EvidenceItem."@en .
+
+pk:bayesFactor a owl:DatatypeProperty ;
+    rdfs:label "Bayes factor"@en ;
+    rdfs:domain pk:BayesianAssessment ;
+    rdfs:range xsd:double .
+
+pk:pValue a owl:DatatypeProperty ;
+    rdfs:label "p-value"@en ;
+    rdfs:domain pk:EvidenceItem ;
+    rdfs:range xsd:double .
+
+pk:calibrationMethod a owl:DatatypeProperty ;
+    rdfs:label "calibration method"@en ;
+    rdfs:domain pk:BayesianAssessment ;
+    rdfs:range xsd:string .
+
+pk:proposedTest a owl:DatatypeProperty ;
+    rdfs:label "proposed test"@en ;
+    rdfs:domain pk:TestableHypothesis ;
+    rdfs:range xsd:string .
+
+pk:assessmentType a owl:DatatypeProperty ;
+    rdfs:label "assessment type"@en ;
+    rdfs:range xsd:string .
+
+pk:hypothesisType a owl:DatatypeProperty ;
+    rdfs:label "hypothesis type"@en ;
+    rdfs:range xsd:string .
+
+pk:domain a owl:DatatypeProperty ;
+    rdfs:label "domain"@en ;
+    rdfs:range xsd:string ;
+    rdfs:comment "The frontier-science (or contested-claims) domain slug a node belongs to."@en .
+
+#################################################################
+#  Datatype properties — economic layer (units are explicit)
+#################################################################
+
+pk:marketSizeUsdBillions a owl:DatatypeProperty ;
+    rdfs:label "market size (USD billions)"@en ;
+    rdfs:domain pk:EconomicPrediction ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Addressable market size. UNIT IS FIXED: billions of US dollars (USD 1e9)."@en .
+
+pk:yearsToAchievement a owl:DatatypeProperty ;
+    rdfs:label "years to achievement"@en ;
+    rdfs:domain pk:EconomicPrediction ;
+    rdfs:range xsd:decimal ;
+    rdfs:comment "Estimated number of years until the prediction is realized."@en .
+
+#################################################################
+#  Backward-compatibility crosswalk (legacy term → current term)
+#################################################################
+# Earlier export waves published nanopublications (now immutable on the network)
+# under non-dereferenceable urn: terms. These owl:equivalent* axioms make every
+# already-published legacy nanopub queryable through the current pk: vocabulary
+# WITHOUT re-publishing anything: an OWL-aware store treats each pair as the same
+# term, and a plain SPARQL endpoint can UNION the two. This is the full set of
+# term-level (class/predicate) identifiers ever emitted by the legacy waves; the
+# remaining urn: identifiers are individuals, mapped in the README A-Box crosswalk.
+
+<urn:pkg:TestableHypothesis>   owl:equivalentClass    pk:TestableHypothesis .
+<urn:pkg:hasPriorProbability>  owl:equivalentProperty pk:hasPriorProbability .
+<urn:pkg:hasResolvability>     owl:equivalentProperty pk:hasResolvability .
+<urn:pkg:proposedTest>         owl:equivalentProperty pk:proposedTest .
+<urn:pkg:hypothesisType>       owl:equivalentProperty pk:hypothesisType .
+<urn:levin-kg:property:domain> owl:equivalentProperty pk:domain .

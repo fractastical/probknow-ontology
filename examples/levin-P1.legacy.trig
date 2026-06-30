@@ -1,0 +1,43 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix this: <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> .
+@prefix sub: <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/> .
+
+<https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/> {
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.nanopub.org/nschema#Nanopublication> .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> <http://www.nanopub.org/nschema#hasAssertion> <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/assertion> .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> <http://www.nanopub.org/nschema#hasProvenance> <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/provenance> .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> <http://www.nanopub.org/nschema#hasPublicationInfo> <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/pubinfo> .
+}
+
+<https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/assertion> {
+    <urn:pkg:platonic:P1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:pkg:TestableHypothesis> .
+    <urn:pkg:platonic:P1> <http://www.w3.org/2000/01/rdf-schema#label> "Morphogenesis is goal-directed navigation" .
+    <urn:pkg:platonic:P1> <http://purl.org/dc/terms/identifier> "P1" .
+    <urn:pkg:platonic:P1> <http://www.w3.org/2000/01/rdf-schema#comment> "Development pursues a target anatomy with error correction: disturb the endpoint and the system re-navigates back to the same form (regulative development, regeneration)." .
+    <urn:pkg:platonic:P1> <urn:pkg:proposedTest> "Perturb or remove tissue mid-development across taxa and measure whether the final anatomy is restored despite different starting states." .
+    <urn:pkg:platonic:P1> <urn:pkg:hasPriorProbability> "0.8800"^^<http://www.w3.org/2001/XMLSchema#double> .
+    <urn:pkg:platonic:P1> <urn:pkg:hasResolvability> "0.9000"^^<http://www.w3.org/2001/XMLSchema#double> .
+}
+
+<https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/provenance> {
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/assertion> <http://www.w3.org/ns/prov#wasDerivedFrom> "Levin seminar — the platonic space of forms" .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/assertion> <http://www.w3.org/ns/prov#wasAttributedTo> <https://bioelectricitynexus.com/nanopub-system> .
+}
+
+<https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/pubinfo> {
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> <http://purl.org/dc/terms/created> "2026-06-15T04:50:06.284Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> <http://purl.org/dc/terms/creator> <https://bioelectricitynexus.com/nanopub-system> .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> <urn:levin-kg:property:domain> "levin-lab" .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> <urn:pkg:hypothesisType> "platonic-space-of-forms" .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/sig> <http://purl.org/nanopub/x/hasAlgorithm> "RSA" .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/sig> <http://purl.org/nanopub/x/hasPublicKey> "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlmVqJvSV6wEdZK/lEu48U7GiYJlbUwaw+75q5s5fHwRCkF0Kwt/M6e3TYfdmpmqH4Zf422o/GeY6iPM/z8afWzq+adlLfmdGe89pvHsExh3sw4WYnIIs3MZMsWAmQXEKjQOBJssru+VivtZ+WeBFcF+UowklxPO9vrlvAeQ1cTJK85g/H5Od+9cteRoXhTfaoMQcb/ToCXQ248P8zBdZfGCQC/D571M8JGcr/OM0FTlc0Ix2OscJunH+RDOsW7TjZseNWPzA5yZk67nqoJSEBvHfayngIY95fCpWNSqxeFQzhh/77JL/4YWq5zsOb7G5EafVIs5HNQACvukfPMPkSQIDAQAB" .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/sig> <http://purl.org/nanopub/x/hasSignatureTarget> <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is> .
+    <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is/sig> <http://purl.org/nanopub/x/hasSignature> "IJGrqZgufaOn1YSjFcBT//PRcr2MdVkBw1t/m9WnF9wNPtOlXHmO7UBuNcu80C3OoGgyGWIDVo83DxD8BuBmnPx80tvMOzQwWkVl497SJLcioUzJuTPqMG8wGjSzpNYqtTwSmG+nS2JfVsC0F4QE+KhaWJUGz3yfOiOb+lORmBSFdsNdGWaqJuG8Q5XOrGKdEI/ytc1gDEw8gYd1cUlCyAFFWyP04L+RMNUgsJ6uTLSpCHgC31RBjp+6Pu4Vm57rhiR6FPbd8C3KiiPx0LtRImvFaIK2xn+l4NUlawHwh5AlTENfw6sEsUjTnGn0OmD3iqIECvOrNJgwygAaI08opg==" .
+}

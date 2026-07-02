@@ -4,12 +4,12 @@
 // This is published so anyone auditing a ProbKnow nanopub can see *how* its
 // assertion / provenance / pubinfo triples were assembled — not just verify the
 // signature. The cryptographic half (trusty-URI RA hash + RSA-SHA256 signing,
-// `signNanopub`) lives in the standalone, dependency-free `nanopub-js` package:
-//   https://github.com/fractastical/nanopub-js
+// `signNanopub`) lives in the standalone, dependency-free `nanopub-ts` package:
+//   https://github.com/fractastical/nanopub-ts
 //
 // These functions return UNSIGNED triples plus the placeholder `preUri`
 // (`NP_BASE + " "`). Pass both to `signNanopub(triples, preUri, keyPair)` from
-// nanopub-js to produce the final signed TriG with its `RA…` trusty URI.
+// nanopub-ts to produce the final signed TriG with its `RA…` trusty URI.
 //
 // This file is intentionally DEPENDENCY-FREE so the construction logic can be
 // read and run (`npx tsx reproduce-example.ts`) without installing anything.
@@ -20,7 +20,7 @@
 
 import * as crypto from "node:crypto";
 
-// ─── Standard RDF / nanopub vocabulary (identical to nanopub-js constants) ───
+// ─── Standard RDF / nanopub vocabulary (identical to nanopub-ts constants) ───
 export const NP_BASE = "https://w3id.org/np/";
 export const NPX = "http://purl.org/nanopub/x/";
 export const NP_NS = "http://www.nanopub.org/nschema#";
@@ -33,7 +33,7 @@ export const FOAF = "http://xmlns.com/foaf/0.1/";
 // Artifact-code placeholder used during construction (Java trusty-uri convention).
 export const SPACE_AC = " ";
 
-/** A quad in the internal nanopub format (identical to nanopub-js `NpTriple`). */
+/** A quad in the internal nanopub format (identical to nanopub-ts `NpTriple`). */
 export interface NpTriple {
   subject: string;
   predicate: string;
@@ -47,7 +47,7 @@ export const PK = "https://w3id.org/probknow/ontology/1.0#"; // classes & predic
 export const PKR = "https://w3id.org/probknow/resource/"; // individuals
 export const SYSTEM_ID = "https://bioelectricitynexus.com/nanopub-system";
 
-// ─── Literal escaping (matches nanopub-js `escapeLit`) ──────────────────────
+// ─── Literal escaping (matches nanopub-ts `escapeLit`) ──────────────────────
 function esc(s: string): string {
   return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n").replace(/\r/g, "\\r");
 }

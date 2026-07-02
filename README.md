@@ -63,3 +63,29 @@ MIT — see [LICENSE](LICENSE).
 ## Nanopublication minting pipeline
 
 The exact code that builds the assertion / provenance / pubinfo triples for every ProbKnow nanopublication lives in [`pipeline/`](./pipeline/) — so the *construction* of published nanopubs is auditable, not just their signatures. The cryptographic sealing (trusty URI + RSA signing) is the standalone [nanopub-js](https://github.com/fractastical/nanopub-js) package. See [`pipeline/README.md`](./pipeline/README.md), and run [`pipeline/reproduce-example.ts`](./pipeline/reproduce-example.ts) to rebuild a live nanopub's triples.
+
+
+  ## FAQ
+
+  ### Is this actually public? Can anyone view it without a GitHub login or token?
+
+  Yes. The repo, the ontology, and the pipeline code are all public with no auth required. Verify yourself with a plain, unauthenticated request:
+
+  ```bash
+  curl -s https://raw.githubusercontent.com/fractastical/probknow-ontology/main/pipeline/probknow-builders.ts
+  ```
+
+  That returns the file directly — no login, no API key.
+
+  ### Why is the nanopub construction code (`pipeline/`) in this repo instead of its own repo?
+
+  It used to briefly exist as a separate repo (`probknow-nanopub-builders`). That was redundant — this repo already had a `pipeline/` folder with the same code, and splitting it out just meant two places to keep in sync for no benefit. The construction logic, the ontology it depends on (`probknow-1.0.ttl`), the worked examples, and the SPARQL queries are all one audit trail, so they live together here. The standalone repo is now archived with a pointer back to this one.
+
+  ### Where is the signing / cryptographic code, then?
+
+  That's the one piece that's genuinely reusable outside ProbKnow (trusty-URI hashing + RSA signing per the nanopub spec), so it's kept separate as its own installable package: [nanopub-js](https://github.com/fractastical/nanopub-js). Everything in `pipeline/` here is ProbKnow-specific triple *construction*; `nanopub-js` is the generic *sealing* step.
+
+  ### Is `pipeline/probknow-builders.ts` the real production code, or a simplified version for show?
+
+  It's the exact construction logic used in production — not a re-implementation. `pipeline/reproduce-example.ts` proves it: it feeds the same inputs a real published nanopub was built from back into `buildAssertionNanopub()` and lets you diff the output against the live, resolvable nanopub at [w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y](https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y).
+  

@@ -55,7 +55,7 @@ for (const [g, ts] of byGraph) {
 
 console.log("=== Sealing (trusty URI + signature) ===");
 console.log("To turn these triples into a signed nanopub, pass { triples, preUri }");
-console.log("to signNanopub() from nanopub-js (https://github.com/fractastical/nanopub-js):");
+console.log("to signNanopub() from nanopub-ts (https://github.com/fractastical/nanopub-ts):");
 console.log("    const signed = await signNanopub(triples, preUri, keyPair);");
 console.log("\nThe published nanopub used the ProbKnow system key + its original");
 console.log("timestamp, so its artifact code is RAzdRz…; verify that one with");

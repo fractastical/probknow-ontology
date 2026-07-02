@@ -12,16 +12,16 @@ Minting a ProbKnow nanopub is two independent, separately-auditable steps:
 1. **Construction (this directory)** — decide which triples go into the four
    named graphs (head / assertion / provenance / pubinfo).
    See [`probknow-builders.ts`](./probknow-builders.ts).
-2. **Sealing (`nanopub-js`)** — compute the trusty-URI RA hash and the
+2. **Sealing (`nanopub-ts`)** — compute the trusty-URI RA hash and the
    RSA-SHA256 signature, then swap the placeholder URI for the final `RA…`
    artifact code. This is the standalone, dependency-free package
-   [`nanopub-js`](https://github.com/fractastical/nanopub-js) — a faithful port
+   [`nanopub-ts`](https://github.com/fractastical/nanopub-ts) — a faithful port
    of the Java `RdfHasher` / `trustyuri` algorithm whose output passes the
    official `np check`.
 
 ```
 build*Nanopub()  ──►  { triples, preUri }  ──►  signNanopub(triples, preUri, keyPair)  ──►  signed TriG (https://w3id.org/np/RA…)
-   (this dir)                                          (nanopub-js)
+   (this dir)                                          (nanopub-ts)
 ```
 
 ## The builders

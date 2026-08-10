@@ -1,0 +1,40 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix this: <https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y> .
+@prefix sub: <https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y/> .
+
+sub: {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  <https://example.org/levin-kg/claim-MURUGAN2022-C1> prov:wasSupportedBy <https://example.org/levin-kg/evidence-MURUGAN2022-C1-E1> .
+
+  <https://w3id.org/probknow/resource/claim/46a9da61-1ea7-4065-b3bc-5f6d1f3cb3f2> <https://w3id.org/probknow/ontology/1.0#weightOfEvidence>
+      "0.9816"^^xsd:double .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo <https://bioelectricitynexus.com/nanopub-system> .
+}
+
+sub:pubinfo {
+  this: dc:created "2026-06-23T05:02:29.165Z"^^xsd:dateTime;
+    dc:creator <https://bioelectricitynexus.com/nanopub-system>;
+    prov:wasGeneratedBy <https://bioelectricitynexus.com/nanopub-system>;
+    <https://w3id.org/probknow/ontology/1.0#domain> "levin-lab" .
+
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlmVqJvSV6wEdZK/lEu48U7GiYJlbUwaw+75q5s5fHwRCkF0Kwt/M6e3TYfdmpmqH4Zf422o/GeY6iPM/z8afWzq+adlLfmdGe89pvHsExh3sw4WYnIIs3MZMsWAmQXEKjQOBJssru+VivtZ+WeBFcF+UowklxPO9vrlvAeQ1cTJK85g/H5Od+9cteRoXhTfaoMQcb/ToCXQ248P8zBdZfGCQC/D571M8JGcr/OM0FTlc0Ix2OscJunH+RDOsW7TjZseNWPzA5yZk67nqoJSEBvHfayngIY95fCpWNSqxeFQzhh/77JL/4YWq5zsOb7G5EafVIs5HNQACvukfPMPkSQIDAQAB";
+    npx:hasSignature "OtGhJZuqlCVW8Xycx4zB7PvpM8dclf21G9/A0eA6SbcYBx7GAvlIN3IwZafUdI7alJf/aZxvMP6zJdw/5l+haZolBo5YJm6+pgn3Momkt7AkwwopC3ubcfHzs8aENXDFNngLcPJ0sCbOYntexWkjoIXgP2/cXNhnOpK8fwDcl/J6HL2z5TZgtuLIIBA32BIQ3qkiaIpNr2/wyoM4eEB6OUTVcai/soEy70/gHjlATU9ZwEMMNev2N9t/XwQzcQaaeN+UytipDuSX5Tz1k+t0VoAM5DYs3nIyHmVrBGfrpmoL05QvfvKj/FeDwQUrRmZ7WlPphoBGln39onnfiOLNNg==";
+    npx:hasSignatureTarget this: .
+}

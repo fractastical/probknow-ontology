@@ -11,17 +11,25 @@ Minting a ProbKnow nanopub is two independent, separately-auditable steps:
 
 1. **Construction (this directory)** — decide which triples go into the four
    named graphs (head / assertion / provenance / pubinfo).
-   See [`probknow-builders.ts`](./probknow-builders.ts).
-2. **Sealing (`nanopub-ts`)** — compute the trusty-URI RA hash and the
-   RSA-SHA256 signature, then swap the placeholder URI for the final `RA…`
-   artifact code. This is the standalone, dependency-free package
-   [`nanopub-ts`](https://github.com/fractastical/nanopub-ts) — a faithful port
-   of the Java `RdfHasher` / `trustyuri` algorithm whose output passes the
-   official `np check`.
+   See [`probknow-builders.ts`](./probknow-builders.ts). Dependency-free.
+2. **Sealing ([`seal.ts`](./seal.ts) → `@nanopub/nanopub-js`)** — compute the
+   trusty-URI RA hash and the RSA-SHA256 signature, then swap the placeholder URI
+   for the final `RA…` artifact code. This is delegated to the official
+   pure-TypeScript library
+   [`@nanopub/nanopub-js`](https://github.com/Nanopublication/nanopub-js), whose
+   output passes the official `np check`. `seal.ts` is a thin adapter: it maps the
+   builder's `{ triples, preUri }` onto a `purl.org/nanopub/temp/` placeholder and
+   hands it to `NanopubClass.fromRdf(...).sign()`.
 
 ```
-build*Nanopub()  ──►  { triples, preUri }  ──►  signNanopub(triples, preUri, keyPair)  ──►  signed TriG (https://w3id.org/np/RA…)
-   (this dir)                                          (nanopub-ts)
+build*Nanopub()  ──►  { triples, preUri }  ──►  sealNanopub({ triples, preUri }, opts)  ──►  signed TriG (https://w3id.org/np/RA…)
+   (this dir)                                    (seal.ts → @nanopub/nanopub-js)
+```
+
+Run the end-to-end demo (`npm install` first):
+
+```bash
+npx tsx sign-example.ts
 ```
 
 ## The builders
@@ -50,6 +58,12 @@ against the published TriG. It is dependency-free — no install needed:
 ```bash
 npx tsx reproduce-example.ts
 ```
+
+**On `npx:signedBy`:** sealing writes `npx:signedBy` into the signature block, as
+the current nanopub spec requires. Nanopubs minted before that became mandatory —
+including the `RAzdRz…` example above — carry only `npx:hasAlgorithm`,
+`npx:hasPublicKey`, `npx:hasSignature` and `npx:hasSignatureTarget`, so expect
+that one extra pubinfo triple when diffing fresh output against them.
 
 **On byte-for-byte hash reproduction:** the trusty hash covers every triple,
 including `dc:created` (a per-run timestamp) and the signature (which depends on

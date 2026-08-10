@@ -1,0 +1,20 @@
+{
+  "name": "probknow-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ProbKnow nanopublication minting pipeline — construction (probknow-builders.ts) + sealing via @nanopub/nanopub-js (seal.ts).",
+  "license": "MIT",
+  "scripts": {
+    "reproduce": "tsx reproduce-example.ts",
+    "sign-example": "tsx sign-example.ts"
+  },
+  "dependencies": {
+    "@nanopub/nanopub-js": "^0.1.3",
+    "n3": "^1.26.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0"
+  }
+}

@@ -3,13 +3,14 @@
 //
 // This is published so anyone auditing a ProbKnow nanopub can see *how* its
 // assertion / provenance / pubinfo triples were assembled — not just verify the
-// signature. The cryptographic half (trusty-URI RA hash + RSA-SHA256 signing,
-// `signNanopub`) lives in the standalone, dependency-free `nanopub-ts` package:
-//   https://github.com/fractastical/nanopub-ts
+// signature. The cryptographic half (trusty-URI RA hash + RSA-SHA256 signing) is
+// delegated to the official pure-TypeScript library @nanopub/nanopub-js, wrapped
+// by the sealing adapter in `seal.ts`:
+//   https://github.com/Nanopublication/nanopub-js
 //
 // These functions return UNSIGNED triples plus the placeholder `preUri`
-// (`NP_BASE + " "`). Pass both to `signNanopub(triples, preUri, keyPair)` from
-// nanopub-ts to produce the final signed TriG with its `RA…` trusty URI.
+// (`NP_BASE + " "`). Pass both to `sealNanopub({ triples, preUri }, opts)` from
+// ./seal.ts to produce the final signed TriG with its `RA…` trusty URI.
 //
 // This file is intentionally DEPENDENCY-FREE so the construction logic can be
 // read and run (`npx tsx reproduce-example.ts`) without installing anything.
@@ -20,7 +21,7 @@
 
 import * as crypto from "node:crypto";
 
-// ─── Standard RDF / nanopub vocabulary (identical to nanopub-ts constants) ───
+// ─── Standard RDF / nanopub vocabulary ──────────────────────────────────────
 export const NP_BASE = "https://w3id.org/np/";
 export const NPX = "http://purl.org/nanopub/x/";
 export const NP_NS = "http://www.nanopub.org/nschema#";
@@ -33,7 +34,7 @@ export const FOAF = "http://xmlns.com/foaf/0.1/";
 // Artifact-code placeholder used during construction (Java trusty-uri convention).
 export const SPACE_AC = " ";
 
-/** A quad in the internal nanopub format (identical to nanopub-ts `NpTriple`). */
+/** A quad in the internal nanopub format consumed by `seal.ts`. */
 export interface NpTriple {
   subject: string;
   predicate: string;
@@ -47,7 +48,7 @@ export const PK = "https://w3id.org/probknow/ontology/1.0#"; // classes & predic
 export const PKR = "https://w3id.org/probknow/resource/"; // individuals
 export const SYSTEM_ID = "https://bioelectricitynexus.com/nanopub-system";
 
-// ─── Literal escaping (matches nanopub-ts `escapeLit`) ──────────────────────
+// ─── Literal escaping (standard N-Triples literal escaping) ─────────────────
 function esc(s: string): string {
   return s.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n").replace(/\r/g, "\\r");
 }
@@ -60,14 +61,42 @@ function publicKeyDerBase64(publicKeyPem: string): string {
   return der.toString("base64");
 }
 
+// ─── IRI validation ─────────────────────────────────────────────────────────
+// Characters an IRI may never contain, per the N-Triples/TriG `IRIREF`
+// production: control chars, space, and < > " { } | ^ ` \
+const ILLEGAL_IRI_CHAR = /[\x00-\x20<>"{}|^`\\]/;
+
+/**
+ * Assert that `v` is usable as an absolute IRI, and return it.
+ *
+ * The builders interpolate caller-supplied values straight into IRI positions, so
+ * a source row holding natural-language text (e.g. a subject of `potassium channel
+ * function modulation`) would otherwise be emitted as `<potassium channel function
+ * modulation>` — output no RDF parser accepts and the registry rejects, discovered
+ * only after signing. Fail loudly at construction time instead.
+ */
+function assertIri(v: string, field: string): string {
+  if (typeof v !== "string" || v.length === 0)
+    throw new Error(`${field}: expected a non-empty absolute IRI, got ${JSON.stringify(v)}`);
+  if (!/^[A-Za-z][A-Za-z0-9+.-]*:/.test(v))
+    throw new Error(`${field}: expected an absolute IRI (missing scheme), got ${JSON.stringify(v)}`);
+  const bad = ILLEGAL_IRI_CHAR.exec(v);
+  if (bad)
+    throw new Error(
+      `${field}: character ${JSON.stringify(bad[0])} is not allowed in an IRI, got ${JSON.stringify(v)}`,
+    );
+  return v;
+}
+
 // Smart term for assertion objects: detects URIs vs plain-text literals.
 // If the value is not a URI or an already-quoted literal, wrap it as a string
 // literal. Handles the case where the source object is stored as plain text
-// (e.g. a title) rather than a quoted literal or URI.
-function assertionObjectTerm(v: string): string {
+// (e.g. a title) rather than a quoted literal or URI. A value that *looks* like a
+// URI must actually be a valid one — otherwise it would slip through as a bare IRI.
+function assertionObjectTerm(v: string, field = "assertion.object"): string {
   if (v.startsWith('"')) return v; // already a quoted literal
   if (v.startsWith("_:")) return v; // blank node (passthrough)
-  if (/^(https?|ftp|urn|mailto):/.test(v)) return v; // URI
+  if (/^(https?|ftp|urn|mailto):/.test(v)) return assertIri(v, field); // URI
   return `"${esc(v)}"`; // plain text → quoted literal
 }
 
@@ -91,6 +120,13 @@ export function buildAssertionNanopub(assertion: AssertionForNanopub): { triples
   const pubG = `${preUri}/pubinfo`;
   const now = new Date().toISOString();
 
+  // Caller-supplied values that land in IRI positions — validated before use so a
+  // malformed row fails here rather than producing an unparseable signed nanopub.
+  const subjIri = assertIri(assertion.subject, "assertion.subject");
+  const predIri = assertIri(assertion.predicate, "assertion.predicate");
+  const claimIri = assertIri(`${PKR}claim/${assertion.id}`, "assertion.id");
+  const doiIri = assertion.paper?.doi ? assertIri(`https://doi.org/${assertion.paper.doi}`, "assertion.paper.doi") : null;
+
   const triples: NpTriple[] = [
     // ── Head graph (NP structure declaration) ──
     { subject: preUri, predicate: `${RDF}type`, object: `${NP_NS}Nanopublication`, graph: headG },
@@ -99,26 +135,26 @@ export function buildAssertionNanopub(assertion: AssertionForNanopub): { triples
     { subject: preUri, predicate: `${NP_NS}hasPublicationInfo`, object: pubG, graph: headG },
 
     // ── Assertion graph ── (object normalized: plain text → literal, URI stays a URI)
-    { subject: assertion.subject, predicate: assertion.predicate, object: assertionObjectTerm(assertion.object), graph: assertG },
+    { subject: subjIri, predicate: predIri, object: assertionObjectTerm(assertion.object), graph: assertG },
     ...(assertion.evidenceWeight != null && isFinite(assertion.evidenceWeight)
-      ? [{ subject: `${PKR}claim/${assertion.id}`, predicate: `${PK}weightOfEvidence`, object: `"${assertion.evidenceWeight.toFixed(4)}"^^${XSD}double`, graph: assertG }]
+      ? [{ subject: claimIri, predicate: `${PK}weightOfEvidence`, object: `"${assertion.evidenceWeight.toFixed(4)}"^^${XSD}double`, graph: assertG }]
       : []),
 
     // ── Provenance graph ──
-    ...(assertion.paper?.doi
+    ...(doiIri
       ? [
-          { subject: assertG, predicate: `${PROV}wasDerivedFrom`, object: `https://doi.org/${assertion.paper.doi}`, graph: provG },
-          { subject: `https://doi.org/${assertion.paper.doi}`, predicate: `${DC}title`, object: `"${esc(assertion.paper.title)}"`, graph: provG },
-          ...(assertion.paper.year ? [{ subject: `https://doi.org/${assertion.paper.doi}`, predicate: `${DC}date`, object: `"${assertion.paper.year}"^^${XSD}gYear`, graph: provG }] : []),
+          { subject: assertG, predicate: `${PROV}wasDerivedFrom`, object: doiIri, graph: provG },
+          { subject: doiIri, predicate: `${DC}title`, object: `"${esc(assertion.paper!.title)}"`, graph: provG },
+          ...(assertion.paper!.year ? [{ subject: doiIri, predicate: `${DC}date`, object: `"${assertion.paper!.year}"^^${XSD}gYear`, graph: provG }] : []),
         ]
       : assertion.paper
         ? [
-            { subject: assertG, predicate: `${PROV}wasDerivedFrom`, object: `${PKR}paper/${assertion.id}`, graph: provG },
-            { subject: `${PKR}paper/${assertion.id}`, predicate: `${DC}title`, object: `"${esc(assertion.paper.title)}"`, graph: provG },
+            { subject: assertG, predicate: `${PROV}wasDerivedFrom`, object: assertIri(`${PKR}paper/${assertion.id}`, "assertion.id"), graph: provG },
+            { subject: assertIri(`${PKR}paper/${assertion.id}`, "assertion.id"), predicate: `${DC}title`, object: `"${esc(assertion.paper.title)}"`, graph: provG },
           ]
         : [{ subject: assertG, predicate: `${PROV}wasAttributedTo`, object: SYSTEM_ID, graph: provG }]),
 
-    // ── Pubinfo graph (base metadata — key/signature added by signNanopub) ──
+    // ── Pubinfo graph (base metadata — key/signature added by sealNanopub) ──
     { subject: preUri, predicate: `${DC}created`, object: `"${now}"^^${XSD}dateTime`, graph: pubG },
     { subject: preUri, predicate: `${DC}creator`, object: SYSTEM_ID, graph: pubG },
     { subject: preUri, predicate: `${PROV}wasGeneratedBy`, object: SYSTEM_ID, graph: pubG },
@@ -193,8 +229,9 @@ export function buildAssessmentNanopub(a: AssessmentForNanopub): { triples: NpTr
   const assertG = `${preUri}/assertion`;
   const provG = `${preUri}/provenance`;
   const pubG = `${preUri}/pubinfo`;
-  const assessUri = `${PKR}assessment/${a.id}`;
-  const hypUri = `${PKR}hypothesis/${a.hypothesisId}`;
+  const assessUri = assertIri(`${PKR}assessment/${a.id}`, "assessment.id");
+  const hypUri = assertIri(`${PKR}hypothesis/${a.hypothesisId}`, "assessment.hypothesisId");
+  // `model` is sanitized to an IRI-safe charset rather than validated.
   const modelUri = `${PKR}model/${a.model.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
   const now = a.createdAt.toISOString();
 
@@ -265,7 +302,7 @@ export function buildPlatonicNanopub(p: PlatonicForNanopub): { triples: NpTriple
   const assertG = `${preUri}/assertion`;
   const provG = `${preUri}/provenance`;
   const pubG = `${preUri}/pubinfo`;
-  const hypUri = `${PKR}platonic/${p.code}`;
+  const hypUri = assertIri(`${PKR}platonic/${p.code}`, "platonic.code");
   const now = new Date().toISOString();
 
   const triples: NpTriple[] = [

@@ -34,7 +34,7 @@
         { "@id": "probknow-1.0.ttl" },
         { "@id": "ONTOLOGY.md" },
         { "@id": "README.md" },
-        { "@id": "examples/levin-potassium-channel.trig" },
+        { "@id": "examples/levin-claim-MURUGAN2022.trig" },
         { "@id": "examples/levin-P1.legacy.trig" },
         { "@id": "queries/all-probknow-nanopubs.rq" },
         { "@id": "queries/claims-by-domain.rq" },
@@ -89,11 +89,12 @@
       "encodingFormat": "text/markdown"
     },
     {
-      "@id": "examples/levin-potassium-channel.trig",
+      "@id": "examples/levin-claim-MURUGAN2022.trig",
       "@type": "File",
-      "name": "Nanopublication example (current pk:/pkr: form)",
-      "description": "A signed nanopublication produced by the current probknow signing pipeline, using the pk:/pkr: ontology. Valid trusty-URI nanopublication (RA hash + RSA-SHA256 signature).",
-      "encodingFormat": "application/trig"
+      "name": "Nanopublication example (current pk:/pkr: form, live on network)",
+      "description": "A signed nanopublication produced by the current probknow signing pipeline, using the pk:/pkr: ontology. Live on the nanopub network and resolvable at https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y. Valid trusty-URI nanopublication (RA hash + RSA-SHA256 signature).",
+      "encodingFormat": "application/trig",
+      "subjectOf": { "@id": "https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y" }
     },
     {
       "@id": "examples/levin-P1.legacy.trig",
@@ -107,6 +108,11 @@
       "@id": "https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is",
       "@type": "CreativeWork",
       "name": "Live nanopublication (Levin P1 hypothesis)"
+    },
+    {
+      "@id": "https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y",
+      "@type": "CreativeWork",
+      "name": "Live nanopublication (Levin MURUGAN2022 evidence-support claim)"
     },
     {
       "@id": "queries/all-probknow-nanopubs.rq",

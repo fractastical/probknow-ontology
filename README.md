@@ -2,9 +2,9 @@
 
 The **ProbKnow** ontology and signed nanopublication examples from [probknow.com](https://probknow.com) — a probabilistic knowledge graph that aggregates scientific research across frontier domains (bioelectricity, active inference, synthetic biology, BCI, and more).
 
-This repo is the public, ecosystem-facing artifact for the knowledge model: the vocabulary (T-Box), worked examples of the nanopublications we publish to the network, and ready-to-run SPARQL queries. The pure-TypeScript signing library that produces these nanopubs lives separately at [fractastical/nanopub-ts](https://github.com/fractastical/nanopub-ts).
+This repo is the public, ecosystem-facing artifact for the knowledge model: the vocabulary (T-Box), worked examples of the nanopublications we publish to the network, and ready-to-run SPARQL queries. The triple-construction code that builds these nanopubs is in [`pipeline/`](./pipeline/); the cryptographic sealing is delegated to the official pure-TypeScript library [`@nanopub/nanopub-js`](https://github.com/Nanopublication/nanopub-js).
 
-> **Which form is current?** The `pk:` / `pkr:` form is what probknow's signing pipeline emits today — `examples/levin-potassium-channel.trig` is real output straight from the live builder. The `urn:pkg:` / `urn:levin-kg:` form (`examples/levin-P1.legacy.trig`) is an earlier published wave, kept fully queryable through the backward-compatibility crosswalk below.
+> **Which form is current?** The `pk:` / `pkr:` form is what probknow's signing pipeline emits today — `examples/levin-claim-MURUGAN2022.trig` is real output straight from the live builder. The `urn:pkg:` / `urn:levin-kg:` form (`examples/levin-P1.legacy.trig`) is an earlier published wave, kept fully queryable through the backward-compatibility crosswalk below.
 
 ## The ontology
 
@@ -36,7 +36,7 @@ So every already-published nanopub is queryable through the current vocabulary: 
 
 Two signed nanopublications, both in [`examples/`](examples/):
 
-- [`examples/levin-potassium-channel.trig`](examples/levin-potassium-channel.trig) — **current builder output**: a claim under the `pk:`/`pkr:` ontology (note `pk:weightOfEvidence`, `pk:domain`, and the `pkr:claim/...` resource IRI). This is what probknow's pipeline emits today.
+- [`examples/levin-claim-MURUGAN2022.trig`](examples/levin-claim-MURUGAN2022.trig) — **current builder output**: an evidence-support claim under the `pk:`/`pkr:` ontology (note `pk:weightOfEvidence`, `pk:domain`, and the `pkr:claim/...` resource IRI), **live on the nanopub network** at <https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y>. This is what probknow's pipeline emits today, and it is the nanopub reconstructed by [`pipeline/reproduce-example.ts`](pipeline/reproduce-example.ts).
 - [`examples/levin-P1.legacy.trig`](examples/levin-P1.legacy.trig) — **earlier published wave**: a Levin-lab hypothesis **live on the nanopub network right now**, resolvable at <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is>. It uses the legacy `urn:pkg:` terms, bridged by the crosswalk above.
 
 Both are valid trusty-URI nanopubs (RA hash + RSA-SHA256 signature) and pass the official Java `np check`.
@@ -62,7 +62,7 @@ MIT — see [LICENSE](LICENSE).
 
 ## Nanopublication minting pipeline
 
-The exact code that builds the assertion / provenance / pubinfo triples for every ProbKnow nanopublication lives in [`pipeline/`](./pipeline/) — so the *construction* of published nanopubs is auditable, not just their signatures. The cryptographic sealing (trusty URI + RSA signing) is the standalone [nanopub-ts](https://github.com/fractastical/nanopub-ts) package. See [`pipeline/README.md`](./pipeline/README.md), and run [`pipeline/reproduce-example.ts`](./pipeline/reproduce-example.ts) to rebuild a live nanopub's triples.
+The exact code that builds the assertion / provenance / pubinfo triples for every ProbKnow nanopublication lives in [`pipeline/`](./pipeline/) — so the *construction* of published nanopubs is auditable, not just their signatures. The cryptographic sealing (trusty URI + RSA signing) is delegated to the official [`@nanopub/nanopub-js`](https://github.com/Nanopublication/nanopub-js) library, wrapped by [`pipeline/seal.ts`](./pipeline/seal.ts). See [`pipeline/README.md`](./pipeline/README.md), and run [`pipeline/reproduce-example.ts`](./pipeline/reproduce-example.ts) to rebuild a live nanopub's triples.
 
 
   ## FAQ
@@ -83,7 +83,9 @@ The exact code that builds the assertion / provenance / pubinfo triples for ever
 
   ### Where is the signing / cryptographic code, then?
 
-  That's the one piece that's genuinely reusable outside ProbKnow (trusty-URI hashing + RSA signing per the nanopub spec), so it's kept separate as its own installable package: [nanopub-ts](https://github.com/fractastical/nanopub-ts). Everything in `pipeline/` here is ProbKnow-specific triple *construction*; `nanopub-ts` is the generic *sealing* step.
+  It isn't ProbKnow code at all. Sealing (trusty-URI hashing + RSA-SHA256 signing per the nanopub spec) is the one piece that's generic rather than ProbKnow-specific, so it's delegated to the official pure-TypeScript implementation maintained by the Nanopublication project: [`@nanopub/nanopub-js`](https://github.com/Nanopublication/nanopub-js). [`pipeline/seal.ts`](./pipeline/seal.ts) is a thin adapter that hands the builders' output to it. Everything else in `pipeline/` is ProbKnow-specific triple *construction*.
+
+  ProbKnow previously sealed with its own standalone port (`nanopub-ts`); that has been retired in favour of the official library.
 
   ### Is `pipeline/probknow-builders.ts` the real production code, or a simplified version for show?
 

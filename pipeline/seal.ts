@@ -14,7 +14,7 @@
 
 import { NanopubClass } from "@nanopub/nanopub-js";
 import { Parser as N3Parser, Writer as N3Writer } from "n3";
-import { SYSTEM_ID, type NpTriple } from "./probknow-builders.js";
+import { SIGNER_LABEL, SYSTEM_ID, type NpTriple } from "./probknow-builders.js";
 
 // @nanopub/nanopub-js detects a placeholder base under this namespace and swaps it
 // for the computed `RA…` trusty URI everywhere during signing. We map the builder's
@@ -110,8 +110,6 @@ export function pemToBase64Der(pem: string): string {
 // `{ trustyUri, trig, nquads }` result. The signer identity defaults to the
 // ProbKnow system agent (baked into the builder triples), overridable via `signer`.
 
-const SIGNER_NAME = "Bioelectricity Nexus KG Publisher";
-
 /** Matches the `nanopub-ts` NpKeyPair (PEM strings). Only privateKeyPem is used. */
 export interface NpKeyPair {
   publicKeyPem: string;
@@ -137,7 +135,7 @@ export async function signNanopub(
     {
       privateKeyBase64: pemToBase64Der(keyPair.privateKeyPem),
       signerIri: signer.iri ?? SYSTEM_ID,
-      name: signer.name ?? SIGNER_NAME,
+      name: signer.name ?? SIGNER_LABEL,
     },
   );
   const trig = np.rdf();

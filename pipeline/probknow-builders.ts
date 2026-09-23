@@ -47,6 +47,10 @@ export interface NpTriple {
 export const PK = "https://w3id.org/probknow/ontology/1.0#"; // classes & predicates
 export const PKR = "https://w3id.org/probknow/resource/"; // individuals
 export const SYSTEM_ID = "https://bioelectricitynexus.com/nanopub-system";
+// License every ProbKnow nanopub is published under (`dct:license` in pubinfo).
+// CC BY 4.0 is the nanopub ecosystem default; change here if the project decides otherwise.
+export const LICENSE = "https://creativecommons.org/licenses/by/4.0/";
+export const SIGNER_LABEL = "Bioelectricity Nexus KG Publisher";
 
 // ─── Literal escaping (standard N-Triples literal escaping) ─────────────────
 function esc(s: string): string {
@@ -59,6 +63,23 @@ function publicKeyDerBase64(publicKeyPem: string): string {
   const key = crypto.createPublicKey(publicKeyPem);
   const der = key.export({ type: "spki", format: "der" }) as Buffer;
   return der.toString("base64");
+}
+
+// ─── Common pubinfo metadata ────────────────────────────────────────────────
+// The nanopub-network conventions every published nanopub is expected to meet:
+//   rdfs:label          short human-readable label of the nanopub itself
+//   dct:license         the license the nanopub is published under
+//   npx:hasNanopubType  the nanopub's type (what Nanodash / the registry list it as)
+//   npx:introduces      the resource this nanopub mints, so its label/type are lifted
+//                       to the nanopub and it becomes discoverable by IRI
+// See github.com/knowledgepixels/nanopub-skill for the conventions these follow.
+function pubinfoCommon(preUri: string, pubG: string, label: string, nanopubType: string, introduces?: string): NpTriple[] {
+  return [
+    { subject: preUri, predicate: `${RDFS}label`, object: `"${esc(label)}"`, graph: pubG },
+    { subject: preUri, predicate: `${DC}license`, object: LICENSE, graph: pubG },
+    { subject: preUri, predicate: `${NPX}hasNanopubType`, object: nanopubType, graph: pubG },
+    ...(introduces ? [{ subject: preUri, predicate: `${NPX}introduces`, object: introduces, graph: pubG }] : []),
+  ];
 }
 
 // ─── IRI validation ─────────────────────────────────────────────────────────
@@ -110,6 +131,8 @@ export interface AssertionForNanopub {
   evidenceWeight?: number | null;
   domain: string;
   paper?: { title: string; doi?: string | null; year?: number | null } | null;
+  /** Short human-readable label for the nanopub (rdfs:label). Falls back to the paper title, then the claim id. */
+  label?: string | null;
 }
 
 export function buildAssertionNanopub(assertion: AssertionForNanopub): { triples: NpTriple[]; preUri: string } {
@@ -126,6 +149,7 @@ export function buildAssertionNanopub(assertion: AssertionForNanopub): { triples
   const predIri = assertIri(assertion.predicate, "assertion.predicate");
   const claimIri = assertIri(`${PKR}claim/${assertion.id}`, "assertion.id");
   const doiIri = assertion.paper?.doi ? assertIri(`https://doi.org/${assertion.paper.doi}`, "assertion.paper.doi") : null;
+  const label = assertion.label || assertion.paper?.title || `ProbKnow claim ${assertion.id}`;
 
   const triples: NpTriple[] = [
     // ── Head graph (NP structure declaration) ──
@@ -136,6 +160,7 @@ export function buildAssertionNanopub(assertion: AssertionForNanopub): { triples
 
     // ── Assertion graph ── (object normalized: plain text → literal, URI stays a URI)
     { subject: subjIri, predicate: predIri, object: assertionObjectTerm(assertion.object), graph: assertG },
+    { subject: claimIri, predicate: `${RDF}type`, object: `${PK}Claim`, graph: assertG },
     ...(assertion.evidenceWeight != null && isFinite(assertion.evidenceWeight)
       ? [{ subject: claimIri, predicate: `${PK}weightOfEvidence`, object: `"${assertion.evidenceWeight.toFixed(4)}"^^${XSD}double`, graph: assertG }]
       : []),
@@ -159,6 +184,7 @@ export function buildAssertionNanopub(assertion: AssertionForNanopub): { triples
     { subject: preUri, predicate: `${DC}creator`, object: SYSTEM_ID, graph: pubG },
     { subject: preUri, predicate: `${PROV}wasGeneratedBy`, object: SYSTEM_ID, graph: pubG },
     { subject: preUri, predicate: `${PK}domain`, object: `"${assertion.domain}"`, graph: pubG },
+    ...pubinfoCommon(preUri, pubG, label, `${PK}Claim`, claimIri),
   ];
 
   return { triples, preUri };
@@ -189,7 +215,7 @@ export function buildIntroNanopub(publicKeyPem: string): { triples: NpTriple[]; 
     { subject: keyDecl, predicate: `${NPX}declaredBy`, object: SYSTEM_ID, graph: assertG },
     { subject: keyDecl, predicate: `${NPX}hasAlgorithm`, object: '"RSA"', graph: assertG },
     { subject: keyDecl, predicate: `${NPX}hasPublicKey`, object: `"${spkiBase64}"`, graph: assertG },
-    { subject: SYSTEM_ID, predicate: `${RDFS}label`, object: '"Bioelectricity Nexus KG Publisher"', graph: assertG },
+    { subject: SYSTEM_ID, predicate: `${RDFS}label`, object: `"${SIGNER_LABEL}"`, graph: assertG },
     { subject: SYSTEM_ID, predicate: `${FOAF}homepage`, object: "https://bioelectricitynexus.com", graph: assertG },
 
     // Provenance
@@ -198,7 +224,7 @@ export function buildIntroNanopub(publicKeyPem: string): { triples: NpTriple[]; 
     // Pubinfo — npx:introduces is required for the network to accept this as a key intro
     { subject: preUri, predicate: `${DC}created`, object: `"${now}"^^${XSD}dateTime`, graph: pubG },
     { subject: preUri, predicate: `${PROV}wasAttributedTo`, object: SYSTEM_ID, graph: pubG },
-    { subject: preUri, predicate: `${NPX}introduces`, object: keyDecl, graph: pubG },
+    ...pubinfoCommon(preUri, pubG, `${SIGNER_LABEL} key declaration`, `${NPX}declaredBy`, keyDecl),
   ];
 
   return { triples, preUri };
@@ -278,6 +304,7 @@ export function buildAssessmentNanopub(a: AssessmentForNanopub): { triples: NpTr
     { subject: preUri, predicate: `${DC}creator`, object: SYSTEM_ID, graph: pubG },
     { subject: preUri, predicate: `${PK}domain`, object: `"${a.hypothesisDomain}"`, graph: pubG },
     { subject: preUri, predicate: `${PK}assessmentType`, object: `"multi-llm-claim-evaluation"`, graph: pubG },
+    ...pubinfoCommon(preUri, pubG, `Assessment of ${a.hypothesisTitle} by ${a.modelLabel}`, `${PK}LLMClaimAssessment`, assessUri),
   );
 
   return { triples, preUri };
@@ -330,6 +357,7 @@ export function buildPlatonicNanopub(p: PlatonicForNanopub): { triples: NpTriple
     { subject: preUri, predicate: `${DC}creator`, object: SYSTEM_ID, graph: pubG },
     { subject: preUri, predicate: `${PK}domain`, object: `"${esc(p.domain)}"`, graph: pubG },
     { subject: preUri, predicate: `${PK}hypothesisType`, object: `"platonic-space-of-forms"`, graph: pubG },
+    ...pubinfoCommon(preUri, pubG, p.title, `${PK}TestableHypothesis`, hypUri),
   ];
 
   return { triples, preUri };

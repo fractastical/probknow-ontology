@@ -14,7 +14,7 @@
 // SPDX-License-Identifier: MIT
 
 import * as crypto from "node:crypto";
-import { buildAssertionNanopub, type AssertionForNanopub, SYSTEM_ID } from "./probknow-builders.js";
+import { buildAssertionNanopub, type AssertionForNanopub, SIGNER_LABEL, SYSTEM_ID } from "./probknow-builders.js";
 import { sealNanopub } from "./seal.js";
 
 // Same inputs reverse-engineered from the published assertion + pubinfo graphs:
@@ -36,7 +36,7 @@ const built = buildAssertionNanopub(input);
 const np = await sealNanopub(built, {
   privateKeyBase64,
   signerIri: SYSTEM_ID,
-  name: "Bioelectricity Nexus KG Publisher",
+  name: SIGNER_LABEL,
 });
 
 console.log("=== Signed nanopublication (TriG) ===\n");

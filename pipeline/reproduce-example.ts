@@ -10,6 +10,11 @@
 // Run (no install needed — this script is dependency-free):
 //   npx tsx reproduce-example.ts
 //
+// Note: the published nanopub predates the pubinfo metadata the builder adds
+//   today (rdfs:label, dct:license, npx:hasNanopubType, npx:introduces, and
+//   `a pk:Claim` on the claim IRI), so those triples appear in the output below
+//   but not in the live nanopub.
+//
 // Note on exact byte-for-byte reproduction of the `RA…` trusty URI:
 //   The trusty hash is computed over ALL triples, which include `dc:created`
 //   (a per-run timestamp) and the signature (which depends on the private key).

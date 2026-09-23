@@ -36,7 +36,7 @@ So every already-published nanopub is queryable through the current vocabulary: 
 
 Two signed nanopublications, both in [`examples/`](examples/):
 
-- [`examples/levin-claim-MURUGAN2022.trig`](examples/levin-claim-MURUGAN2022.trig) — **current builder output**: an evidence-support claim under the `pk:`/`pkr:` ontology (note `pk:weightOfEvidence`, `pk:domain`, and the `pkr:claim/...` resource IRI), **live on the nanopub network** at <https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y>. This is what probknow's pipeline emits today, and it is the nanopub reconstructed by [`pipeline/reproduce-example.ts`](pipeline/reproduce-example.ts).
+- [`examples/levin-claim-MURUGAN2022.trig`](examples/levin-claim-MURUGAN2022.trig) — **current builder output**: an evidence-support claim under the `pk:`/`pkr:` ontology (note `pk:weightOfEvidence`, `pk:domain`, and the `pkr:claim/...` resource IRI), **live on the nanopub network** at <https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y>. This is the nanopub reconstructed by [`pipeline/reproduce-example.ts`](pipeline/reproduce-example.ts). It predates the pubinfo metadata the builders add today (`rdfs:label`, `dct:license`, `npx:hasNanopubType`, `npx:introduces`, and `npx:signedBy` from sealing), so fresh output carries those extra triples.
 - [`examples/levin-P1.legacy.trig`](examples/levin-P1.legacy.trig) — **earlier published wave**: a Levin-lab hypothesis **live on the nanopub network right now**, resolvable at <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is>. It uses the legacy `urn:pkg:` terms, bridged by the crosswalk above.
 
 Both are valid trusty-URI nanopubs (RA hash + RSA-SHA256 signature) and pass the official Java `np check`.
@@ -55,6 +55,9 @@ SPARQL queries in [`queries/`](queries/), runnable against a nanopub-network end
 2. **Linking claims to their source papers** via CiTO/FaBiO so a claim resolves to the paper it was extracted from.
 3. **Confidence semantics.** Aligning `pk:weightOfEvidence` with `npx:hasConfidence` / existing nanopub confidence conventions.
 4. **Dereferenceable terms.** Registering the `w3id.org/probknow` redirect so the `pk:` IRIs resolve to this ontology in a browser/tool.
+5. **Template links.** Declaring `nt:wasCreatedFromTemplate` (and the provenance/pubinfo equivalents) so the nanopubs become derivable and updatable through Nanodash — this needs matching published templates first.
+
+Done: every builder now writes `rdfs:label`, `dct:license`, `npx:hasNanopubType` and `npx:introduces` in pubinfo, so the nanopubs carry a label and a type on the network.
 
 ## License
 

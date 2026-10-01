@@ -10,10 +10,13 @@
 // Run (no install needed — this script is dependency-free):
 //   npx tsx reproduce-example.ts
 //
-// Note: the published nanopub predates the pubinfo metadata the builder adds
-//   today (rdfs:label, dct:license, npx:hasNanopubType, npx:introduces, and
-//   `a pk:Claim` on the claim IRI), so those triples appear in the output below
-//   but not in the live nanopub.
+// Note: the published nanopub predates two changes the builder makes today,
+//   so expect these differences when diffing:
+//   - its legacy `https://example.org/levin-kg/…` IRIs are now rewritten to
+//     `pkr:claim/…` / `pkr:evidence/…` (see `canonicalIri`);
+//   - the weight and claim type now sit on the assertion graph in the
+//     provenance graph (not on a separate pkr:claim/<uuid> IRI), and pubinfo
+//     carries rdfs:label, dct:license, npx:hasNanopubType and a pkr:domain/ IRI.
 //
 // Note on exact byte-for-byte reproduction of the `RA…` trusty URI:
 //   The trusty hash is computed over ALL triples, which include `dc:created`
@@ -36,7 +39,7 @@ const input: AssertionForNanopub = {
   object: "https://example.org/levin-kg/evidence-MURUGAN2022-C1-E1",
   evidenceWeight: 0.9816,
   domain: "levin-lab",
-  paper: null, // no DOI/title on this row → provenance falls back to prov:wasAttributedTo
+  paper: null, // no DOI/title on this row → provenance is just prov:wasAttributedTo
 };
 
 const { triples, preUri } = buildAssertionNanopub(input);
@@ -62,7 +65,7 @@ console.log("=== Sealing (trusty URI + signature) ===");
 console.log("To turn these triples into a signed nanopub, pass { triples, preUri }");
 console.log("to sealNanopub() from ./seal.ts (wraps @nanopub/nanopub-js):");
 console.log("    const np = await sealNanopub({ triples, preUri }, opts);");
-console.log("    console.log(np.rdf());");
+console.log("    console.log(prettyTrig(np));   // or np.rdf() for the library's own serialization");
 console.log("See sign-example.ts for a runnable end-to-end signing demo.");
 console.log("\nThe published nanopub used the ProbKnow system key + its original");
 console.log("timestamp, so its artifact code is RAzdRz…; verify that one with");

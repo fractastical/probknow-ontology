@@ -1,10 +1,17 @@
-# Find claims whose weight of evidence (panel-assigned, 0.0–1.0) is high.
+# Find claims whose panel-assigned weight of evidence (a score in 0.0–1.0) is high.
 # pk:weightOfEvidence is the probabilistic-evaluation term ProbKnow mints;
 # everything else reuses standard vocabularies (PROV-O, Dublin Core, np schema).
-PREFIX pk: <https://w3id.org/probknow/ontology/1.0#>
+# The weight sits on the claim IRI in the assertion graph (entity nanopubs) or on
+# the assertion graph itself in the provenance graph (single-statement nanopubs),
+# so match it in any graph. Nanopubs from ontology version 1.0 use the hash form
+# of the term, listed in VALUES.
+PREFIX pk: <https://w3id.org/probknow/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?claim ?weight WHERE {
-  GRAPH ?a { ?claim pk:weightOfEvidence ?weight . }
+SELECT ?claim ?label ?weight WHERE {
+  VALUES ?p { pk:weightOfEvidence <https://w3id.org/probknow/ontology/1.0#weightOfEvidence> }
+  GRAPH ?g { ?claim ?p ?weight . }
+  OPTIONAL { GRAPH ?g2 { ?claim rdfs:label ?label . } }
   FILTER(?weight >= 0.8)
 }
 ORDER BY DESC(?weight)

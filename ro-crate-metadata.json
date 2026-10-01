@@ -29,9 +29,9 @@
         "linked data",
         "open science"
       ],
-      "mainEntity": { "@id": "probknow-1.0.ttl" },
+      "mainEntity": { "@id": "probknow.ttl" },
       "hasPart": [
-        { "@id": "probknow-1.0.ttl" },
+        { "@id": "probknow.ttl" },
         { "@id": "ONTOLOGY.md" },
         { "@id": "README.md" },
         { "@id": "examples/levin-claim-MURUGAN2022.trig" },
@@ -39,6 +39,11 @@
         { "@id": "queries/all-probknow-nanopubs.rq" },
         { "@id": "queries/claims-by-domain.rq" },
         { "@id": "queries/high-confidence-claims.rq" },
+        { "@id": "examples/probknow-claim-entity.example.trig" },
+        { "@id": "examples/probknow-claim-statement.example.trig" },
+        { "@id": "examples/probknow-intro.example.trig" },
+        { "@id": "w3id/.htaccess" },
+        { "@id": "w3id/README.md" },
         { "@id": "LICENSE" }
       ]
     },
@@ -61,16 +66,16 @@
       "identifier": "CC-BY-4.0"
     },
     {
-      "@id": "probknow-1.0.ttl",
+      "@id": "probknow.ttl",
       "@type": "File",
       "name": "ProbKnow ontology (Turtle)",
       "description": "The OWL ontology / T-Box: classes, properties, the probabilistic-evaluation layer, and the legacy urn:-to-pk: equivalence crosswalk that keeps already-published nanopublications queryable.",
       "encodingFormat": "text/turtle",
-      "conformsTo": { "@id": "https://w3id.org/probknow/ontology/1.0" },
+      "conformsTo": { "@id": "https://w3id.org/probknow/ontology/1.1" },
       "license": { "@id": "https://creativecommons.org/licenses/by/4.0/" }
     },
     {
-      "@id": "https://w3id.org/probknow/ontology/1.0",
+      "@id": "https://w3id.org/probknow/ontology/1.1",
       "@type": ["CreativeWork", "DefinedTermSet"],
       "name": "ProbKnow: Probabilistic Knowledge Graph Ontology for Frontier Science",
       "version": "1.0"
@@ -140,6 +145,41 @@
       "@type": "File",
       "name": "MIT License",
       "encodingFormat": "text/plain"
+    },
+    {
+      "@id": "examples/probknow-claim-entity.example.trig",
+      "@type": "File",
+      "name": "ProbKnow claim as an entity nanopublication (example)",
+      "description": "Fresh output of the current builders: one pkr:claim/ with type, label, context, evidence link and weight of evidence, introduced by the nanopublication. Signed with a throwaway key; not published.",
+      "encodingFormat": "application/trig"
+    },
+    {
+      "@id": "examples/probknow-claim-statement.example.trig",
+      "@type": "File",
+      "name": "ProbKnow claim as a single-statement nanopublication (example)",
+      "description": "Fresh output of the current builders from the same row as the live RAzdRz… nanopublication, with its legacy example.org IRIs rewritten to pkr:. Signed with a throwaway key; not published.",
+      "encodingFormat": "application/trig"
+    },
+    {
+      "@id": "examples/probknow-intro.example.trig",
+      "@type": "File",
+      "name": "ProbKnow publisher introduction (example)",
+      "description": "The publisher agent typed npx:Bot and npx:SoftwareAgent together with its key declaration. Signed with a throwaway key; not published.",
+      "encodingFormat": "application/trig"
+    },
+    {
+      "@id": "w3id/.htaccess",
+      "@type": "File",
+      "name": "w3id.org redirect rules for https://w3id.org/probknow/",
+      "description": "Ready-to-submit Apache rewrite rules for the perma-id/w3id.org registration of the pk: and pkr: namespaces.",
+      "encodingFormat": "text/plain"
+    },
+    {
+      "@id": "w3id/README.md",
+      "@type": "File",
+      "name": "w3id.org registration notes",
+      "description": "How to register the w3id.org/probknow/ namespace and what the redirect rules do.",
+      "encodingFormat": "text/markdown"
     }
   ]
 }

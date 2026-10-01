@@ -1,4 +1,4 @@
-@prefix pk:      <https://w3id.org/probknow/ontology/1.0#> .
+@prefix pk:      <https://w3id.org/probknow/ontology/> .
 @prefix pkr:     <https://w3id.org/probknow/resource/> .
 @prefix owl:     <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -17,7 +17,7 @@
 #  Ontology declaration
 #################################################################
 
-<https://w3id.org/probknow/ontology/1.0> a owl:Ontology ;
+<https://w3id.org/probknow/ontology> a owl:Ontology ;
     dcterms:title "ProbKnow: Probabilistic Knowledge Graph Ontology for Frontier Science"@en ;
     dcterms:description """The vocabulary (T-Box) used by the PKG Aggregator (probknow.com) to
 represent scientific papers, the discrete claims extracted from them, the hypotheses those claims
@@ -26,8 +26,12 @@ that a panel of independent models assign to each claim. The ontology reuses PRO
 Core Terms, the SPAR ontologies (CiTO, FaBiO) and the Nanopublication schema wherever a standard
 term exists, and mints terms only for the probabilistic-evaluation layer, which has no settled
 standard."""@en ;
-    owl:versionIRI <https://w3id.org/probknow/ontology/1.0> ;
-    owl:versionInfo "1.0" ;
+    owl:versionIRI <https://w3id.org/probknow/ontology/1.1> ;
+    owl:versionInfo "1.1" ;
+    owl:priorVersion <https://w3id.org/probknow/ontology/1.0> ;
+    # Term IRIs are slash-based and unversioned (https://w3id.org/probknow/ontology/<Term>),
+    # following the SPAR ontologies; the version lives in owl:versionIRI only. Version 1.0
+    # used hash terms under https://w3id.org/probknow/ontology/1.0#, mapped in the crosswalk.
     dcterms:creator "PKG Aggregator (probknow.com)" ;
     dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
     rdfs:seeAlso <http://purl.obolibrary.org/obo/sepio.owl> ,   # SEPIO — evidence & provenance (alignment target)
@@ -41,7 +45,7 @@ standard."""@en ;
 #                            pkr:assessment/…, pkr:economic-prediction/…, pkr:platonic/L1
 # This single resource namespace supersedes the legacy, non-dereferenceable identifiers used by
 # earlier export waves: urn:pkg:*, urn:levin-kg:*, https://example.org/levin-kg/*, and the
-# per-wave bases w3id.org/{levin-kg,aif,morphopkg}. See docs/ontology/README.md for the crosswalk.
+# per-wave bases w3id.org/{levin-kg,aif,morphopkg}. See ONTOLOGY.md for the crosswalk.
 
 #################################################################
 #  Classes
@@ -109,9 +113,8 @@ pk:Model a owl:Class ;
 
 pk:hasAssessment a owl:ObjectProperty ;
     rdfs:label "has assessment"@en ;
-    rdfs:domain pk:Hypothesis ;
     rdfs:range pk:Assessment ;
-    rdfs:comment "Links a hypothesis (or claim) to one of its probabilistic assessments."@en .
+    rdfs:comment "Links a hypothesis or a claim to one of its probabilistic assessments."@en .
 
 pk:evaluatesHypothesis a owl:ObjectProperty ;
     rdfs:label "evaluates hypothesis"@en ;
@@ -190,9 +193,32 @@ pk:evidenceAgainst a owl:DatatypeProperty ;
 
 pk:weightOfEvidence a owl:DatatypeProperty ;
     rdfs:label "weight of evidence"@en ;
-    rdfs:domain pk:Claim ;
     rdfs:range xsd:double ;
-    rdfs:comment "Aggregate weight of evidence for a claim, in decibans (10·log10 of the likelihood ratio). May also be attached to an individual pk:EvidenceItem."@en .
+    rdfs:comment "Panel-assigned aggregate weight of evidence for a claim, as a score in [0,1]. Attached to a pk:Claim or pk:EvidenceItem, or — in nanopublications that carry a single statement — to the nanopublication's assertion graph in its provenance graph. For the deciban-scaled quantity of the Bayesian assessments use pk:weightOfEvidenceDeciban."@en .
+
+pk:weightOfEvidenceDeciban a owl:DatatypeProperty ;
+    rdfs:label "weight of evidence (decibans)"@en ;
+    rdfs:domain pk:BayesianAssessment ;
+    rdfs:range xsd:double ;
+    rdfs:comment "Weight of evidence in decibans, 10·log10 of the combined Bayes factor (pk:bayesFactor)."@en .
+
+pk:vovkSellkeMaxPRatio a owl:DatatypeProperty ;
+    rdfs:label "Vovk–Sellke maximum p-ratio"@en ;
+    rdfs:domain pk:EvidenceItem ;
+    rdfs:range xsd:double ;
+    rdfs:comment "Upper bound on the Bayes factor against the null implied by the evidence item's p-value (Vovk–Sellke maximum p-ratio, −1/(e·p·ln p) for p < 1/e)."@en .
+
+pk:statisticalTest a owl:DatatypeProperty ;
+    rdfs:label "statistical test"@en ;
+    rdfs:domain pk:EvidenceItem ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Free-text description of the statistical test the evidence item's p-value comes from."@en .
+
+pk:context a owl:DatatypeProperty ;
+    rdfs:label "context"@en ;
+    rdfs:domain pk:Claim ;
+    rdfs:range xsd:string ;
+    rdfs:comment "Free-text experimental context of a claim (organism, intervention, measured quantity, time points)."@en .
 
 pk:bayesFactor a owl:DatatypeProperty ;
     rdfs:label "Bayes factor"@en ;
@@ -222,10 +248,14 @@ pk:hypothesisType a owl:DatatypeProperty ;
     rdfs:label "hypothesis type"@en ;
     rdfs:range xsd:string .
 
-pk:domain a owl:DatatypeProperty ;
+pk:Domain a owl:Class ;
+    rdfs:label "Domain"@en ;
+    rdfs:comment "A frontier-science (or contested-claims) domain, e.g. pkr:domain/levin-lab. Carries an rdfs:label with the domain slug."@en .
+
+pk:domain a owl:ObjectProperty ;
     rdfs:label "domain"@en ;
-    rdfs:range xsd:string ;
-    rdfs:comment "The frontier-science (or contested-claims) domain slug a node belongs to."@en .
+    rdfs:range pk:Domain ;
+    rdfs:comment "The domain a nanopublication (or node) belongs to, as a pkr:domain/<slug> IRI. Nanopublications published before 2026-10 carry the slug as a plain string literal instead."@en .
 
 #################################################################
 #  Datatype properties — economic layer (units are explicit)
@@ -247,16 +277,81 @@ pk:yearsToAchievement a owl:DatatypeProperty ;
 #  Backward-compatibility crosswalk (legacy term → current term)
 #################################################################
 # Earlier export waves published nanopublications (now immutable on the network)
-# under non-dereferenceable urn: terms. These owl:equivalent* axioms make every
-# already-published legacy nanopub queryable through the current pk: vocabulary
-# WITHOUT re-publishing anything: an OWL-aware store treats each pair as the same
-# term, and a plain SPARQL endpoint can UNION the two. This is the full set of
-# term-level (class/predicate) identifiers ever emitted by the legacy waves; the
-# remaining urn: identifiers are individuals, mapped in the README A-Box crosswalk.
+# under non-dereferenceable namespaces: urn:pkg:* / urn:levin-kg:* (one wave) and
+# https://example.org/levin-kg/* plus a stray https://w3id.org/levin-kg/* (the
+# Bayesian-assessment wave; example.org is reserved for documentation, RFC 2606).
+# These owl:equivalent* axioms make every already-published legacy nanopub
+# queryable through the current pk: vocabulary WITHOUT re-publishing anything: an
+# OWL-aware store treats each pair as the same term, and a plain SPARQL endpoint
+# can UNION the two. This is the full set of term-level (class/predicate)
+# identifiers found in the published nanopubs as of 2026-10; the same table drives
+# `canonicalIri()` in pipeline/probknow-builders.ts, which rewrites legacy IRIs
+# in new nanopubs. Legacy INDIVIDUALS map by pattern (see ONTOLOGY.md):
+#   <legacy-base><kind>-<id>  →  pkr:<kind>/<id>     (kind ∈ claim, evidence, assessment, …)
+#   urn:pkg:<kind>:<id>       →  pkr:<kind>/<id>
 
+# -- version 1.0 of this ontology (hash terms under …/ontology/1.0#) --
+# Two of these (weightOfEvidence, domain) occur in published nanopubs; the rest are listed so
+# that any consumer of the 1.0 document resolves to the current terms.
+<https://w3id.org/probknow/ontology/1.0#Assessment> owl:equivalentClass pk:Assessment .
+<https://w3id.org/probknow/ontology/1.0#BayesianAssessment> owl:equivalentClass pk:BayesianAssessment .
+<https://w3id.org/probknow/ontology/1.0#Claim> owl:equivalentClass pk:Claim .
+<https://w3id.org/probknow/ontology/1.0#Concept> owl:equivalentClass pk:Concept .
+<https://w3id.org/probknow/ontology/1.0#EconomicPrediction> owl:equivalentClass pk:EconomicPrediction .
+<https://w3id.org/probknow/ontology/1.0#EvidenceItem> owl:equivalentClass pk:EvidenceItem .
+<https://w3id.org/probknow/ontology/1.0#Hypothesis> owl:equivalentClass pk:Hypothesis .
+<https://w3id.org/probknow/ontology/1.0#LLMClaimAssessment> owl:equivalentClass pk:LLMClaimAssessment .
+<https://w3id.org/probknow/ontology/1.0#Model> owl:equivalentClass pk:Model .
+<https://w3id.org/probknow/ontology/1.0#Paper> owl:equivalentClass pk:Paper .
+<https://w3id.org/probknow/ontology/1.0#TestableHypothesis> owl:equivalentClass pk:TestableHypothesis .
+<https://w3id.org/probknow/ontology/1.0#assessedBy> owl:equivalentProperty pk:assessedBy .
+<https://w3id.org/probknow/ontology/1.0#assessmentType> owl:equivalentProperty pk:assessmentType .
+<https://w3id.org/probknow/ontology/1.0#bayesFactor> owl:equivalentProperty pk:bayesFactor .
+<https://w3id.org/probknow/ontology/1.0#calibrationMethod> owl:equivalentProperty pk:calibrationMethod .
+<https://w3id.org/probknow/ontology/1.0#derivedFromPaper> owl:equivalentProperty pk:derivedFromPaper .
+<https://w3id.org/probknow/ontology/1.0#domain> owl:equivalentProperty pk:domain .
+<https://w3id.org/probknow/ontology/1.0#evaluatesHypothesis> owl:equivalentProperty pk:evaluatesHypothesis .
+<https://w3id.org/probknow/ontology/1.0#evidenceAgainst> owl:equivalentProperty pk:evidenceAgainst .
+<https://w3id.org/probknow/ontology/1.0#evidenceFor> owl:equivalentProperty pk:evidenceFor .
+<https://w3id.org/probknow/ontology/1.0#hasAssessment> owl:equivalentProperty pk:hasAssessment .
+<https://w3id.org/probknow/ontology/1.0#hasConfidence> owl:equivalentProperty pk:hasConfidence .
+<https://w3id.org/probknow/ontology/1.0#hasEconomicPrediction> owl:equivalentProperty pk:hasEconomicPrediction .
+<https://w3id.org/probknow/ontology/1.0#hasEvidence> owl:equivalentProperty pk:hasEvidence .
+<https://w3id.org/probknow/ontology/1.0#hasPriorProbability> owl:equivalentProperty pk:hasPriorProbability .
+<https://w3id.org/probknow/ontology/1.0#hasProbability> owl:equivalentProperty pk:hasProbability .
+<https://w3id.org/probknow/ontology/1.0#hasResolvability> owl:equivalentProperty pk:hasResolvability .
+<https://w3id.org/probknow/ontology/1.0#hasVerdict> owl:equivalentProperty pk:hasVerdict .
+<https://w3id.org/probknow/ontology/1.0#hypothesisType> owl:equivalentProperty pk:hypothesisType .
+<https://w3id.org/probknow/ontology/1.0#marketSizeUsdBillions> owl:equivalentProperty pk:marketSizeUsdBillions .
+<https://w3id.org/probknow/ontology/1.0#pValue> owl:equivalentProperty pk:pValue .
+<https://w3id.org/probknow/ontology/1.0#proposedTest> owl:equivalentProperty pk:proposedTest .
+<https://w3id.org/probknow/ontology/1.0#weightOfEvidence> owl:equivalentProperty pk:weightOfEvidence .
+<https://w3id.org/probknow/ontology/1.0#yearsToAchievement> owl:equivalentProperty pk:yearsToAchievement .
+
+# -- urn: wave --
 <urn:pkg:TestableHypothesis>   owl:equivalentClass    pk:TestableHypothesis .
 <urn:pkg:hasPriorProbability>  owl:equivalentProperty pk:hasPriorProbability .
 <urn:pkg:hasResolvability>     owl:equivalentProperty pk:hasResolvability .
 <urn:pkg:proposedTest>         owl:equivalentProperty pk:proposedTest .
 <urn:pkg:hypothesisType>       owl:equivalentProperty pk:hypothesisType .
 <urn:levin-kg:property:domain> owl:equivalentProperty pk:domain .
+npx:hasEvidenceWeight          owl:equivalentProperty pk:weightOfEvidence .   # not an npx term; one nanopub used it
+
+# -- example.org/levin-kg wave --
+<https://example.org/levin-kg/Assertion>                owl:equivalentClass    pk:Claim .
+<https://example.org/levin-kg/BayesianAssessment>       owl:equivalentClass    pk:BayesianAssessment .
+<https://example.org/levin-kg/EvidenceItem>             owl:equivalentClass    pk:EvidenceItem .
+<https://example.org/levin-kg/weightOfEvidence>         owl:equivalentProperty pk:weightOfEvidence .
+<https://example.org/levin-kg/weightOfEvidence_deciban> owl:equivalentProperty pk:weightOfEvidenceDeciban .
+<https://example.org/levin-kg/calibrationMethod>        owl:equivalentProperty pk:calibrationMethod .
+<https://example.org/levin-kg/bayesFactorCombined>      owl:equivalentProperty pk:bayesFactor .
+<https://example.org/levin-kg/bayesFactorVS_MPR>        owl:equivalentProperty pk:vovkSellkeMaxPRatio .
+<https://example.org/levin-kg/pValue>                   owl:equivalentProperty pk:pValue .
+<https://example.org/levin-kg/statisticalTest>          owl:equivalentProperty pk:statisticalTest .
+<https://example.org/levin-kg/context>                  owl:equivalentProperty pk:context .
+<https://example.org/levin-kg/hasAssessment>            owl:equivalentProperty pk:hasAssessment .
+
+# -- w3id.org/levin-kg variant of the same wave --
+<https://w3id.org/levin-kg/BayesianAssessment>          owl:equivalentClass    pk:BayesianAssessment .
+<https://w3id.org/levin-kg/weightOfEvidence_deciban>    owl:equivalentProperty pk:weightOfEvidenceDeciban .
+<https://w3id.org/levin-kg/bayesFactorCombined>         owl:equivalentProperty pk:bayesFactor .

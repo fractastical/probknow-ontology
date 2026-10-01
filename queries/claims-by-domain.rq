@@ -1,9 +1,15 @@
 # Count ProbKnow nanopublications grouped by the frontier-science domain
-# recorded in their publication-info graph (pk:domain).
-PREFIX pk: <https://w3id.org/probknow/ontology/1.0#>
+# recorded in their publication-info graph (pk:domain). Current nanopubs point
+# at a pkr:domain/<slug> IRI (labelled in the same graph); older ones carry the
+# slug as a plain literal under the version-1.0 hash term, so both forms are
+# folded into one key.
+PREFIX pk: <https://w3id.org/probknow/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?domain (COUNT(?np) AS ?count) WHERE {
-  GRAPH ?pubinfo { ?np pk:domain ?domain . }
+SELECT ?domain (COUNT(DISTINCT ?np) AS ?count) WHERE {
+  VALUES ?p { pk:domain <https://w3id.org/probknow/ontology/1.0#domain> }
+  GRAPH ?pubinfo { ?np ?p ?d . OPTIONAL { ?d rdfs:label ?dl . } }
+  BIND(COALESCE(?dl, STR(?d)) AS ?domain)
 }
 GROUP BY ?domain
 ORDER BY DESC(?count)

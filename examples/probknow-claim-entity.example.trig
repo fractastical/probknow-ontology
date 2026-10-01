@@ -1,0 +1,53 @@
+# ProbKnow claim as an ENTITY nanopub (preferred granularity): one pkr:claim/ with type, label, context, evidence link and weight.
+# Fresh output of pipeline/probknow-builders.ts + seal.ts (@nanopub/nanopub-js), signed with a
+# THROWAWAY key for illustration. NOT published to the network; the RA… code and signature
+# are therefore not the production ones. Regenerate with: npx tsx pipeline/sign-example.ts
+@prefix this: <https://w3id.org/np/RAQEIWCrDLtfoZ2a-ETl4x-HiWsQn6XPHkQnHj-v49XQU>.
+@prefix sub: <https://w3id.org/np/RAQEIWCrDLtfoZ2a-ETl4x-HiWsQn6XPHkQnHj-v49XQU/>.
+@prefix np: <http://www.nanopub.org/nschema#>.
+@prefix npx: <http://purl.org/nanopub/x/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix pk: <https://w3id.org/probknow/ontology/>.
+@prefix claim: <https://w3id.org/probknow/resource/claim/>.
+@prefix evidence: <https://w3id.org/probknow/resource/evidence/>.
+@prefix domain: <https://w3id.org/probknow/resource/domain/>.
+
+sub:Head {
+this: np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo;
+    a np:Nanopublication
+}
+sub:assertion {
+claim:MURUGAN2022-C1 a pk:Claim;
+    dct:description "A 24 h exposure to a five-drug cocktail delivered by a wearable bioreactor (BioDome) after hindlimb amputation induces long-term limb regeneration and functional recovery in adult Xenopus laevis.";
+    rdfs:label "Wearable bioreactor drug delivery enables limb regeneration in adult Xenopus";
+    prov:wasSupportedBy evidence:MURUGAN2022-C1-E1;
+    pk:context "Xenopus laevis; hindlimb amputation; BioDome wearable bioreactor, five-drug cocktail; 24 h exposure; 18-month follow-up";
+    pk:weightOfEvidence "0.9816"^^xsd:double
+}
+sub:provenance {
+sub:assertion prov:wasAttributedTo <https://bioelectricitynexus.com/nanopub-system>;
+    prov:wasDerivedFrom <https://doi.org/10.1126/sciadv.abj2164>.
+<https://doi.org/10.1126/sciadv.abj2164> dct:date "2022"^^xsd:gYear;
+    dct:title "Acute multidrug delivery via a wearable bioreactor facilitates long-term limb regeneration and functional recovery in adult Xenopus laevis."
+}
+sub:pubinfo {
+this: rdfs:label "Wearable bioreactor drug delivery enables limb regeneration in adult Xenopus";
+    dct:created "2026-10-01T06:07:24.664Z"^^xsd:dateTime;
+    dct:creator <https://bioelectricitynexus.com/nanopub-system>;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:hasNanopubType pk:Claim;
+    npx:introduces claim:MURUGAN2022-C1;
+    pk:domain domain:levin-lab.
+domain:levin-lab rdfs:label "levin-lab".
+sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4Nnm/4U5dmf7Wg11KEAXu7/GfFSF4HvfD36ky3jVAucbg7KIVRXEu3AB+sJEmrHMkZMUZdOMuyHYBW/KbuZO3d62kKFzyEDNng6t2bTMK8oCSeDTQBCAdSQb9P8iHzLNYwJlh//N6ol2HVVRw2dgdnWdw1D60JfHCLwY9/XLsJzJTu2Kdoyq/14jzQ6ku+iIbaS5CFzAMPF/V6P/rGVB+d6CO/VCYIj2+8xGcAykgWHn/06rgG8dgsQh9Zu+8fc8E51zh5MQVdME2yfBBSsxqawmI/Zk0QsUxspfETI+LtcbAz4FMPGJ53gxcU/8RH3zNhr+7eD+0uPmE8Nhz6PCbQIDAQAB";
+    npx:hasSignatureTarget this:;
+    npx:signedBy <https://bioelectricitynexus.com/nanopub-system>;
+    npx:hasSignature "2lTNgUXdsID+SVbmq8oEeNXP2TpovIpbPQfoXAyhZURvJP0rLM3eDJyMkpF+/0Whx5b94B2mZxxWTKn/5F8RsRco/K+KBpPU1afVgzocFalEgnHQ+4+WumofE/Gg/T9XnhuQYq88PnBcr1EInktXu+vB+PVp5qF9tysOd9BppcI8hWmzHOPGKDSY6Frhb5O/MXoto8xPy6ZOCLZTUgpXV/h/38nw3Oj2hEoaYY8uyWJfBV17SK0Q9SOyIYBcQ6UTTXAOVI4OaCM1tMs3TfZQ95GEEAqFfCjgGXFwJgD7ubl0knaGlI0YG9Wo3mCuR5P0qPgyEippI4w2Ku8VSuf8Zw=="
+}

@@ -1,1 +1,4 @@
 /local
+
+# unsigned intermediates written by nanopubs/sign.sh
+nanopubs/signed/tmp/

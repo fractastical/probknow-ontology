@@ -2,8 +2,8 @@
 # Fresh output of pipeline/probknow-builders.ts + seal.ts (@nanopub/nanopub-js), signed with a
 # THROWAWAY key for illustration. NOT published to the network; the RA… code and signature
 # are therefore not the production ones. Regenerate with: npx tsx pipeline/sign-example.ts
-@prefix this: <https://w3id.org/np/RA95bvVhjhUxrNIsQmTBZ96CrFP2LX5SH9Inxl5A9g4dg>.
-@prefix sub: <https://w3id.org/np/RA95bvVhjhUxrNIsQmTBZ96CrFP2LX5SH9Inxl5A9g4dg/>.
+@prefix this: <https://w3id.org/np/RAHUgJkJQhpVpJhKa1j7JLv3FwcNndCxfhROxc5z0Mmvc>.
+@prefix sub: <https://w3id.org/np/RAHUgJkJQhpVpJhKa1j7JLv3FwcNndCxfhROxc5z0Mmvc/>.
 @prefix np: <http://www.nanopub.org/nschema#>.
 @prefix npx: <http://purl.org/nanopub/x/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -22,7 +22,7 @@ this: np:hasAssertion sub:assertion;
 sub:assertion {
 sub:keyDeclaration npx:declaredBy <https://bioelectricitynexus.com/nanopub-system>;
     npx:hasAlgorithm "RSA";
-    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4Nnm/4U5dmf7Wg11KEAXu7/GfFSF4HvfD36ky3jVAucbg7KIVRXEu3AB+sJEmrHMkZMUZdOMuyHYBW/KbuZO3d62kKFzyEDNng6t2bTMK8oCSeDTQBCAdSQb9P8iHzLNYwJlh//N6ol2HVVRw2dgdnWdw1D60JfHCLwY9/XLsJzJTu2Kdoyq/14jzQ6ku+iIbaS5CFzAMPF/V6P/rGVB+d6CO/VCYIj2+8xGcAykgWHn/06rgG8dgsQh9Zu+8fc8E51zh5MQVdME2yfBBSsxqawmI/Zk0QsUxspfETI+LtcbAz4FMPGJ53gxcU/8RH3zNhr+7eD+0uPmE8Nhz6PCbQIDAQAB".
+    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyX7jl9/9LSjJQkRupa/6t9GRY3D524+YejevXtPpyR99020Bnezw+4I6QbzzG/wk9ch2HPznXlh1dg2WpKTOCiyvYnBRzAZ8/ABRPBX584qY3juwp1e8WOy5ZXPd5O7Evc4ViXXsMbHqB2zEjpqQn7oterGlb0Eug+4nfgXgF4yYiCRv+Zdmtm68Qp982EQgGWTcuYeUkQxxWtcDUGe3UmHN2D6zWrS0xnmoPzFM1pKB0ujTRn9X3vrqgB28he206blLljhUinQkGkRzIO1yPoRRFoRWKGHQtWSL9obX4HgSBrMJqj8q++vstbd+hjbEQYRL2htQT8jDRBGCPd8CzQIDAQAB".
 <https://bioelectricitynexus.com/nanopub-system> a npx:Bot, npx:SoftwareAgent;
     rdfs:label "Bioelectricity Nexus KG Publisher";
     foaf:homepage <https://bioelectricitynexus.com>;
@@ -33,14 +33,14 @@ sub:assertion prov:wasAttributedTo <https://bioelectricitynexus.com/nanopub-syst
 }
 sub:pubinfo {
 this: rdfs:label "Bioelectricity Nexus KG Publisher";
-    dct:created "2026-10-01T06:07:24.667Z"^^xsd:dateTime;
+    dct:created "2026-10-01T07:32:04.614Z"^^xsd:dateTime;
     dct:creator <https://bioelectricitynexus.com/nanopub-system>;
     dct:license <https://creativecommons.org/licenses/by/4.0/>;
     npx:hasNanopubType npx:declaredBy;
     npx:introduces <https://bioelectricitynexus.com/nanopub-system>.
 sub:sig npx:hasAlgorithm "RSA";
-    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4Nnm/4U5dmf7Wg11KEAXu7/GfFSF4HvfD36ky3jVAucbg7KIVRXEu3AB+sJEmrHMkZMUZdOMuyHYBW/KbuZO3d62kKFzyEDNng6t2bTMK8oCSeDTQBCAdSQb9P8iHzLNYwJlh//N6ol2HVVRw2dgdnWdw1D60JfHCLwY9/XLsJzJTu2Kdoyq/14jzQ6ku+iIbaS5CFzAMPF/V6P/rGVB+d6CO/VCYIj2+8xGcAykgWHn/06rgG8dgsQh9Zu+8fc8E51zh5MQVdME2yfBBSsxqawmI/Zk0QsUxspfETI+LtcbAz4FMPGJ53gxcU/8RH3zNhr+7eD+0uPmE8Nhz6PCbQIDAQAB";
+    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyX7jl9/9LSjJQkRupa/6t9GRY3D524+YejevXtPpyR99020Bnezw+4I6QbzzG/wk9ch2HPznXlh1dg2WpKTOCiyvYnBRzAZ8/ABRPBX584qY3juwp1e8WOy5ZXPd5O7Evc4ViXXsMbHqB2zEjpqQn7oterGlb0Eug+4nfgXgF4yYiCRv+Zdmtm68Qp982EQgGWTcuYeUkQxxWtcDUGe3UmHN2D6zWrS0xnmoPzFM1pKB0ujTRn9X3vrqgB28he206blLljhUinQkGkRzIO1yPoRRFoRWKGHQtWSL9obX4HgSBrMJqj8q++vstbd+hjbEQYRL2htQT8jDRBGCPd8CzQIDAQAB";
     npx:hasSignatureTarget this:;
     npx:signedBy <https://bioelectricitynexus.com/nanopub-system>;
-    npx:hasSignature "EQz6DFK16sHOMrTBfloueBvaZWzK0x1xx4WlekjSSJwp0Ang06oaB9yUd+6320+29y6/QkkwPyKyzOyD06/1G0rBKNkFvpsOcSrlAkMjO+oYmMSM6UO1UK+Lod6eVMIlFkpj/Y8/q+Ov+Clu2sEJoLQHOxsByTQOFmH6QzJXDCmm/6mZCUcn22c2IqCmD6ZEYYZlxJotm/i3IYPwVp0ZfjgswR1LyyuWYh3aJ+TgQ2Jsv6T8E1pXMfUfOAY5UcYAPEI2TYf467scdqKhUPRgr1Td7CX38SdW+rAh7/xwUvFj499BfTTMVY28V25okJ4NW+iU/OwUWg8giq6ywG1ptg=="
+    npx:hasSignature "OAIq8he0Bnhm9v8GQCcWGmS51wxXNGWkiNxzBJIDab6I86AOjbcs4gEDhxMzzCM35/ly1Hhtt54w8vhFixNtJoUjprCXGYaUMTz3fCdsq5oTogOjIwgvVDCQrBA5vZZYXoBj35OZIiIR5cWSn5G2QQUt/kKtCUgSH81876WZ9ueNoLhb4LrRoyuuAS0SWMOdOOI7b4r3xGT/O3w2s8I4QugQTZTbFSWh6Dnf0+fPmUXoSn8Hwn89rTiQODCyC1TMAhKTFwp3RZB9JT+mhy0TuftXav90Ksnw9plydU9SJ/h1gIvPKL4KBxQunq2JVrSiU/tuRYTCD8NwmdvP4+PsNA=="
 }

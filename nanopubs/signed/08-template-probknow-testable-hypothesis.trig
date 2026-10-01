@@ -1,0 +1,139 @@
+@prefix this: <https://w3id.org/np/RAPZZB0fIwmSTnoiL9cBDSx9uRGI10J7gd9P42WmunbbA> .
+@prefix sub: <https://w3id.org/np/RAPZZB0fIwmSTnoiL9cBDSx9uRGI10J7gd9P42WmunbbA/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix orcid: <https://orcid.org/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix pk: <https://w3id.org/probknow/ontology/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sub:Head {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  dct:identifier rdfs:label "has the identifier" .
+  
+  rdf:type rdfs:label "is a" .
+  
+  rdfs:comment rdfs:label "has the comment" .
+  
+  rdfs:label rdfs:label "has the label" .
+  
+  sub:claim a nt:LongLiteralPlaceholder;
+    rdfs:label "the full statement of the hypothesis" .
+  
+  sub:code a nt:LiteralPlaceholder;
+    rdfs:label "the hypothesis code (e.g. P1)" .
+  
+  sub:label a nt:LiteralPlaceholder;
+    rdfs:label "the hypothesis in one sentence" .
+  
+  sub:prior a nt:LiteralPlaceholder;
+    rdfs:label "prior probability, from 0 to 1";
+    nt:hasDatatype xsd:double .
+  
+  sub:resolvability a nt:LiteralPlaceholder;
+    rdfs:label "resolvability, from 0 to 1";
+    nt:hasDatatype xsd:double .
+  
+  sub:st01 rdf:object pk:TestableHypothesis;
+    rdf:predicate rdf:type;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~>;
+    nt:statementOrder "1" .
+  
+  sub:st02 rdf:object sub:label;
+    rdf:predicate rdfs:label;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~>;
+    nt:statementOrder "2" .
+  
+  sub:st03 a nt:OptionalStatement;
+    rdf:object sub:code;
+    rdf:predicate dct:identifier;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~>;
+    nt:statementOrder "3" .
+  
+  sub:st04 rdf:object sub:claim;
+    rdf:predicate rdfs:comment;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~>;
+    nt:statementOrder "4" .
+  
+  sub:st05 rdf:object sub:test;
+    rdf:predicate pk:proposedTest;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~>;
+    nt:statementOrder "5" .
+  
+  sub:st06 a nt:OptionalStatement;
+    rdf:object sub:prior;
+    rdf:predicate pk:hasPriorProbability;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~>;
+    nt:statementOrder "6" .
+  
+  sub:st07 a nt:OptionalStatement;
+    rdf:object sub:resolvability;
+    rdf:predicate pk:hasResolvability;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~>;
+    nt:statementOrder "7" .
+  
+  sub:template a nt:AssertionTemplate;
+    dct:description "A hypothesis stated together with the experiment that would resolve it, a prior probability and a resolvability score (how decidably it can be tested), both from 0 to 1. The hypothesis's identifier is minted from this nanopublication's artifact code.";
+    dct:isVersionOf <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind>;
+    rdfs:label "ProbKnow testable hypothesis";
+    gen:governedBy <https://w3id.org/spaces/probknow>;
+    nt:hasNanopubLabelPattern "${label}";
+    nt:hasStatement sub:st01, sub:st02, sub:st03, sub:st04, sub:st05, sub:st06, sub:st07;
+    nt:hasTag "ProbKnow";
+    nt:hasTargetNanopubType pk:TestableHypothesis .
+  
+  sub:test a nt:LongLiteralPlaceholder;
+    rdfs:label "the experiment that would resolve the hypothesis" .
+  
+  pk:TestableHypothesis rdfs:label "testable hypothesis" .
+  
+  pk:hasPriorProbability rdfs:label "has the prior probability" .
+  
+  pk:hasResolvability rdfs:label "has the resolvability" .
+  
+  pk:proposedTest rdfs:label "has the proposed test" .
+  
+  <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> a nt:IntroducedResource;
+    rdfs:label "this hypothesis" .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo orcid:0000-0002-1267-0234 .
+}
+
+sub:pubinfo {
+  orcid:0000-0002-1267-0234 foaf:name "Tobias Kuhn" .
+  
+  this: dct:created "2026-10-01T07:30:44Z"^^xsd:dateTime;
+    dct:creator orcid:0000-0002-1267-0234;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:embeds sub:template;
+    npx:introduces <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind>;
+    npx:supersedes <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI>;
+    rdfs:label "ProbKnow testable hypothesis";
+    skos:changeNote "Introduced resources are now minted from the nanopublication's artifact code (pkr:<kind>/RA…), so they are unique by construction; the pipeline may still use its own ids under the same namespace. References to other ProbKnow resources are guided choices searched on the network.";
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>,
+      <https://w3id.org/np/RAKc76yHLDbloE6ObluzYQsfX37v6qrZXbYeIKpe8-YUo>, <https://w3id.org/np/RAoTD7udB2KtUuOuAe74tJi1t3VzK0DyWS7rYVAq1GRvw>,
+      <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAWwJ-TzFhUJN5l6cTUIeCIUqqzS8ek-_zumlDczSUipk/template> .
+  
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwUtewGCpT5vIfXYE1bmf/Uqu1ojqnWdYxv+ySO80ul8Gu7m8KoyPAwuvaPj0lvPtHrg000qMmkxzKhYknEjq8v7EerxZNYp5B3/3+5ZpuWOYAs78UnQVjbHSmDdmryr4D4VvvNIiUmd0yxci47dTFUj4DvfHnGd6hVe5+goqdcwIDAQAB";
+    npx:hasSignature "fmQPpJZ/r6uWemZBMqjOaI2IYHub6EfL4JmYLQsEI1YEu87oRFkO68R+oFo2YPWb7vc1QJMYwPZET95EePfzIyyFM8bbloFwzd7BCOACoqyDiPxu0qyMmx5aWcKU58RrZMpjLgrp9WdHNy0o7RPtz719MpNTnHO8ejNeKZVIMVs=";
+    npx:hasSignatureTarget this:;
+    npx:signedBy orcid:0000-0002-1267-0234 .
+}

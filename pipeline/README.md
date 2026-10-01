@@ -52,7 +52,8 @@ caught before anything is published.
 2. For every stored nanopub, build its replacement with `supersedes` = its old
    trusty URI (prefer `buildEntityNanopub`, grouping the rows of one entity).
 3. Run `java -jar nanopub-<version>-jar-with-dependencies.jar check -v` over the
-   signed files, publish a handful to `https://test.registry.knowledgepixels.com/`
+   signed files (and the nanopub skill's `check-nanopub-conformance.py` against
+   the templates), publish a handful to `https://test.registry.knowledgepixels.com/`
    and inspect them in Nanodash, then publish the batch to the live network.
 4. Verify on Nanopub Query that the publisher's nanopub count matches, and keep
    the old → new mapping.
@@ -69,6 +70,19 @@ used in production. Five builders:
 | `buildIntroNanopub` | the publisher agent (`npx:Bot`, `npx:SoftwareAgent`) and its key declaration | `npx:declaredBy`, `npx:hasPublicKey`, `frbr:owner` |
 | `buildAssessmentNanopub` | a multi-LLM hypothesis evaluation (`pk:LLMClaimAssessment`) | `pk:assessedBy`, `pk:hasProbability` |
 | `buildPlatonicNanopub` | a testable hypothesis + its prior (`pk:TestableHypothesis`) | `pk:proposedTest`, `pk:hasPriorProbability` |
+
+### Resource identifiers: caller ids or the artifact code
+
+Resources live under `pkr:<kind>/<id>` (`pkr:claim/…`, `pkr:evidence/…`,
+`pkr:assessment/…`, `pkr:platonic/…`). The id is either **caller-provided**, a
+database key such as `MURUGAN2022-C1` or a UUID (letters, digits, `_` and `-`
+only), or, when none is given, **the artifact code of the nanopub that
+introduces the resource**: `resourceIri()` writes the `~~~ARTIFACTCODE~~~`
+marker and both signers replace it with the computed `RA…` code, so the IRI is
+unique by construction and known once the nanopub is sealed (`signNanopub`
+returns the trusty URI; the resource IRI is `pkr:<kind>/<its artifact code>`).
+Nanodash mints the same form from the ProbKnow templates and matches either
+form against them, so pipeline nanopubs with their own ids conform too.
 
 ### Legacy IRIs are rewritten, `example.org` is refused
 
@@ -101,6 +115,13 @@ for the conventions):
   key** as the original; the ProbKnow key is unchanged, so republishing the
   live wave this way makes every old URI resolve to its clean replacement.
 - `pk:domain` — a `pkr:domain/<slug>` IRI, labelled in the same graph.
+- `nt:wasCreatedFromTemplate`, `nt:wasCreatedFromProvenanceTemplate`,
+  `nt:wasCreatedFromPubinfoTemplate` — the ProbKnow templates (governed by the
+  ProbKnow space, sources in [`../nanopubs/`](../nanopubs/)) and the ecosystem's
+  Creator, License and Supersedes pubinfo templates. The `TEMPLATES` table in
+  `probknow-builders.ts` maps each entity class to its assertion template; a
+  nanopub whose class has no template carries no links. Re-signing the templates
+  changes their IRIs, and `nanopubs/sign.sh` prints the table to paste back.
 
 Each returns unsigned `{ triples, preUri }`. The `pk:`/`pkr:` terms are defined
 in [`../probknow.ttl`](../probknow.ttl).

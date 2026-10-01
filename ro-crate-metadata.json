@@ -44,6 +44,7 @@
         { "@id": "examples/probknow-intro.example.trig" },
         { "@id": "w3id/.htaccess" },
         { "@id": "w3id/README.md" },
+        { "@id": "nanopubs/" },
         { "@id": "LICENSE" }
       ]
     },
@@ -173,6 +174,12 @@
       "name": "w3id.org redirect rules for https://w3id.org/probknow/",
       "description": "Ready-to-submit Apache rewrite rules for the perma-id/w3id.org registration of the pk: and pkr: namespaces.",
       "encodingFormat": "text/plain"
+    },
+    {
+      "@id": "nanopubs/",
+      "@type": "Dataset",
+      "name": "ProbKnow Space and governed templates",
+      "description": "Sources (nanopubs/src), generator and signing script for the ProbKnow Space on the nanopublication network and the templates it governs: claim, evidence item, Bayesian assessment, LLM assessment, testable hypothesis, a provenance template and a domain pubinfo template, plus the maintained-resource declarations of their kinds."
     },
     {
       "@id": "w3id/README.md",

@@ -56,6 +56,68 @@ export const SYSTEM_HOMEPAGE = "https://bioelectricitynexus.com";
 // CC BY 4.0 is the nanopub ecosystem default; change here if the project decides otherwise.
 export const LICENSE = "https://creativecommons.org/licenses/by/4.0/";
 export const SIGNER_LABEL = "Bioelectricity Nexus KG Publisher";
+export const NT = "https://w3id.org/np/o/ntemplate/";
+
+// ─── Minting resource IRIs ──────────────────────────────────────────────────
+// Resources live under pkr:<kind>/<id>. The id is either caller-provided (a database
+// key such as MURUGAN2022-C1 or a UUID) or, when none is given, the ARTIFACT CODE of
+// the nanopub that introduces the resource: the builders write the marker below and
+// both signers (nanopub-java, @nanopub/nanopub-js) replace it with the computed
+// RA… code at signing time, so the IRI is unique by construction and known only once
+// the nanopub is sealed. Nanodash mints the same form from the ProbKnow templates
+// (`…/~~ARTIFACTCODE~~` there), and matches either form against them.
+export const ARTIFACT_CODE = "~~~ARTIFACTCODE~~~";
+/** pkr: path segment per resource class. */
+export const RESOURCE_KIND: Record<string, string> = {
+  [`${PK}Claim`]: "claim",
+  [`${PK}EvidenceItem`]: "evidence",
+  [`${PK}BayesianAssessment`]: "assessment",
+  [`${PK}LLMClaimAssessment`]: "assessment",
+  [`${PK}Assessment`]: "assessment",
+  [`${PK}TestableHypothesis`]: "platonic",
+  [`${PK}Hypothesis`]: "hypothesis",
+  [`${PK}Paper`]: "paper",
+  [`${PK}Model`]: "model",
+  [`${PK}Domain`]: "domain",
+};
+// Ids must be plain local names: this is what Nanodash unifies with the templates'
+// artifact-code IRIs, and what keeps the IRI free of escaping.
+const LOCAL_ID = /^[A-Za-z0-9_-]+$/;
+/** The pkr: IRI of a resource of class `type` with the given id, or with the artifact-code marker when no id is given. */
+export function resourceIri(type: string, id?: string | null): string {
+  const kind = RESOURCE_KIND[canonicalIri(type)];
+  if (!kind) throw new Error(`no pkr: kind known for class ${JSON.stringify(type)}; extend RESOURCE_KIND`);
+  if (id != null && id !== "") {
+    if (!LOCAL_ID.test(id)) throw new Error(`resource id ${JSON.stringify(id)} must match ${LOCAL_ID} (letters, digits, _ and -)`);
+    return `${PKR}${kind}/${id}`;
+  }
+  return `${PKR}${kind}/${ARTIFACT_CODE}`;
+}
+
+// ─── Templates ──────────────────────────────────────────────────────────────
+// Every nanopub links to the templates it was created from (nt:wasCreatedFromTemplate,
+// …ProvenanceTemplate, …PubinfoTemplate), so Nanodash renders it with its form and it
+// can be derived from or superseded there. The ProbKnow templates are governed by the
+// ProbKnow space (https://w3id.org/spaces/probknow); their sources are in ../nanopubs/.
+// The IRIs below are the signed versions: re-signing (nanopubs/sign.sh) changes them,
+// and the script prints the new table (also nanopubs/signed/template-iris.json).
+export const TEMPLATES = {
+  /** Assertion templates by the class of the resource they create (embedded identity: <np>/template). */
+  assertion: {
+    [`${PK}Claim`]: "https://w3id.org/np/RAIVOEuhWNK4BuCbL_XRChRVlV6LKpFicBzwHpmuRxHWI/template",
+    [`${PK}EvidenceItem`]: "https://w3id.org/np/RAk4kcX4zA_touv8CeKku9tTUnbR5xiTLSLwFbrKSl3BE/template",
+    [`${PK}BayesianAssessment`]: "https://w3id.org/np/RAnN-8bznTS-PsGIw8LMU4LA_jybOJ4THjLzMRy_W0rFc/template",
+    [`${PK}LLMClaimAssessment`]: "https://w3id.org/np/RAku3DINcetdFUnyTLflyV-8ep3QOCuL-IpGdS984vw8s/template",
+    [`${PK}TestableHypothesis`]: "https://w3id.org/np/RAPZZB0fIwmSTnoiL9cBDSx9uRGI10J7gd9P42WmunbbA/template",
+  } as Record<string, string>,
+  /** "Extracted from a paper by ProbKnow": assertion attributed to an agent, derived from a paper. */
+  provenance: "https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg",
+  /** Pubinfo templates: the ecosystem's Creator and License, ProbKnow's domain, and Supersedes when used. */
+  pubinfoCreator: "https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI",
+  pubinfoLicense: "https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8",
+  pubinfoDomain: "https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0",
+  pubinfoSupersedes: "https://w3id.org/np/RAoTD7udB2KtUuOuAe74tJi1t3VzK0DyWS7rYVAq1GRvw",
+};
 
 // ─── Literal escaping (standard N-Triples literal escaping) ─────────────────
 function esc(s: string): string {
@@ -198,6 +260,8 @@ interface Common {
   introduces?: string | null;
   supersedes?: string | null;
   domain?: string | null;
+  /** The assertion template (embedded-identity IRI) this nanopub follows; template links are written when set. */
+  template?: string | null;
 }
 function pubinfoCommon(preUri: string, pubG: string, c: Common): NpTriple[] {
   const out: NpTriple[] = [
@@ -213,6 +277,16 @@ function pubinfoCommon(preUri: string, pubG: string, c: Common): NpTriple[] {
       { subject: preUri, predicate: `${PK}domain`, object: d, graph: pubG },
       { subject: d, predicate: `${RDFS}label`, object: lit(c.domain), graph: pubG },
     );
+  }
+  if (c.template) {
+    out.push(
+      { subject: preUri, predicate: `${NT}wasCreatedFromTemplate`, object: c.template, graph: pubG },
+      { subject: preUri, predicate: `${NT}wasCreatedFromProvenanceTemplate`, object: TEMPLATES.provenance, graph: pubG },
+      { subject: preUri, predicate: `${NT}wasCreatedFromPubinfoTemplate`, object: TEMPLATES.pubinfoCreator, graph: pubG },
+      { subject: preUri, predicate: `${NT}wasCreatedFromPubinfoTemplate`, object: TEMPLATES.pubinfoLicense, graph: pubG },
+    );
+    if (c.domain) out.push({ subject: preUri, predicate: `${NT}wasCreatedFromPubinfoTemplate`, object: TEMPLATES.pubinfoDomain, graph: pubG });
+    if (c.supersedes) out.push({ subject: preUri, predicate: `${NT}wasCreatedFromPubinfoTemplate`, object: TEMPLATES.pubinfoSupersedes, graph: pubG });
   }
   return out;
 }
@@ -265,19 +339,21 @@ function paperProvenance(assertG: string, provG: string, id: string, paper: Pape
 // introduces one meaningful resource instead of a single disconnected edge.
 
 export interface EntityForNanopub {
-  /** The entity IRI (legacy forms are canonicalized to pkr:). */
-  iri: string;
+  /** The entity IRI (legacy forms are canonicalized to pkr:). Omit it to mint `pkr:<kind>/<id>`, or, with no `id` either, `pkr:<kind>/<artifact code>`. */
+  iri?: string | null;
   /** The entity's class, e.g. `PK + "Claim"` (legacy forms are canonicalized to pk:). */
   type: string;
   label: string;
   description?: string | null;
   /** Further properties of the entity. `object` is an IRI, a quoted literal, or plain text (→ string literal). */
   statements?: { predicate: string; object: string }[] | null;
+  /** Statements that have the entity as OBJECT, e.g. the claim an assessment is of: `{ subject: pkr:claim/X, predicate: pk:hasAssessment }`. */
+  about?: { subject: string; predicate: string }[] | null;
   /** Panel-assigned weight of evidence for the entity, in [0,1]. */
   evidenceWeight?: number | null;
   domain: string;
   paper?: PaperRef | null;
-  /** Row id, used for the pkr:paper/ fallback when the paper has no DOI. */
+  /** Row id: the local name of the minted IRI when `iri` is omitted, and the pkr:paper/ fallback when the paper has no DOI. */
   id?: string | null;
   /** Trusty URI of the earlier version of this nanopub (same signing key). */
   supersedes?: string | null;
@@ -287,8 +363,8 @@ export interface EntityForNanopub {
 export function buildEntityNanopub(e: EntityForNanopub): { triples: NpTriple[]; preUri: string } {
   const preUri = NP_BASE + SPACE_AC;
   const { assertG, provG, pubG } = graphs(preUri);
-  const iri = assertIri(e.iri, "entity.iri");
   const type = assertIri(e.type, "entity.type");
+  const iri = e.iri ? assertIri(e.iri, "entity.iri") : resourceIri(type, e.id);
   const now = (e.createdAt ?? new Date()).toISOString();
 
   const triples: NpTriple[] = [
@@ -304,17 +380,23 @@ export function buildEntityNanopub(e: EntityForNanopub): { triples: NpTriple[]; 
       object: objectTerm(s.object, `entity.statements[${i}].object`),
       graph: assertG,
     })),
+    ...(e.about ?? []).map((s, i) => ({
+      subject: assertIri(s.subject, `entity.about[${i}].subject`),
+      predicate: assertIri(s.predicate, `entity.about[${i}].predicate`),
+      object: iri,
+      graph: assertG,
+    })),
     ...(e.evidenceWeight != null && isFinite(e.evidenceWeight)
       ? [{ subject: iri, predicate: `${PK}weightOfEvidence`, object: dbl(e.evidenceWeight), graph: assertG }]
       : []),
 
     // ── Provenance ──
-    ...paperProvenance(assertG, provG, e.id ?? iri.slice(iri.lastIndexOf("/") + 1), e.paper),
+    ...paperProvenance(assertG, provG, e.id ?? iri.slice(iri.lastIndexOf("/") + 1).replace(ARTIFACT_CODE, "paper"), e.paper),
 
     // ── Pubinfo ──
     { subject: preUri, predicate: `${DC}created`, object: `"${now}"^^${XSD}dateTime`, graph: pubG },
     { subject: preUri, predicate: `${DC}creator`, object: SYSTEM_ID, graph: pubG },
-    ...pubinfoCommon(preUri, pubG, { label: e.label, nanopubType: type, introduces: iri, supersedes: e.supersedes, domain: e.domain }),
+    ...pubinfoCommon(preUri, pubG, { label: e.label, nanopubType: type, introduces: iri, supersedes: e.supersedes, domain: e.domain, template: TEMPLATES.assertion[type] }),
   ];
 
   return { triples, preUri };
@@ -441,7 +523,8 @@ export function buildIntroNanopub(intro: IntroForNanopub | string): { triples: N
 // ─── Assessment (multi-LLM hypothesis evaluation) nanopub ───────────────────
 
 export interface AssessmentForNanopub {
-  id: string;
+  /** Local id of the assessment; omit to mint it from the nanopub's artifact code. */
+  id?: string | null;
   hypothesisId: string;
   hypothesisCode: string;
   hypothesisTitle: string;
@@ -462,7 +545,7 @@ export interface AssessmentForNanopub {
 export function buildAssessmentNanopub(a: AssessmentForNanopub): { triples: NpTriple[]; preUri: string } {
   const preUri = NP_BASE + SPACE_AC;
   const { assertG, provG, pubG } = graphs(preUri);
-  const assessUri = assertIri(`${PKR}assessment/${a.id}`, "assessment.id");
+  const assessUri = resourceIri(`${PK}LLMClaimAssessment`, a.id);
   const hypUri = assertIri(`${PKR}hypothesis/${a.hypothesisId}`, "assessment.hypothesisId");
   // `model` is sanitized to an IRI-safe charset rather than validated.
   const modelUri = `${PKR}model/${a.model.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
@@ -497,11 +580,10 @@ export function buildAssessmentNanopub(a: AssessmentForNanopub): { triples: NpTr
     triples.push({ subject: assessUri, predicate: `${PK}evidenceAgainst`, object: lit(ea), graph: assertG });
 
   // ── Provenance: produced by the model, run by the ProbKnow system ──
+  // (the hypothesis link is in the assertion as pk:evaluatesHypothesis)
   triples.push(
     { subject: assertG, predicate: `${PROV}wasAttributedTo`, object: modelUri, graph: provG },
     { subject: assertG, predicate: `${PROV}wasAttributedTo`, object: SYSTEM_ID, graph: provG },
-    { subject: assertG, predicate: `${PROV}wasDerivedFrom`, object: hypUri, graph: provG },
-    { subject: modelUri, predicate: `${DC}description`, object: `"AI language model performing scientific claim assessment"`, graph: provG },
   );
 
   // ── Pubinfo ──
@@ -509,7 +591,7 @@ export function buildAssessmentNanopub(a: AssessmentForNanopub): { triples: NpTr
     { subject: preUri, predicate: `${DC}created`, object: `"${now}"^^${XSD}dateTime`, graph: pubG },
     { subject: preUri, predicate: `${DC}creator`, object: SYSTEM_ID, graph: pubG },
     { subject: preUri, predicate: `${PK}assessmentType`, object: `"multi-llm-claim-evaluation"`, graph: pubG },
-    ...pubinfoCommon(preUri, pubG, { label, nanopubType: `${PK}LLMClaimAssessment`, introduces: assessUri, supersedes: a.supersedes, domain: a.hypothesisDomain }),
+    ...pubinfoCommon(preUri, pubG, { label, nanopubType: `${PK}LLMClaimAssessment`, introduces: assessUri, supersedes: a.supersedes, domain: a.hypothesisDomain, template: TEMPLATES.assertion[`${PK}LLMClaimAssessment`] }),
   );
 
   return { triples, preUri };
@@ -539,7 +621,7 @@ const slug = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").
 export function buildPlatonicNanopub(p: PlatonicForNanopub): { triples: NpTriple[]; preUri: string } {
   const preUri = NP_BASE + SPACE_AC;
   const { assertG, provG, pubG } = graphs(preUri);
-  const hypUri = assertIri(`${PKR}platonic/${p.code}`, "platonic.code");
+  const hypUri = resourceIri(`${PK}TestableHypothesis`, p.code);
   const sourceIri = p.sourceIri ? assertIri(p.sourceIri, "platonic.sourceIri") : assertIri(`${PKR}source/${slug(p.sourceLabel)}`, "platonic.sourceLabel");
   const now = (p.createdAt ?? new Date()).toISOString();
 
@@ -564,7 +646,7 @@ export function buildPlatonicNanopub(p: PlatonicForNanopub): { triples: NpTriple
     { subject: preUri, predicate: `${DC}created`, object: `"${now}"^^${XSD}dateTime`, graph: pubG },
     { subject: preUri, predicate: `${DC}creator`, object: SYSTEM_ID, graph: pubG },
     { subject: preUri, predicate: `${PK}hypothesisType`, object: `"platonic-space-of-forms"`, graph: pubG },
-    ...pubinfoCommon(preUri, pubG, { label: p.title, nanopubType: `${PK}TestableHypothesis`, introduces: hypUri, supersedes: p.supersedes, domain: p.domain }),
+    ...pubinfoCommon(preUri, pubG, { label: p.title, nanopubType: `${PK}TestableHypothesis`, introduces: hypUri, supersedes: p.supersedes, domain: p.domain, template: TEMPLATES.assertion[`${PK}TestableHypothesis`] }),
   ];
 
   return { triples, preUri };

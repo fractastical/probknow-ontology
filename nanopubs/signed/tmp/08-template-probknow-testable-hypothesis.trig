@@ -1,0 +1,125 @@
+@prefix this: <http://purl.org/nanopub/temp/np001/> .
+@prefix sub: <http://purl.org/nanopub/temp/np001/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix orcid: <https://orcid.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix pk: <https://w3id.org/probknow/ontology/> .
+@prefix pkr: <https://w3id.org/probknow/resource/> .
+
+sub:Head {
+  this: a np:Nanopublication ;
+    np:hasAssertion sub:assertion ;
+    np:hasProvenance sub:provenance ;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  dct:identifier rdfs:label "has the identifier" .
+  pk:TestableHypothesis rdfs:label "testable hypothesis" .
+  pk:hasPriorProbability rdfs:label "has the prior probability" .
+  pk:hasResolvability rdfs:label "has the resolvability" .
+  pk:proposedTest rdfs:label "has the proposed test" .
+  rdf:type rdfs:label "is a" .
+  rdfs:comment rdfs:label "has the comment" .
+  rdfs:label rdfs:label "has the label" .
+
+  <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> a nt:IntroducedResource ;
+    rdfs:label "this hypothesis" .
+
+  sub:label a nt:LiteralPlaceholder ;
+    rdfs:label "the hypothesis in one sentence" .
+
+  sub:code a nt:LiteralPlaceholder ;
+    rdfs:label "the hypothesis code (e.g. P1)" .
+
+  sub:claim a nt:LongLiteralPlaceholder ;
+    rdfs:label "the full statement of the hypothesis" .
+
+  sub:test a nt:LongLiteralPlaceholder ;
+    rdfs:label "the experiment that would resolve the hypothesis" .
+
+  sub:prior a nt:LiteralPlaceholder ;
+    rdfs:label "prior probability, from 0 to 1" ;
+    nt:hasDatatype xsd:double .
+
+  sub:resolvability a nt:LiteralPlaceholder ;
+    rdfs:label "resolvability, from 0 to 1" ;
+    nt:hasDatatype xsd:double .
+
+  sub:st01 rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> ;
+    rdf:predicate rdf:type ;
+    rdf:object pk:TestableHypothesis ;
+    nt:statementOrder "1" .
+
+  sub:st02 rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> ;
+    rdf:predicate rdfs:label ;
+    rdf:object sub:label ;
+    nt:statementOrder "2" .
+
+  sub:st03 a nt:OptionalStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> ;
+    rdf:predicate dct:identifier ;
+    rdf:object sub:code ;
+    nt:statementOrder "3" .
+
+  sub:st04 rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> ;
+    rdf:predicate rdfs:comment ;
+    rdf:object sub:claim ;
+    nt:statementOrder "4" .
+
+  sub:st05 rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:proposedTest ;
+    rdf:object sub:test ;
+    nt:statementOrder "5" .
+
+  sub:st06 a nt:OptionalStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:hasPriorProbability ;
+    rdf:object sub:prior ;
+    nt:statementOrder "6" .
+
+  sub:st07 a nt:OptionalStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/platonic/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:hasResolvability ;
+    rdf:object sub:resolvability ;
+    nt:statementOrder "7" .
+
+  sub:template a nt:AssertionTemplate ;
+    rdfs:label "ProbKnow testable hypothesis" ;
+    dct:description "A hypothesis stated together with the experiment that would resolve it, a prior probability and a resolvability score (how decidably it can be tested), both from 0 to 1. The hypothesis's identifier is minted from this nanopublication's artifact code." ;
+    dct:isVersionOf <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind> ;
+    gen:governedBy <https://w3id.org/spaces/probknow> ;
+    nt:hasTag "ProbKnow" ;
+    nt:hasTargetNanopubType pk:TestableHypothesis ;
+    nt:hasNanopubLabelPattern "${label}" ;
+    nt:hasStatement sub:st01, sub:st02, sub:st03, sub:st04, sub:st05, sub:st06, sub:st07 .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo <https://orcid.org/0000-0002-1267-0234> .
+}
+
+sub:pubinfo {
+  orcid:0000-0002-1267-0234 foaf:name "Tobias Kuhn" .
+
+  this: dct:created "2026-10-01T07:30:44Z"^^xsd:dateTime ;
+    dct:creator orcid:0000-0002-1267-0234 ;
+    dct:license <https://creativecommons.org/licenses/by/4.0/> ;
+    rdfs:label "ProbKnow testable hypothesis" ;
+    npx:embeds sub:template ;
+    npx:introduces <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind> ;
+    npx:supersedes <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI> ;
+    skos:changeNote "Introduced resources are now minted from the nanopublication's artifact code (pkr:<kind>/RA…), so they are unique by construction; the pipeline may still use its own ids under the same namespace. References to other ProbKnow resources are guided choices searched on the network." ;
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU> ;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>, <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>, <https://w3id.org/np/RAoTD7udB2KtUuOuAe74tJi1t3VzK0DyWS7rYVAq1GRvw>, <https://w3id.org/np/RAKc76yHLDbloE6ObluzYQsfX37v6qrZXbYeIKpe8-YUo> ;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAWwJ-TzFhUJN5l6cTUIeCIUqqzS8ek-_zumlDczSUipk/template> .
+}

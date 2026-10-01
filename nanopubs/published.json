@@ -1,0 +1,47 @@
+{
+  "space-probknow": {
+    "nanopub": "https://w3id.org/np/RAh38EheT37uXQ-JUccqfgu_yjB51Zvoba8-5WD_udGk8",
+    "kind": null,
+    "published": "2026-10-01"
+  },
+  "provenance-probknow-extraction": {
+    "nanopub": "https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg",
+    "kind": "https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg/provenanceKind",
+    "published": "2026-10-01"
+  },
+  "pubinfo-probknow-domain": {
+    "nanopub": "https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0",
+    "kind": "https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0/domainKind",
+    "published": "2026-10-01"
+  },
+  "probknow-claim": {
+    "nanopub": "https://w3id.org/np/RAIVOEuhWNK4BuCbL_XRChRVlV6LKpFicBzwHpmuRxHWI",
+    "kind": "https://w3id.org/np/RACSW-97Ldd_hknVOLd2FEB6b8KwgRlp1DdlhR3uFGtt0/claimKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RACSW-97Ldd_hknVOLd2FEB6b8KwgRlp1DdlhR3uFGtt0"
+  },
+  "probknow-evidence-item": {
+    "nanopub": "https://w3id.org/np/RAk4kcX4zA_touv8CeKku9tTUnbR5xiTLSLwFbrKSl3BE",
+    "kind": "https://w3id.org/np/RAXGuXJtOBVqNAQswIpXkUHtrgY4NADQjIT2YYTpDbyd8/evidenceKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAXGuXJtOBVqNAQswIpXkUHtrgY4NADQjIT2YYTpDbyd8"
+  },
+  "probknow-bayesian-assessment": {
+    "nanopub": "https://w3id.org/np/RAnN-8bznTS-PsGIw8LMU4LA_jybOJ4THjLzMRy_W0rFc",
+    "kind": "https://w3id.org/np/RAF1nqvpxkLm8bS57YZWi_HILYUQJ157vz9RAqdtdx10Q/bayesianAssessmentKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAF1nqvpxkLm8bS57YZWi_HILYUQJ157vz9RAqdtdx10Q"
+  },
+  "probknow-llm-assessment": {
+    "nanopub": "https://w3id.org/np/RAku3DINcetdFUnyTLflyV-8ep3QOCuL-IpGdS984vw8s",
+    "kind": "https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY/llmAssessmentKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY"
+  },
+  "probknow-testable-hypothesis": {
+    "nanopub": "https://w3id.org/np/RAPZZB0fIwmSTnoiL9cBDSx9uRGI10J7gd9P42WmunbbA",
+    "kind": "https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI"
+  }
+}

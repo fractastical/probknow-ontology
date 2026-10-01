@@ -52,7 +52,7 @@ const row: AssertionForNanopub = {
 
 // (2) The same knowledge as one entity nanopub: the claim with all its properties.
 const entity: EntityForNanopub = {
-  iri: "https://w3id.org/probknow/resource/claim/MURUGAN2022-C1",
+  // no `iri`/`id`: the claim IRI is pkr:claim/<artifact code of this nanopub>; pass `id` for a database key instead
   type: PK + "Claim",
   label: "Wearable bioreactor drug delivery enables limb regeneration in adult Xenopus",
   description: "Acute multidrug delivery via a wearable bioreactor facilitates long-term limb regeneration and functional recovery in adult Xenopus laevis.",

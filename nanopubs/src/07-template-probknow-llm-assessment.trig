@@ -1,0 +1,191 @@
+@prefix this: <http://purl.org/nanopub/temp/np001/> .
+@prefix sub: <http://purl.org/nanopub/temp/np001/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix orcid: <https://orcid.org/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix pk: <https://w3id.org/probknow/ontology/> .
+@prefix pkr: <https://w3id.org/probknow/resource/> .
+
+sub:Head {
+  this: a np:Nanopublication ;
+    np:hasAssertion sub:assertion ;
+    np:hasProvenance sub:provenance ;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  dct:identifier rdfs:label "has the identifier" .
+  pk:LLMClaimAssessment rdfs:label "LLM claim assessment" .
+  pk:Model rdfs:label "language model" .
+  pk:assessedBy rdfs:label "is assessed by" .
+  pk:evaluatesHypothesis rdfs:label "evaluates the hypothesis" .
+  pk:evidenceAgainst rdfs:label "has evidence against" .
+  pk:evidenceFor rdfs:label "has evidence for" .
+  pk:hasConfidence rdfs:label "has the confidence" .
+  pk:hasProbability rdfs:label "has the probability" .
+  pk:hasVerdict rdfs:label "has the verdict" .
+  rdf:type rdfs:label "is a" .
+  rdfs:comment rdfs:label "has the comment" .
+  rdfs:label rdfs:label "has the label" .
+
+  <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> a nt:IntroducedResource ;
+    rdfs:label "this assessment" .
+
+  sub:label a nt:LiteralPlaceholder ;
+    rdfs:label "short label of the assessment" .
+
+  sub:hypothesis a nt:ExternalUriPlaceholder ;
+    rdfs:label "the hypothesis being evaluated" ;
+    nt:hasPrefix "https://w3id.org/probknow/resource/hypothesis/" ;
+    nt:hasPrefixLabel "pkr:hypothesis/" .
+
+  sub:hypothesisLabel a nt:LiteralPlaceholder ;
+    rdfs:label "the hypothesis in one sentence" .
+
+  sub:hypothesisCode a nt:LiteralPlaceholder ;
+    rdfs:label "the hypothesis code (e.g. H1)" .
+
+  sub:model a nt:ExternalUriPlaceholder ;
+    rdfs:label "the language model that made the assessment" ;
+    nt:hasPrefix "https://w3id.org/probknow/resource/model/" ;
+    nt:hasPrefixLabel "pkr:model/" .
+
+  sub:modelLabel a nt:LiteralPlaceholder ;
+    rdfs:label "the model's name and version" .
+
+  sub:probability a nt:LiteralPlaceholder ;
+    rdfs:label "probability that the hypothesis is true, from 0 to 1" ;
+    nt:hasDatatype xsd:double .
+
+  sub:confidence a nt:LiteralPlaceholder ;
+    rdfs:label "the model's confidence in its probability, from 0 to 1" ;
+    nt:hasDatatype xsd:double .
+
+  sub:verdict a nt:LiteralPlaceholder ;
+    rdfs:label "short categorical verdict (e.g. Plausible)" .
+
+  sub:reasoning a nt:LongLiteralPlaceholder ;
+    rdfs:label "the model's reasoning" .
+
+  sub:evidenceFor a nt:LongLiteralPlaceholder ;
+    rdfs:label "a point of evidence supporting the hypothesis" .
+
+  sub:evidenceAgainst a nt:LongLiteralPlaceholder ;
+    rdfs:label "a point of evidence against the hypothesis" .
+
+  sub:st01 rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate rdf:type ;
+    rdf:object pk:LLMClaimAssessment ;
+    nt:statementOrder "1" .
+
+  sub:st02 rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate rdfs:label ;
+    rdf:object sub:label ;
+    nt:statementOrder "2" .
+
+  sub:st03 rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:evaluatesHypothesis ;
+    rdf:object sub:hypothesis ;
+    nt:statementOrder "3" .
+
+  sub:st04 rdf:subject sub:hypothesis ;
+    rdf:predicate rdfs:label ;
+    rdf:object sub:hypothesisLabel ;
+    nt:statementOrder "4" .
+
+  sub:st05 a nt:OptionalStatement ;
+    rdf:subject sub:hypothesis ;
+    rdf:predicate dct:identifier ;
+    rdf:object sub:hypothesisCode ;
+    nt:statementOrder "5" .
+
+  sub:st06 rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:assessedBy ;
+    rdf:object sub:model ;
+    nt:statementOrder "6" .
+
+  sub:st07 rdf:subject sub:model ;
+    rdf:predicate rdf:type ;
+    rdf:object pk:Model ;
+    nt:statementOrder "7" .
+
+  sub:st08 rdf:subject sub:model ;
+    rdf:predicate rdfs:label ;
+    rdf:object sub:modelLabel ;
+    nt:statementOrder "8" .
+
+  sub:st09 a nt:OptionalStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:hasProbability ;
+    rdf:object sub:probability ;
+    nt:statementOrder "9" .
+
+  sub:st10 a nt:OptionalStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:hasConfidence ;
+    rdf:object sub:confidence ;
+    nt:statementOrder "10" .
+
+  sub:st11 a nt:OptionalStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:hasVerdict ;
+    rdf:object sub:verdict ;
+    nt:statementOrder "11" .
+
+  sub:st12 a nt:OptionalStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate rdfs:comment ;
+    rdf:object sub:reasoning ;
+    nt:statementOrder "12" .
+
+  sub:st13 a nt:OptionalStatement, nt:RepeatableStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:evidenceFor ;
+    rdf:object sub:evidenceFor ;
+    nt:statementOrder "13" .
+
+  sub:st14 a nt:OptionalStatement, nt:RepeatableStatement ;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> ;
+    rdf:predicate pk:evidenceAgainst ;
+    rdf:object sub:evidenceAgainst ;
+    nt:statementOrder "14" .
+
+  sub:template a nt:AssertionTemplate ;
+    rdfs:label "ProbKnow LLM assessment of a hypothesis" ;
+    dct:description "An assessment of a ProbKnow hypothesis made by a language model acting as evaluator: the model's probability that the hypothesis is true, its self-reported confidence, a verdict, its reasoning, and the points of evidence for and against. The assessment's identifier is minted from this nanopublication's artifact code." ;
+    dct:isVersionOf <https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY/llmAssessmentKind> ;
+    gen:governedBy <https://w3id.org/spaces/probknow> ;
+    nt:hasTag "ProbKnow" ;
+    nt:hasTargetNanopubType pk:LLMClaimAssessment ;
+    nt:hasNanopubLabelPattern "${label}" ;
+    nt:hasStatement sub:st01, sub:st02, sub:st03, sub:st04, sub:st05, sub:st06, sub:st07, sub:st08, sub:st09, sub:st10, sub:st11, sub:st12, sub:st13, sub:st14 .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo <https://orcid.org/0000-0002-1267-0234> .
+}
+
+sub:pubinfo {
+  orcid:0000-0002-1267-0234 foaf:name "Tobias Kuhn" .
+
+  this: dct:created "__NOW__"^^xsd:dateTime ;
+    dct:creator orcid:0000-0002-1267-0234 ;
+    dct:license <https://creativecommons.org/licenses/by/4.0/> ;
+    rdfs:label "ProbKnow LLM assessment of a hypothesis" ;
+    npx:embeds sub:template ;
+    npx:introduces <https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY/llmAssessmentKind> ;
+    npx:supersedes <https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY> ;
+    skos:changeNote "Introduced resources are now minted from the nanopublication's artifact code (pkr:<kind>/RA…), so they are unique by construction; the pipeline may still use its own ids under the same namespace. References to other ProbKnow resources are guided choices searched on the network." ;
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU> ;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>, <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>, <https://w3id.org/np/RAoTD7udB2KtUuOuAe74tJi1t3VzK0DyWS7rYVAq1GRvw>, <https://w3id.org/np/RAKc76yHLDbloE6ObluzYQsfX37v6qrZXbYeIKpe8-YUo> ;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAWwJ-TzFhUJN5l6cTUIeCIUqqzS8ek-_zumlDczSUipk/template> .
+}

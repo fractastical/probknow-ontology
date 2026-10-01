@@ -14,7 +14,7 @@
 
 import { Nanopub } from "@nanopub/nanopub-js";
 import { Parser as N3Parser, Writer as N3Writer } from "n3";
-import { DC, FOAF, FRBR, NP_NS, NPX, ORCID, PK, PKR, PROV, RDF, RDFS, SIGNER_LABEL, SYSTEM_ID, XSD, type NpTriple } from "./probknow-builders.js";
+import { DC, FOAF, FRBR, NP_NS, NPX, NT, ORCID, PK, PKR, PROV, RDF, RDFS, SIGNER_LABEL, SYSTEM_ID, XSD, type NpTriple } from "./probknow-builders.js";
 
 // @nanopub/nanopub-js detects a placeholder base under this namespace and swaps it
 // for the computed `RA…` trusty URI everywhere during signing. We map the builder's
@@ -111,6 +111,7 @@ export async function sealNanopub(
 export const TRIG_PREFIXES: Record<string, string> = {
   np: NP_NS,
   npx: NPX,
+  nt: NT,
   rdf: RDF,
   rdfs: RDFS,
   xsd: XSD,

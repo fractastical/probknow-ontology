@@ -1,11 +1,12 @@
-# ProbKnow claim as an ENTITY nanopub (preferred granularity): one pkr:claim/ with type, label, context, evidence link and weight.
+# ProbKnow claim as an ENTITY nanopub (preferred granularity): one pkr:claim/<artifact code> with type, label, context, evidence link and weight; the claim IRI is minted from this nanopub's own artifact code.
 # Fresh output of pipeline/probknow-builders.ts + seal.ts (@nanopub/nanopub-js), signed with a
 # THROWAWAY key for illustration. NOT published to the network; the RA… code and signature
 # are therefore not the production ones. Regenerate with: npx tsx pipeline/sign-example.ts
-@prefix this: <https://w3id.org/np/RAQEIWCrDLtfoZ2a-ETl4x-HiWsQn6XPHkQnHj-v49XQU>.
-@prefix sub: <https://w3id.org/np/RAQEIWCrDLtfoZ2a-ETl4x-HiWsQn6XPHkQnHj-v49XQU/>.
+@prefix this: <https://w3id.org/np/RAYvKGUzy68o-CnqwBJWy0W-yezbwYjt6Kcfu8P6-oSnM>.
+@prefix sub: <https://w3id.org/np/RAYvKGUzy68o-CnqwBJWy0W-yezbwYjt6Kcfu8P6-oSnM/>.
 @prefix np: <http://www.nanopub.org/nschema#>.
 @prefix npx: <http://purl.org/nanopub/x/>.
+@prefix nt: <https://w3id.org/np/o/ntemplate/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
@@ -23,7 +24,7 @@ this: np:hasAssertion sub:assertion;
     a np:Nanopublication
 }
 sub:assertion {
-claim:MURUGAN2022-C1 a pk:Claim;
+claim:RAYvKGUzy68o-CnqwBJWy0W-yezbwYjt6Kcfu8P6-oSnM a pk:Claim;
     dct:description "A 24 h exposure to a five-drug cocktail delivered by a wearable bioreactor (BioDome) after hindlimb amputation induces long-term limb regeneration and functional recovery in adult Xenopus laevis.";
     rdfs:label "Wearable bioreactor drug delivery enables limb regeneration in adult Xenopus";
     prov:wasSupportedBy evidence:MURUGAN2022-C1-E1;
@@ -38,16 +39,19 @@ sub:assertion prov:wasAttributedTo <https://bioelectricitynexus.com/nanopub-syst
 }
 sub:pubinfo {
 this: rdfs:label "Wearable bioreactor drug delivery enables limb regeneration in adult Xenopus";
-    dct:created "2026-10-01T06:07:24.664Z"^^xsd:dateTime;
+    dct:created "2026-10-01T07:32:04.611Z"^^xsd:dateTime;
     dct:creator <https://bioelectricitynexus.com/nanopub-system>;
     dct:license <https://creativecommons.org/licenses/by/4.0/>;
     npx:hasNanopubType pk:Claim;
-    npx:introduces claim:MURUGAN2022-C1;
+    npx:introduces claim:RAYvKGUzy68o-CnqwBJWy0W-yezbwYjt6Kcfu8P6-oSnM;
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>, <https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0>, <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAIVOEuhWNK4BuCbL_XRChRVlV6LKpFicBzwHpmuRxHWI/template>;
     pk:domain domain:levin-lab.
 domain:levin-lab rdfs:label "levin-lab".
 sub:sig npx:hasAlgorithm "RSA";
-    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4Nnm/4U5dmf7Wg11KEAXu7/GfFSF4HvfD36ky3jVAucbg7KIVRXEu3AB+sJEmrHMkZMUZdOMuyHYBW/KbuZO3d62kKFzyEDNng6t2bTMK8oCSeDTQBCAdSQb9P8iHzLNYwJlh//N6ol2HVVRw2dgdnWdw1D60JfHCLwY9/XLsJzJTu2Kdoyq/14jzQ6ku+iIbaS5CFzAMPF/V6P/rGVB+d6CO/VCYIj2+8xGcAykgWHn/06rgG8dgsQh9Zu+8fc8E51zh5MQVdME2yfBBSsxqawmI/Zk0QsUxspfETI+LtcbAz4FMPGJ53gxcU/8RH3zNhr+7eD+0uPmE8Nhz6PCbQIDAQAB";
+    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyX7jl9/9LSjJQkRupa/6t9GRY3D524+YejevXtPpyR99020Bnezw+4I6QbzzG/wk9ch2HPznXlh1dg2WpKTOCiyvYnBRzAZ8/ABRPBX584qY3juwp1e8WOy5ZXPd5O7Evc4ViXXsMbHqB2zEjpqQn7oterGlb0Eug+4nfgXgF4yYiCRv+Zdmtm68Qp982EQgGWTcuYeUkQxxWtcDUGe3UmHN2D6zWrS0xnmoPzFM1pKB0ujTRn9X3vrqgB28he206blLljhUinQkGkRzIO1yPoRRFoRWKGHQtWSL9obX4HgSBrMJqj8q++vstbd+hjbEQYRL2htQT8jDRBGCPd8CzQIDAQAB";
     npx:hasSignatureTarget this:;
     npx:signedBy <https://bioelectricitynexus.com/nanopub-system>;
-    npx:hasSignature "2lTNgUXdsID+SVbmq8oEeNXP2TpovIpbPQfoXAyhZURvJP0rLM3eDJyMkpF+/0Whx5b94B2mZxxWTKn/5F8RsRco/K+KBpPU1afVgzocFalEgnHQ+4+WumofE/Gg/T9XnhuQYq88PnBcr1EInktXu+vB+PVp5qF9tysOd9BppcI8hWmzHOPGKDSY6Frhb5O/MXoto8xPy6ZOCLZTUgpXV/h/38nw3Oj2hEoaYY8uyWJfBV17SK0Q9SOyIYBcQ6UTTXAOVI4OaCM1tMs3TfZQ95GEEAqFfCjgGXFwJgD7ubl0knaGlI0YG9Wo3mCuR5P0qPgyEippI4w2Ku8VSuf8Zw=="
+    npx:hasSignature "PEHgsdL16gdcbZWPt6VguWnNTEcFHsYOAuwLxPWn/ZklSxba2GIvzpyKriuxhWDyPVHuOQm8phxigu3VkaaJ2z0x+E+xhbDZ8gL71iMgJKUBKeQFWiqMuy7BVoSg6PK+Zh/hGj9OUlnIr8OM9iIQddkiqhOtXMTJyJQD3HPtD0FOtrri9tJ9144MqQvsx6Eys3mx1jqtREzE5KEI2D48+TyPhmRtkxqwRGhHJ7rXQiqj5fkUzZU9Vm3waJqGcWhu0UEDVw5a0Zr20phUidRwlC3iArGacvn906vS1tQ8yoHBMhCMgcjCr00zYraHHaUWQ7PSkj8Y4FQjCwGfwAy9ow=="
 }

@@ -12,7 +12,10 @@ the single source of truth for the namespaces the paper should cite; the machine
 | `pkr:` | `https://w3id.org/probknow/resource/` | **Individuals** (papers, claims, hypotheses, assessments…) — the A-Box |
 
 Both are intended to be **dereferenceable** via a [w3id.org](https://w3id.org) redirect to this
-repository (and, for `pk:`, to content-negotiate the Turtle file). This replaces every earlier,
+repository (and, for `pk:`, to content-negotiate the Turtle file). Individuals are
+`pkr:<kind>/<id>`, where the id is either the application's own key (letters, digits, `_`, `-`) or
+the artifact code of the nanopublication that introduces the individual (`pkr:claim/RA…`), which is
+what the ProbKnow templates mint in Nanodash and what the pipeline mints when it is given no id. This replaces every earlier,
 non-dereferenceable identifier (`urn:pkg:*`, `urn:levin-kg:*`, `https://example.org/levin-kg/*`)
 and the three per-export-wave bases (`w3id.org/{levin-kg,aif,morphopkg}`).
 

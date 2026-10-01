@@ -1,0 +1,154 @@
+@prefix this: <https://w3id.org/np/RAnN-8bznTS-PsGIw8LMU4LA_jybOJ4THjLzMRy_W0rFc> .
+@prefix sub: <https://w3id.org/np/RAnN-8bznTS-PsGIw8LMU4LA_jybOJ4THjLzMRy_W0rFc/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix orcid: <https://orcid.org/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix pk: <https://w3id.org/probknow/ontology/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sub:Head {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  dct:description rdfs:label "has the description" .
+  
+  rdf:type rdfs:label "is a" .
+  
+  rdfs:label rdfs:label "has the label" .
+  
+  sub:bayesFactor a nt:LiteralPlaceholder;
+    rdfs:label "combined Bayes factor";
+    nt:hasDatatype xsd:double .
+  
+  sub:calibration a nt:LiteralPlaceholder;
+    rdfs:label "calibration method (e.g. Vovk–Sellke p-value calibration)" .
+  
+  sub:claim a nt:ExternalUriPlaceholder, nt:GuidedChoicePlaceholder;
+    rdfs:label "the claim being assessed";
+    nt:possibleValuesFromApi "https://w3id.org/np/l/nanopub-query-1.1/api/RAyMrQ89RECTi9gZK5q7gjL1wKTiP8StkLy0NIkkCiyew/find-things?type=https://w3id.org/probknow/ontology/Claim" .
+  
+  sub:deciban a nt:LiteralPlaceholder;
+    rdfs:label "weight of evidence in decibans (10·log10 of the Bayes factor)";
+    nt:hasDatatype xsd:double .
+  
+  sub:description a nt:LongLiteralPlaceholder;
+    rdfs:label "notes on how the evidence was combined" .
+  
+  sub:evidence a nt:ExternalUriPlaceholder, nt:GuidedChoicePlaceholder;
+    rdfs:label "an evidence item that entered the assessment";
+    nt:possibleValuesFromApi "https://w3id.org/np/l/nanopub-query-1.1/api/RAyMrQ89RECTi9gZK5q7gjL1wKTiP8StkLy0NIkkCiyew/find-things?type=https://w3id.org/probknow/ontology/EvidenceItem" .
+  
+  sub:label a nt:LiteralPlaceholder;
+    rdfs:label "short label of the assessment" .
+  
+  sub:st01 rdf:object pk:BayesianAssessment;
+    rdf:predicate rdf:type;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "1" .
+  
+  sub:st02 rdf:object sub:label;
+    rdf:predicate rdfs:label;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "2" .
+  
+  sub:st03 rdf:object <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    rdf:predicate pk:hasAssessment;
+    rdf:subject sub:claim;
+    nt:statementOrder "3" .
+  
+  sub:st04 a nt:OptionalStatement;
+    rdf:object sub:description;
+    rdf:predicate dct:description;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "4" .
+  
+  sub:st05 a nt:OptionalStatement, nt:RepeatableStatement;
+    rdf:object sub:evidence;
+    rdf:predicate pk:hasEvidence;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "5" .
+  
+  sub:st06 a nt:OptionalStatement;
+    rdf:object sub:bayesFactor;
+    rdf:predicate pk:bayesFactor;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "6" .
+  
+  sub:st07 a nt:OptionalStatement;
+    rdf:object sub:deciban;
+    rdf:predicate pk:weightOfEvidenceDeciban;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "7" .
+  
+  sub:st08 a nt:OptionalStatement;
+    rdf:object sub:calibration;
+    rdf:predicate pk:calibrationMethod;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "8" .
+  
+  sub:template a nt:AssertionTemplate;
+    dct:description "A Bayesian assessment of a ProbKnow claim: the combined Bayes factor over the claim's evidence items, the resulting weight of evidence in decibans, and the calibration method used to turn p-values into Bayes factors. The assessment's identifier is minted from this nanopublication's artifact code.";
+    dct:isVersionOf <https://w3id.org/np/RAF1nqvpxkLm8bS57YZWi_HILYUQJ157vz9RAqdtdx10Q/bayesianAssessmentKind>;
+    rdfs:label "ProbKnow Bayesian assessment";
+    gen:governedBy <https://w3id.org/spaces/probknow>;
+    nt:hasNanopubLabelPattern "${label}";
+    nt:hasStatement sub:st01, sub:st02, sub:st03, sub:st04, sub:st05, sub:st06, sub:st07,
+      sub:st08;
+    nt:hasTag "ProbKnow";
+    nt:hasTargetNanopubType pk:BayesianAssessment .
+  
+  pk:BayesianAssessment rdfs:label "Bayesian assessment" .
+  
+  pk:bayesFactor rdfs:label "has the combined Bayes factor" .
+  
+  pk:calibrationMethod rdfs:label "uses the calibration method" .
+  
+  pk:hasAssessment rdfs:label "has the assessment" .
+  
+  pk:hasEvidence rdfs:label "has the evidence item" .
+  
+  pk:weightOfEvidenceDeciban rdfs:label "has the weight of evidence in decibans" .
+  
+  <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> a nt:IntroducedResource;
+    rdfs:label "this assessment" .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo orcid:0000-0002-1267-0234 .
+}
+
+sub:pubinfo {
+  orcid:0000-0002-1267-0234 foaf:name "Tobias Kuhn" .
+  
+  this: dct:created "2026-10-01T07:30:42Z"^^xsd:dateTime;
+    dct:creator orcid:0000-0002-1267-0234;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:embeds sub:template;
+    npx:introduces <https://w3id.org/np/RAF1nqvpxkLm8bS57YZWi_HILYUQJ157vz9RAqdtdx10Q/bayesianAssessmentKind>;
+    npx:supersedes <https://w3id.org/np/RAF1nqvpxkLm8bS57YZWi_HILYUQJ157vz9RAqdtdx10Q>;
+    rdfs:label "ProbKnow Bayesian assessment";
+    skos:changeNote "Introduced resources are now minted from the nanopublication's artifact code (pkr:<kind>/RA…), so they are unique by construction; the pipeline may still use its own ids under the same namespace. References to other ProbKnow resources are guided choices searched on the network.";
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>,
+      <https://w3id.org/np/RAKc76yHLDbloE6ObluzYQsfX37v6qrZXbYeIKpe8-YUo>, <https://w3id.org/np/RAoTD7udB2KtUuOuAe74tJi1t3VzK0DyWS7rYVAq1GRvw>,
+      <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAWwJ-TzFhUJN5l6cTUIeCIUqqzS8ek-_zumlDczSUipk/template> .
+  
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwUtewGCpT5vIfXYE1bmf/Uqu1ojqnWdYxv+ySO80ul8Gu7m8KoyPAwuvaPj0lvPtHrg000qMmkxzKhYknEjq8v7EerxZNYp5B3/3+5ZpuWOYAs78UnQVjbHSmDdmryr4D4VvvNIiUmd0yxci47dTFUj4DvfHnGd6hVe5+goqdcwIDAQAB";
+    npx:hasSignature "jZRedOkUl/zbbPK/7pxz6of8lSoqhDB3ruCoBc8pItzReULNjYdqFp8bIuXy7w5q+ONvgNJap6v3li+lFWsm7KZLBKByIfjegbJU9oA7zqWNM57pf7swiNYL8L+yTePuh/DEvJLA4oMZTdDnEvGwSoRY9FVOBIzKMjB2alISOJs=";
+    npx:hasSignatureTarget this:;
+    npx:signedBy orcid:0000-0002-1267-0234 .
+}

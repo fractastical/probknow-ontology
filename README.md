@@ -36,7 +36,11 @@ Signed nanopublications in [`examples/`](examples/). Two are live on the network
 - [`examples/levin-claim-MURUGAN2022.trig`](examples/levin-claim-MURUGAN2022.trig) — **current builder output**: an evidence-support claim under the `pk:`/`pkr:` ontology (note `pk:weightOfEvidence`, `pk:domain`, and the `pkr:claim/...` resource IRI), **live on the nanopub network** at <https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y>. This is the nanopub reconstructed by [`pipeline/reproduce-example.ts`](pipeline/reproduce-example.ts). It predates the current builders, so fresh output differs: its `example.org` IRIs are rewritten to `pkr:`, the weight is stated about the assertion in the provenance graph, and pubinfo carries label, license, type, a `pkr:domain/` IRI and `npx:signedBy`.
 - [`examples/levin-P1.legacy.trig`](examples/levin-P1.legacy.trig) — **earlier published wave**: a Levin-lab hypothesis **live on the nanopub network right now**, resolvable at <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is>. It uses the legacy `urn:pkg:` terms, bridged by the crosswalk above.
 
-All are valid trusty-URI nanopubs (RA hash + RSA-SHA256 signature). With nanopub-java 1.94 `check -v`, the fresh examples report only the missing template links; the two live ones additionally lack `npx:signedBy`, a label and a type, which is what the current builders fix.
+All are valid trusty-URI nanopubs (RA hash + RSA-SHA256 signature). With nanopub-java 1.94 `check -v`, the fresh examples report no issues at all (they carry label, type, signer and template links); the two live ones lack `npx:signedBy`, a label, a type and template links, which is what the current builders fix.
+
+## The ProbKnow Space and templates
+
+[`nanopubs/`](nanopubs/) holds the nanopublications that set ProbKnow up on the network: a **Space** (`https://w3id.org/spaces/probknow`, admins Tobias Kuhn and Joel Dietz) and seven **templates governed by it** — assertion templates for claims, evidence items, Bayesian assessments, LLM assessments and testable hypotheses, a provenance template for paper-derived extractions, and a pubinfo template for the domain — plus the declarations that make the Space maintain each template's kind. `generate.py` produces the sources, `sign.sh` signs them in order; see [`nanopubs/README.md`](nanopubs/README.md). Once published, every nanopub the pipeline emits links to its templates, so Nanodash renders it with its form and space members can evolve the templates without the original signing key.
 
 ## Queries
 
@@ -50,7 +54,7 @@ SPARQL queries in [`queries/`](queries/), runnable against a nanopub-network end
 
 1. **Migrate the stored rows.** The application database still holds `example.org/levin-kg/…` IRIs. The builders rewrite them on export, but the rows should be migrated with the same rules (`canonicalIri()` / the crosswalk tables) so the guard never has to fire.
 2. **Republish the live wave.** Every builder takes a `supersedes` input; republishing the 183 nanopubs on the network with `npx:supersedes` (same key) makes the old URIs resolve to clean versions. Publish the new introduction first, then the data.
-3. **Template links.** Declaring `nt:wasCreatedFromTemplate` (and the provenance/pubinfo equivalents) so the nanopubs become derivable and updatable through Nanodash — this needs matching published templates first.
+3. **Publish the Space and templates** in [`nanopubs/`](nanopubs/); the builders already link every nanopub to them.
 4. **Dereferenceable terms.** Registering the `w3id.org/probknow` redirect; the ready-to-submit rules are in [`w3id/`](w3id/).
 5. **Linking claims to their source papers** via CiTO so a claim resolves to the paper it was extracted from (the DOI provenance is in place; typed citations are not).
 

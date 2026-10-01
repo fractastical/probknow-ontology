@@ -1,0 +1,104 @@
+@prefix this: <https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg> .
+@prefix sub: <https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix orcid: <https://orcid.org/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sub:Head {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  dct:date rdfs:label "has the date" .
+  
+  dct:title rdfs:label "has the title" .
+  
+  prov:wasAttributedTo rdfs:label "is attributed to" .
+  
+  prov:wasDerivedFrom rdfs:label "is derived from" .
+  
+  sub:agent a nt:AgentPlaceholder;
+    rdfs:label "the agent the assertion is attributed to (the ProbKnow system agent, or yourself)";
+    nt:hasDefaultValue nt:CREATOR .
+  
+  sub:assertion a nt:ProvenanceTemplate;
+    dct:description "The assertion was produced by ProbKnow's extraction and assessment pipeline (attributed to the ProbKnow system agent, or to whoever states it), and was derived from a scholarly paper identified by its DOI, whose title and year are recorded for readability.";
+    dct:isVersionOf sub:provenanceKind;
+    rdfs:label "Extracted from a paper by ProbKnow";
+    gen:governedBy <https://w3id.org/spaces/probknow>;
+    nt:hasStatement sub:st1, sub:st2, sub:st2a, sub:st2b, sub:st2c .
+  
+  sub:paper a nt:ExternalUriPlaceholder;
+    rdfs:label "the paper the assertion was derived from (DOI as https://doi.org/… IRI)";
+    nt:hasPrefix "https://doi.org/";
+    nt:hasPrefixLabel "DOI" .
+  
+  sub:st1 a nt:RepeatableStatement;
+    rdf:object sub:agent;
+    rdf:predicate prov:wasAttributedTo;
+    rdf:subject nt:ASSERTION;
+    nt:statementOrder "1" .
+  
+  sub:st2 a nt:GroupedStatement, nt:OptionalStatement, nt:RepeatableStatement;
+    nt:hasStatement sub:st2a, sub:st2b, sub:st2c .
+  
+  sub:st2a rdf:object sub:paper;
+    rdf:predicate prov:wasDerivedFrom;
+    rdf:subject nt:ASSERTION;
+    nt:statementOrder "2" .
+  
+  sub:st2b a nt:OptionalStatement;
+    rdf:object sub:title;
+    rdf:predicate dct:title;
+    rdf:subject sub:paper;
+    nt:statementOrder "3" .
+  
+  sub:st2c a nt:OptionalStatement;
+    rdf:object sub:year;
+    rdf:predicate dct:date;
+    rdf:subject sub:paper;
+    nt:statementOrder "4" .
+  
+  sub:title a nt:LiteralPlaceholder;
+    rdfs:label "the title of the paper" .
+  
+  sub:year a nt:LiteralPlaceholder;
+    rdfs:label "the publication year of the paper";
+    nt:hasDatatype xsd:gYear .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo orcid:0000-0002-1267-0234 .
+}
+
+sub:pubinfo {
+  orcid:0000-0002-1267-0234 foaf:name "Tobias Kuhn" .
+  
+  this: dct:created "2026-10-01T06:55:27Z"^^xsd:dateTime;
+    dct:creator orcid:0000-0002-1267-0234;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:embeds sub:assertion;
+    npx:introduces sub:provenanceKind;
+    rdfs:label "Extracted from a paper by ProbKnow";
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>,
+      <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAlxVeww5o6RsAzkcaMKjgAjPPaB1IMqqFg06_AzXNFZc> .
+  
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwUtewGCpT5vIfXYE1bmf/Uqu1ojqnWdYxv+ySO80ul8Gu7m8KoyPAwuvaPj0lvPtHrg000qMmkxzKhYknEjq8v7EerxZNYp5B3/3+5ZpuWOYAs78UnQVjbHSmDdmryr4D4VvvNIiUmd0yxci47dTFUj4DvfHnGd6hVe5+goqdcwIDAQAB";
+    npx:hasSignature "XPN7QJeenzl+pm6mV233uyD51v7zdjSKL/WH7ySzhYj7JDMG2EClnoU39WDR4VyzmVDxiJa70iWoXxMRJoPlBov8q12Q5t3SAf7AKosRNZjxhfIqh+T3XObok9M9BlIvWLSUagp4xwmJ9R+h5gZwrz7jzCu7NgLZ2r6m8KspA10=";
+    npx:hasSignatureTarget this:;
+    npx:signedBy orcid:0000-0002-1267-0234 .
+}

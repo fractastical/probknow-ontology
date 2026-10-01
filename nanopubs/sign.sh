@@ -45,6 +45,10 @@ else
 fi
 
 # Maintained-resource declarations: one per template kind, so the space maintains the kinds.
+# The declaring nanopub's pubinfo rdfs:label must be EXACTLY the resource's own name (the
+# same string as <resource> rdfs:label in the assertion): Nanodash takes a maintained
+# resource's display name from the declaring nanopub's label (until nanodash PR #764 ships),
+# so a sentence there ("X is a template maintained by Y") becomes the resource's name.
 i=9
 [ "${#ONLY[@]}" -gt 0 ] && i=99   # explicit files: kinds exist already, skip
 for f in "$OUT"/0[2-8]-*.trig; do
@@ -66,12 +70,12 @@ for f in "$OUT"/0[2-8]-*.trig; do
     gen:isAssignmentOfPreset <$TEMPLATE_PRESET> ."
     pubinfo_extra="npx:embeds sub:assignment ;
     npx:hasNanopubType gen:MaintainedResource, gen:PresetAssignment ;"
-    np_label="$label is a template maintained by ProbKnow"
+    np_label="$label"
     from_template="$LISTING_TEMPLATE"
   else
     assertion_extra=""
     pubinfo_extra="npx:hasNanopubType gen:MaintainedResource ;"
-    np_label="$label (maintained by ProbKnow)"
+    np_label="$label"
     from_template="$MAINTAINED_TEMPLATE"
   fi
   cat > "$HERE/src/$name.trig" <<TRIG

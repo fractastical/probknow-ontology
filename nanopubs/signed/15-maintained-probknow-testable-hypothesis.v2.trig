@@ -1,0 +1,58 @@
+@prefix this: <https://w3id.org/np/RA-DXbq-SUiJRhwOuE1pJnvJhKU_aj8kBUzv1ZMGJug7I> .
+@prefix sub: <https://w3id.org/np/RA-DXbq-SUiJRhwOuE1pJnvJhKU_aj8kBUzv1ZMGJug7I/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sub:Head {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  sub:assignment a gen:ActivatedPresetAssignment, gen:PresetAssignment;
+    gen:isAssignmentFor <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind>;
+    gen:isAssignmentOfPreset <https://w3id.org/np/RAsfqb0NCvXnSsJgsx75aqbR-O_4q8uqp0YDgeX83fHIE/maintained-template-preset> .
+  
+  <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind>
+    a gen:MaintainedResource, nt:AssertionTemplate;
+    dct:description "The ProbKnow template 'ProbKnow testable hypothesis' (all its versions), maintained by the ProbKnow space so that its members can publish the next version.";
+    rdfs:label "ProbKnow testable hypothesis";
+    gen:isMaintainedBy <https://w3id.org/spaces/probknow> .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo <https://orcid.org/0000-0002-1267-0234> .
+}
+
+sub:pubinfo {
+  <https://orcid.org/0000-0002-1267-0234> foaf:name "Tobias Kuhn" .
+  
+  this: dct:created "2026-10-01T09:15:50Z"^^xsd:dateTime;
+    dct:creator <https://orcid.org/0000-0002-1267-0234>;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:embeds sub:assignment;
+    npx:hasNanopubType gen:MaintainedResource, gen:PresetAssignment;
+    npx:introduces <https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind>;
+    npx:supersedes <https://w3id.org/np/RAH8opW1FyLNTj3Z6_Cbon5_ry9vdbnpWCo2EGUVG0LJA>;
+    rdfs:label "ProbKnow testable hypothesis";
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>,
+      <https://w3id.org/np/RAoTD7udB2KtUuOuAe74tJi1t3VzK0DyWS7rYVAq1GRvw>, <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RA1_mJ1G8d-5riusOFBQHtR8gG6pQHIH1W_e6S7ahIRTQ/template> .
+  
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwUtewGCpT5vIfXYE1bmf/Uqu1ojqnWdYxv+ySO80ul8Gu7m8KoyPAwuvaPj0lvPtHrg000qMmkxzKhYknEjq8v7EerxZNYp5B3/3+5ZpuWOYAs78UnQVjbHSmDdmryr4D4VvvNIiUmd0yxci47dTFUj4DvfHnGd6hVe5+goqdcwIDAQAB";
+    npx:hasSignature "ZuiH1lXdTaPT2hNVkyORv8k3ZTAw4xGMz+hn5YS6qooN+Fkh1N6FY56DU36xmbHzzMhZff5zCCY0as1hXxynLcd46imgnqGelhuzrf4vMQr5SX0LnBq3l6eF8mq/ZskU/GAxUK7nn7/FzsGTWPozOnH9qtC+i0EW15XATwQXJIg=";
+    npx:hasSignatureTarget this:;
+    npx:signedBy <https://orcid.org/0000-0002-1267-0234> .
+}
+

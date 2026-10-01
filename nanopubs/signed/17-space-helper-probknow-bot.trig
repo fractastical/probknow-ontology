@@ -1,0 +1,49 @@
+@prefix this: <https://w3id.org/np/RA56ulZLQo5VSyBv7tpMsckXzQiLLxxJxsK5a8ICrsNv8> .
+@prefix sub: <https://w3id.org/np/RA56ulZLQo5VSyBv7tpMsckXzQiLLxxJxsK5a8ICrsNv8/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix orcid: <https://orcid.org/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sub:Head {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  <https://w3id.org/spaces/probknow> gen:hasHelper <https://bioelectricitynexus.com/nanopub-system> .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo orcid:0000-0002-1267-0234 .
+}
+
+sub:pubinfo {
+  <https://bioelectricitynexus.com/nanopub-system> rdfs:label "Bioelectricity Nexus KG Publisher" .
+  
+  orcid:0000-0002-1267-0234 foaf:name "Tobias Kuhn" .
+  
+  this: dct:created "2026-10-01T08:49:07Z"^^xsd:dateTime;
+    dct:creator orcid:0000-0002-1267-0234;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:hasNanopubType gen:RoleInstantiation;
+    rdfs:label "ProbKnow has helper: Bioelectricity Nexus KG Publisher (the ProbKnow pipeline bot)";
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>,
+      <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAhvO0iwv_IOtSf9hwR2Vgvw_uhBcDfPsIVVXftw-qnI4> .
+  
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwUtewGCpT5vIfXYE1bmf/Uqu1ojqnWdYxv+ySO80ul8Gu7m8KoyPAwuvaPj0lvPtHrg000qMmkxzKhYknEjq8v7EerxZNYp5B3/3+5ZpuWOYAs78UnQVjbHSmDdmryr4D4VvvNIiUmd0yxci47dTFUj4DvfHnGd6hVe5+goqdcwIDAQAB";
+    npx:hasSignature "XhglnshnWlGgDtH149oX4bDm1wGZNPy3QNXdlwB8eLXyQpn7QJm+D38IsYVyadv7CoFGvUDjIYLIdhrJeMz7BtTRXusBaIcYh19WcOFh17a+5lhcqudLbNCiOt4S2vMPq89NmyK+SPBaTOdJa+OkyjlhVBG1GefjkAQ2Nq9I7X0=";
+    npx:hasSignatureTarget this:;
+    npx:signedBy orcid:0000-0002-1267-0234 .
+}

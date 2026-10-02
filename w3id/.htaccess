@@ -1,0 +1,23 @@
+# w3id.org redirect rules for https://w3id.org/probknow/
+# Maintained in https://github.com/fractastical/probknow-ontology (w3id/.htaccess)
+Options +FollowSymLinks
+RewriteEngine on
+
+# Ontology document and its versions: the human-readable reference for browsers, Turtle for everything else
+RewriteCond %{HTTP_ACCEPT} text/html [NC]
+RewriteRule ^ontology/?$ https://github.com/fractastical/probknow-ontology/blob/main/ONTOLOGY.md [R=303,L]
+RewriteRule ^ontology/?$ https://raw.githubusercontent.com/fractastical/probknow-ontology/main/probknow.ttl [R=303,L]
+RewriteCond %{HTTP_ACCEPT} text/html [NC]
+RewriteRule ^ontology/[0-9]+\.[0-9]+/?$ https://github.com/fractastical/probknow-ontology/blob/main/ONTOLOGY.md [R=303,L]
+RewriteRule ^ontology/[0-9]+\.[0-9]+/?$ https://raw.githubusercontent.com/fractastical/probknow-ontology/main/probknow.ttl [R=303,L]
+
+# Terms (slash IRIs, e.g. /ontology/Claim): the reference for browsers, Turtle otherwise
+RewriteCond %{HTTP_ACCEPT} text/html [NC]
+RewriteRule ^ontology/([A-Za-z]+)$ https://github.com/fractastical/probknow-ontology/blob/main/ONTOLOGY.md [R=303,L]
+RewriteRule ^ontology/([A-Za-z]+)$ https://raw.githubusercontent.com/fractastical/probknow-ontology/main/probknow.ttl [R=303,L]
+
+# Resources (A-Box individuals): resolved by probknow.com
+RewriteRule ^resource/(.*)$ https://probknow.com/resource/$1 [R=303,L]
+
+# Everything else: the repository
+RewriteRule ^(.*)$ https://github.com/fractastical/probknow-ontology [R=303,L]

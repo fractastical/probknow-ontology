@@ -1,0 +1,51 @@
+@prefix this: <https://w3id.org/np/RApDCXhbct-cNwBJ_LmqOHaMKBdhgMeVG8TaoB6jfTcy8> .
+@prefix sub: <https://w3id.org/np/RApDCXhbct-cNwBJ_LmqOHaMKBdhgMeVG8TaoB6jfTcy8/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sub:Head {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  <https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0/domainKind> a gen:MaintainedResource,
+      nt:PubinfoTemplate;
+    dct:description "The ProbKnow template 'ProbKnow domain' (all its versions), maintained by the ProbKnow space so that its members can publish the next version.";
+    rdfs:label "ProbKnow domain";
+    gen:isMaintainedBy <https://w3id.org/spaces/probknow> .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo <https://orcid.org/0000-0002-1267-0234> .
+}
+
+sub:pubinfo {
+  <https://orcid.org/0000-0002-1267-0234> foaf:name "Tobias Kuhn" .
+  
+  this: dct:created "2026-10-01T06:55:33Z"^^xsd:dateTime;
+    dct:creator <https://orcid.org/0000-0002-1267-0234>;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:hasNanopubType gen:MaintainedResource;
+    npx:introduces <https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0/domainKind>;
+    rdfs:label "ProbKnow domain (maintained by ProbKnow)";
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>,
+      <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAuoIiBPtkpMCALeI5AWNlQHoXdBfqZwqj_sVHiBGbfQo> .
+  
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwUtewGCpT5vIfXYE1bmf/Uqu1ojqnWdYxv+ySO80ul8Gu7m8KoyPAwuvaPj0lvPtHrg000qMmkxzKhYknEjq8v7EerxZNYp5B3/3+5ZpuWOYAs78UnQVjbHSmDdmryr4D4VvvNIiUmd0yxci47dTFUj4DvfHnGd6hVe5+goqdcwIDAQAB";
+    npx:hasSignature "dsLcGorqKFIaLiweeq7fqxhTSDYvbQCSitb52JYkZz3vdIsxAhkI1bjjGljia9Op4DmD2OEDFuFISmUcpEo/2o1Ja4LUE2GdZFqar2hVLFwRFtw9c0+xsM0HsVXm0+YiqijoQLZsjamXulFYGUhhuUW4teYVCEIo9Yv1n888+SE=";
+    npx:hasSignatureTarget this:;
+    npx:signedBy <https://orcid.org/0000-0002-1267-0234> .
+}

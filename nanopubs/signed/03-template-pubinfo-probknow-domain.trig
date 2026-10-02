@@ -1,0 +1,78 @@
+@prefix this: <https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0> .
+@prefix sub: <https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix orcid: <https://orcid.org/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix pk: <https://w3id.org/probknow/ontology/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sub:Head {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  rdfs:label rdfs:label "has the label" .
+  
+  sub:assertion a nt:PubinfoTemplate;
+    dct:description "Records the frontier-science domain (e.g. levin-lab, active-inference) a ProbKnow nanopublication belongs to, as a pkr:domain/<slug> IRI.";
+    dct:isVersionOf sub:domainKind;
+    rdfs:label "ProbKnow domain";
+    gen:governedBy <https://w3id.org/spaces/probknow>;
+    nt:hasStatement sub:st1, sub:st2 .
+  
+  sub:domain a nt:ExternalUriPlaceholder;
+    rdfs:label "the domain";
+    nt:hasPrefix "https://w3id.org/probknow/resource/domain/";
+    nt:hasPrefixLabel "pkr:domain/" .
+  
+  sub:domainLabel a nt:LiteralPlaceholder;
+    rdfs:label "the domain's name (its slug)" .
+  
+  sub:st1 rdf:object sub:domain;
+    rdf:predicate pk:domain;
+    rdf:subject nt:NANOPUB;
+    nt:statementOrder "1" .
+  
+  sub:st2 a nt:OptionalStatement;
+    rdf:object sub:domainLabel;
+    rdf:predicate rdfs:label;
+    rdf:subject sub:domain;
+    nt:statementOrder "2" .
+  
+  pk:domain rdfs:label "belongs to the domain" .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo orcid:0000-0002-1267-0234 .
+}
+
+sub:pubinfo {
+  orcid:0000-0002-1267-0234 foaf:name "Tobias Kuhn" .
+  
+  this: dct:created "2026-10-01T06:55:28Z"^^xsd:dateTime;
+    dct:creator orcid:0000-0002-1267-0234;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:embeds sub:assertion;
+    npx:introduces sub:domainKind;
+    rdfs:label "ProbKnow domain";
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>,
+      <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RA3KyKGBWWXKZa-Tgq1XW8djl-9veFZDC2lcXIOeNz1WE> .
+  
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwUtewGCpT5vIfXYE1bmf/Uqu1ojqnWdYxv+ySO80ul8Gu7m8KoyPAwuvaPj0lvPtHrg000qMmkxzKhYknEjq8v7EerxZNYp5B3/3+5ZpuWOYAs78UnQVjbHSmDdmryr4D4VvvNIiUmd0yxci47dTFUj4DvfHnGd6hVe5+goqdcwIDAQAB";
+    npx:hasSignature "h/3NWtmBRSWI5J4GVw4T/sIlTgWJW3Q3K3UdyVPz4oz9GZeKFZOuONvNGfzWfFMHItrPkNwwNBNafCP+V6w3e5l39lBHAzLmpu58+jbgGjIqm9wQ5Uhtw6LOV6xR2+e3AmAC9O3XJfFezT5Q/OxbDtiDRzsf/8awc1jZQqaD7Tw=";
+    npx:hasSignatureTarget this:;
+    npx:signedBy orcid:0000-0002-1267-0234 .
+}

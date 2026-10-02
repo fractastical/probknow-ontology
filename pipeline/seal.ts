@@ -12,9 +12,9 @@
 //
 // SPDX-License-Identifier: MIT
 
-import { NanopubClass } from "@nanopub/nanopub-js";
+import { Nanopub } from "@nanopub/nanopub-js";
 import { Parser as N3Parser, Writer as N3Writer } from "n3";
-import { SIGNER_LABEL, SYSTEM_ID, type NpTriple } from "./probknow-builders.js";
+import { DC, FOAF, FRBR, NP_NS, NPX, NT, ORCID, PK, PKR, PROV, RDF, RDFS, SIGNER_LABEL, SYSTEM_ID, XSD, type NpTriple } from "./probknow-builders.js";
 
 // @nanopub/nanopub-js detects a placeholder base under this namespace and swaps it
 // for the computed `RA…` trusty URI everywhere during signing. We map the builder's
@@ -23,7 +23,8 @@ import { SIGNER_LABEL, SYSTEM_ID, type NpTriple } from "./probknow-builders.js";
 const TEMP = "http://purl.org/nanopub/temp/np1/";
 
 export interface SealOptions {
-  /** RSA private key as base64-encoded PKCS#8 DER (the nanopub key format). */
+  /** RSA private key as base64-encoded PKCS#8 DER (the nanopub key format). From
+   *  @nanopub/nanopub-js 0.3 a PEM-armored PKCS#8 or PKCS#1 key is accepted too. */
   privateKeyBase64: string;
   /** Signer identity → written as `npx:signedBy`. A bot IRI or an ORCID. */
   signerIri: string;
@@ -79,8 +80,9 @@ export function triplesToTrig(triples: NpTriple[], preUri: string): string {
 }
 
 /**
- * Seal an unsigned nanopub (from any build*Nanopub()) into a signed NanopubClass.
- * Call `.rdf()` for the signed TriG, `.hasValidSignature()` to verify, or
+ * Seal an unsigned nanopub (from any build*Nanopub()) into a signed Nanopub.
+ * Call `.rdf()` for the signed TriG (or `prettyTrig(np)` for the same content
+ * with ProbKnow prefixes), `.hasValidSignature()` to verify, or
  * `.publish(server)` to submit. Signing adds npx:hasAlgorithm/hasPublicKey/
  * hasSignature/hasSignatureTarget (and npx:signedBy = signerIri) to pubinfo, and
  * replaces the temp base with the `RA…` trusty URI throughout.
@@ -88,9 +90,9 @@ export function triplesToTrig(triples: NpTriple[], preUri: string): string {
 export async function sealNanopub(
   built: { triples: NpTriple[]; preUri: string },
   opts: SealOptions,
-): Promise<NanopubClass> {
+): Promise<Nanopub> {
   const trig = triplesToTrig(built.triples, built.preUri);
-  const np = NanopubClass.fromRdf(trig, "trig", {
+  const np = Nanopub.fromRdf(trig, "trig", {
     privateKey: opts.privateKeyBase64,
     orcid: opts.signerIri,
     name: opts.name,
@@ -99,7 +101,78 @@ export async function sealNanopub(
   return np;
 }
 
-/** Strip PEM armor to the base64-DER string @nanopub/nanopub-js expects. */
+// ─── Pretty TriG ────────────────────────────────────────────────────────────
+// @nanopub/nanopub-js serializes with a fixed prefix table, so ProbKnow terms and
+// resources come out as full IRIs. The signature and trusty hash cover the
+// normalized quads, not the text, so a signed nanopub can be re-serialized freely.
+// `prettyTrig` re-serializes with the ProbKnow prefixes that are actually used.
+
+/** Candidate prefixes for serializing ProbKnow nanopubs (this:/sub: are added per nanopub). */
+export const TRIG_PREFIXES: Record<string, string> = {
+  np: NP_NS,
+  npx: NPX,
+  nt: NT,
+  rdf: RDF,
+  rdfs: RDFS,
+  xsd: XSD,
+  dct: DC,
+  prov: PROV,
+  foaf: FOAF,
+  frbr: FRBR,
+  orcid: ORCID,
+  pk: PK,
+  // pkr: resources live under pkr:<kind>/<id>; a slash cannot sit unescaped in a
+  // prefixed local name, so each kind gets its own prefix (only used ones are emitted).
+  claim: `${PKR}claim/`,
+  evidence: `${PKR}evidence/`,
+  assessment: `${PKR}assessment/`,
+  hypothesis: `${PKR}hypothesis/`,
+  platonic: `${PKR}platonic/`,
+  paper: `${PKR}paper/`,
+  model: `${PKR}model/`,
+  domain: `${PKR}domain/`,
+  source: `${PKR}source/`,
+  pkr: PKR,
+};
+
+// A prefix is usable for an IRI when the remainder is a plain local name.
+const LOCAL_NAME = /^[A-Za-z0-9_][A-Za-z0-9_.-]*$/;
+
+/** Re-serialize a signed nanopub as TriG with the ProbKnow prefix table. Content-identical to `np.rdf()`. */
+export function prettyTrig(np: Nanopub): string {
+  const rdf = np.rdf();
+  const quads = new N3Parser({ format: "application/trig" }).parse(rdf);
+  const thisUri = rdf.match(/@prefix this:\s*<([^>]+)>/)?.[1];
+  const iris = new Set<string>();
+  for (const q of quads)
+    for (const t of [q.subject, q.predicate, q.object, q.graph]) {
+      if (t.termType === "NamedNode") iris.add(t.value);
+      else if (t.termType === "Literal" && t.datatype) iris.add(t.datatype.value); // so xsd: is declared for typed literals
+    }
+  const prefixes: Record<string, string> = {};
+  if (thisUri) prefixes.sub = thisUri + "/";
+  for (const [pfx, ns] of Object.entries(TRIG_PREFIXES)) {
+    for (const iri of iris) {
+      if (iri.startsWith(ns) && LOCAL_NAME.test(iri.slice(ns.length))) {
+        prefixes[pfx] = ns;
+        break;
+      }
+    }
+  }
+  const writer = new N3Writer({ format: "application/trig", prefixes });
+  writer.addQuads(quads);
+  let out = "";
+  writer.end((err, result) => {
+    if (err) throw err;
+    out = result;
+  });
+  // N3 does not abbreviate an IRI with an empty local name; write the nanopub's own
+  // IRI as `this:` like nanopub-java does.
+  if (thisUri) out = `@prefix this: <${thisUri}>.\n` + out.split(`<${thisUri}>`).join("this:");
+  return out;
+}
+
+/** Strip PEM armor to a base64-DER string. (@nanopub/nanopub-js ≥ 0.3 also accepts PEM directly; kept for callers on the DER form.) */
 export function pemToBase64Der(pem: string): string {
   return pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
 }
@@ -138,7 +211,7 @@ export async function signNanopub(
       name: signer.name ?? SIGNER_LABEL,
     },
   );
-  const trig = np.rdf();
+  const trig = prettyTrig(np);
   const m = trig.match(/@prefix this:\s*<([^>]+)>/) ?? trig.match(/(https:\/\/w3id\.org\/np\/RA[A-Za-z0-9_-]{43})/);
   return { trustyUri: m ? m[1] : "", trig, nquads: await trigToNquads(trig) };
 }

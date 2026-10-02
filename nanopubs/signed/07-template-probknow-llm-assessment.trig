@@ -1,0 +1,211 @@
+@prefix this: <https://w3id.org/np/RAku3DINcetdFUnyTLflyV-8ep3QOCuL-IpGdS984vw8s> .
+@prefix sub: <https://w3id.org/np/RAku3DINcetdFUnyTLflyV-8ep3QOCuL-IpGdS984vw8s/> .
+@prefix np: <http://www.nanopub.org/nschema#> .
+@prefix nt: <https://w3id.org/np/o/ntemplate/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix orcid: <https://orcid.org/> .
+@prefix gen: <https://w3id.org/kpxl/gen/terms/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix npx: <http://purl.org/nanopub/x/> .
+@prefix pk: <https://w3id.org/probknow/ontology/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+sub:Head {
+  this: a np:Nanopublication;
+    np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo .
+}
+
+sub:assertion {
+  dct:identifier rdfs:label "has the identifier" .
+  
+  rdf:type rdfs:label "is a" .
+  
+  rdfs:comment rdfs:label "has the comment" .
+  
+  rdfs:label rdfs:label "has the label" .
+  
+  sub:confidence a nt:LiteralPlaceholder;
+    rdfs:label "the model's confidence in its probability, from 0 to 1";
+    nt:hasDatatype xsd:double .
+  
+  sub:evidenceAgainst a nt:LongLiteralPlaceholder;
+    rdfs:label "a point of evidence against the hypothesis" .
+  
+  sub:evidenceFor a nt:LongLiteralPlaceholder;
+    rdfs:label "a point of evidence supporting the hypothesis" .
+  
+  sub:hypothesis a nt:ExternalUriPlaceholder;
+    rdfs:label "the hypothesis being evaluated";
+    nt:hasPrefix "https://w3id.org/probknow/resource/hypothesis/";
+    nt:hasPrefixLabel "pkr:hypothesis/" .
+  
+  sub:hypothesisCode a nt:LiteralPlaceholder;
+    rdfs:label "the hypothesis code (e.g. H1)" .
+  
+  sub:hypothesisLabel a nt:LiteralPlaceholder;
+    rdfs:label "the hypothesis in one sentence" .
+  
+  sub:label a nt:LiteralPlaceholder;
+    rdfs:label "short label of the assessment" .
+  
+  sub:model a nt:ExternalUriPlaceholder;
+    rdfs:label "the language model that made the assessment";
+    nt:hasPrefix "https://w3id.org/probknow/resource/model/";
+    nt:hasPrefixLabel "pkr:model/" .
+  
+  sub:modelLabel a nt:LiteralPlaceholder;
+    rdfs:label "the model's name and version" .
+  
+  sub:probability a nt:LiteralPlaceholder;
+    rdfs:label "probability that the hypothesis is true, from 0 to 1";
+    nt:hasDatatype xsd:double .
+  
+  sub:reasoning a nt:LongLiteralPlaceholder;
+    rdfs:label "the model's reasoning" .
+  
+  sub:st01 rdf:object pk:LLMClaimAssessment;
+    rdf:predicate rdf:type;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "1" .
+  
+  sub:st02 rdf:object sub:label;
+    rdf:predicate rdfs:label;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "2" .
+  
+  sub:st03 rdf:object sub:hypothesis;
+    rdf:predicate pk:evaluatesHypothesis;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "3" .
+  
+  sub:st04 rdf:object sub:hypothesisLabel;
+    rdf:predicate rdfs:label;
+    rdf:subject sub:hypothesis;
+    nt:statementOrder "4" .
+  
+  sub:st05 a nt:OptionalStatement;
+    rdf:object sub:hypothesisCode;
+    rdf:predicate dct:identifier;
+    rdf:subject sub:hypothesis;
+    nt:statementOrder "5" .
+  
+  sub:st06 rdf:object sub:model;
+    rdf:predicate pk:assessedBy;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "6" .
+  
+  sub:st07 rdf:object pk:Model;
+    rdf:predicate rdf:type;
+    rdf:subject sub:model;
+    nt:statementOrder "7" .
+  
+  sub:st08 rdf:object sub:modelLabel;
+    rdf:predicate rdfs:label;
+    rdf:subject sub:model;
+    nt:statementOrder "8" .
+  
+  sub:st09 a nt:OptionalStatement;
+    rdf:object sub:probability;
+    rdf:predicate pk:hasProbability;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "9" .
+  
+  sub:st10 a nt:OptionalStatement;
+    rdf:object sub:confidence;
+    rdf:predicate pk:hasConfidence;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "10" .
+  
+  sub:st11 a nt:OptionalStatement;
+    rdf:object sub:verdict;
+    rdf:predicate pk:hasVerdict;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "11" .
+  
+  sub:st12 a nt:OptionalStatement;
+    rdf:object sub:reasoning;
+    rdf:predicate rdfs:comment;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "12" .
+  
+  sub:st13 a nt:OptionalStatement, nt:RepeatableStatement;
+    rdf:object sub:evidenceFor;
+    rdf:predicate pk:evidenceFor;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "13" .
+  
+  sub:st14 a nt:OptionalStatement, nt:RepeatableStatement;
+    rdf:object sub:evidenceAgainst;
+    rdf:predicate pk:evidenceAgainst;
+    rdf:subject <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~>;
+    nt:statementOrder "14" .
+  
+  sub:template a nt:AssertionTemplate;
+    dct:description "An assessment of a ProbKnow hypothesis made by a language model acting as evaluator: the model's probability that the hypothesis is true, its self-reported confidence, a verdict, its reasoning, and the points of evidence for and against. The assessment's identifier is minted from this nanopublication's artifact code.";
+    dct:isVersionOf <https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY/llmAssessmentKind>;
+    rdfs:label "ProbKnow LLM assessment of a hypothesis";
+    gen:governedBy <https://w3id.org/spaces/probknow>;
+    nt:hasNanopubLabelPattern "${label}";
+    nt:hasStatement sub:st01, sub:st02, sub:st03, sub:st04, sub:st05, sub:st06, sub:st07,
+      sub:st08, sub:st09, sub:st10, sub:st11, sub:st12, sub:st13, sub:st14;
+    nt:hasTag "ProbKnow";
+    nt:hasTargetNanopubType pk:LLMClaimAssessment .
+  
+  sub:verdict a nt:LiteralPlaceholder;
+    rdfs:label "short categorical verdict (e.g. Plausible)" .
+  
+  pk:LLMClaimAssessment rdfs:label "LLM claim assessment" .
+  
+  pk:Model rdfs:label "language model" .
+  
+  pk:assessedBy rdfs:label "is assessed by" .
+  
+  pk:evaluatesHypothesis rdfs:label "evaluates the hypothesis" .
+  
+  pk:evidenceAgainst rdfs:label "has evidence against" .
+  
+  pk:evidenceFor rdfs:label "has evidence for" .
+  
+  pk:hasConfidence rdfs:label "has the confidence" .
+  
+  pk:hasProbability rdfs:label "has the probability" .
+  
+  pk:hasVerdict rdfs:label "has the verdict" .
+  
+  <https://w3id.org/probknow/resource/assessment/~~ARTIFACTCODE~~> a nt:IntroducedResource;
+    rdfs:label "this assessment" .
+}
+
+sub:provenance {
+  sub:assertion prov:wasAttributedTo orcid:0000-0002-1267-0234 .
+}
+
+sub:pubinfo {
+  orcid:0000-0002-1267-0234 foaf:name "Tobias Kuhn" .
+  
+  this: dct:created "2026-10-01T07:30:43Z"^^xsd:dateTime;
+    dct:creator orcid:0000-0002-1267-0234;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:embeds sub:template;
+    npx:introduces <https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY/llmAssessmentKind>;
+    npx:supersedes <https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY>;
+    rdfs:label "ProbKnow LLM assessment of a hypothesis";
+    skos:changeNote "Introduced resources are now minted from the nanopublication's artifact code (pkr:<kind>/RA…), so they are unique by construction; the pipeline may still use its own ids under the same namespace. References to other ProbKnow resources are guided choices searched on the network.";
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA7lSq6MuK_TIC6JMSHvLtee3lpLoZDOqLJCLXevnrPoU>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>,
+      <https://w3id.org/np/RAKc76yHLDbloE6ObluzYQsfX37v6qrZXbYeIKpe8-YUo>, <https://w3id.org/np/RAoTD7udB2KtUuOuAe74tJi1t3VzK0DyWS7rYVAq1GRvw>,
+      <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAWwJ-TzFhUJN5l6cTUIeCIUqqzS8ek-_zumlDczSUipk/template> .
+  
+  sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwUtewGCpT5vIfXYE1bmf/Uqu1ojqnWdYxv+ySO80ul8Gu7m8KoyPAwuvaPj0lvPtHrg000qMmkxzKhYknEjq8v7EerxZNYp5B3/3+5ZpuWOYAs78UnQVjbHSmDdmryr4D4VvvNIiUmd0yxci47dTFUj4DvfHnGd6hVe5+goqdcwIDAQAB";
+    npx:hasSignature "pP9PdG2yAL2QtjteObWxa7y4j2aJAJiQmtfP/H39hlg7E9UdmyEShVgLLlZUf4DgeLJ4S8XBhFt6RlSjM/sL6YkDHB+hrJcjefrh738ETOzc8LRFZfvSZxzxaoz6u9L/LjTRgteSsNzACsHv5W32twEtLqHy3aR2K3wsa6QXLJA=";
+    npx:hasSignatureTarget this:;
+    npx:signedBy orcid:0000-0002-1267-0234 .
+}

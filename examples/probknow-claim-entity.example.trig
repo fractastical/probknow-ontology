@@ -1,0 +1,57 @@
+# ProbKnow claim as an ENTITY nanopub (preferred granularity): one pkr:claim/<artifact code> with type, label, context, evidence link and weight; the claim IRI is minted from this nanopub's own artifact code.
+# Fresh output of pipeline/probknow-builders.ts + seal.ts (@nanopub/nanopub-js), signed with a
+# THROWAWAY key for illustration. NOT published to the network; the RA… code and signature
+# are therefore not the production ones. Regenerate with: npx tsx pipeline/sign-example.ts
+@prefix this: <https://w3id.org/np/RAYvKGUzy68o-CnqwBJWy0W-yezbwYjt6Kcfu8P6-oSnM>.
+@prefix sub: <https://w3id.org/np/RAYvKGUzy68o-CnqwBJWy0W-yezbwYjt6Kcfu8P6-oSnM/>.
+@prefix np: <http://www.nanopub.org/nschema#>.
+@prefix npx: <http://purl.org/nanopub/x/>.
+@prefix nt: <https://w3id.org/np/o/ntemplate/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix pk: <https://w3id.org/probknow/ontology/>.
+@prefix claim: <https://w3id.org/probknow/resource/claim/>.
+@prefix evidence: <https://w3id.org/probknow/resource/evidence/>.
+@prefix domain: <https://w3id.org/probknow/resource/domain/>.
+
+sub:Head {
+this: np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo;
+    a np:Nanopublication
+}
+sub:assertion {
+claim:RAYvKGUzy68o-CnqwBJWy0W-yezbwYjt6Kcfu8P6-oSnM a pk:Claim;
+    dct:description "A 24 h exposure to a five-drug cocktail delivered by a wearable bioreactor (BioDome) after hindlimb amputation induces long-term limb regeneration and functional recovery in adult Xenopus laevis.";
+    rdfs:label "Wearable bioreactor drug delivery enables limb regeneration in adult Xenopus";
+    prov:wasSupportedBy evidence:MURUGAN2022-C1-E1;
+    pk:context "Xenopus laevis; hindlimb amputation; BioDome wearable bioreactor, five-drug cocktail; 24 h exposure; 18-month follow-up";
+    pk:weightOfEvidence "0.9816"^^xsd:double
+}
+sub:provenance {
+sub:assertion prov:wasAttributedTo <https://bioelectricitynexus.com/nanopub-system>;
+    prov:wasDerivedFrom <https://doi.org/10.1126/sciadv.abj2164>.
+<https://doi.org/10.1126/sciadv.abj2164> dct:date "2022"^^xsd:gYear;
+    dct:title "Acute multidrug delivery via a wearable bioreactor facilitates long-term limb regeneration and functional recovery in adult Xenopus laevis."
+}
+sub:pubinfo {
+this: rdfs:label "Wearable bioreactor drug delivery enables limb regeneration in adult Xenopus";
+    dct:created "2026-10-01T07:32:04.611Z"^^xsd:dateTime;
+    dct:creator <https://bioelectricitynexus.com/nanopub-system>;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:hasNanopubType pk:Claim;
+    npx:introduces claim:RAYvKGUzy68o-CnqwBJWy0W-yezbwYjt6Kcfu8P6-oSnM;
+    nt:wasCreatedFromProvenanceTemplate <https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg>;
+    nt:wasCreatedFromPubinfoTemplate <https://w3id.org/np/RACJ58Gvyn91LqCKIO9zu1eijDQIeEff28iyDrJgjSJF8>, <https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0>, <https://w3id.org/np/RAukAcWHRDlkqxk7H2XNSegc1WnHI569INvNr-xdptDGI>;
+    nt:wasCreatedFromTemplate <https://w3id.org/np/RAIVOEuhWNK4BuCbL_XRChRVlV6LKpFicBzwHpmuRxHWI/template>;
+    pk:domain domain:levin-lab.
+domain:levin-lab rdfs:label "levin-lab".
+sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyX7jl9/9LSjJQkRupa/6t9GRY3D524+YejevXtPpyR99020Bnezw+4I6QbzzG/wk9ch2HPznXlh1dg2WpKTOCiyvYnBRzAZ8/ABRPBX584qY3juwp1e8WOy5ZXPd5O7Evc4ViXXsMbHqB2zEjpqQn7oterGlb0Eug+4nfgXgF4yYiCRv+Zdmtm68Qp982EQgGWTcuYeUkQxxWtcDUGe3UmHN2D6zWrS0xnmoPzFM1pKB0ujTRn9X3vrqgB28he206blLljhUinQkGkRzIO1yPoRRFoRWKGHQtWSL9obX4HgSBrMJqj8q++vstbd+hjbEQYRL2htQT8jDRBGCPd8CzQIDAQAB";
+    npx:hasSignatureTarget this:;
+    npx:signedBy <https://bioelectricitynexus.com/nanopub-system>;
+    npx:hasSignature "PEHgsdL16gdcbZWPt6VguWnNTEcFHsYOAuwLxPWn/ZklSxba2GIvzpyKriuxhWDyPVHuOQm8phxigu3VkaaJ2z0x+E+xhbDZ8gL71iMgJKUBKeQFWiqMuy7BVoSg6PK+Zh/hGj9OUlnIr8OM9iIQddkiqhOtXMTJyJQD3HPtD0FOtrri9tJ9144MqQvsx6Eys3mx1jqtREzE5KEI2D48+TyPhmRtkxqwRGhHJ7rXQiqj5fkUzZU9Vm3waJqGcWhu0UEDVw5a0Zr20phUidRwlC3iArGacvn906vS1tQ8yoHBMhCMgcjCr00zYraHHaUWQ7PSkj8Y4FQjCwGfwAy9ow=="
+}

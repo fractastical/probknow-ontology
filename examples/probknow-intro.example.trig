@@ -1,0 +1,46 @@
+# ProbKnow publisher INTRODUCTION: the agent typed npx:Bot + npx:SoftwareAgent with its key declaration (bot pattern of the nanopub ecosystem). Pass ownerOrcid/ownerName to record the responsible person.
+# Fresh output of pipeline/probknow-builders.ts + seal.ts (@nanopub/nanopub-js), signed with a
+# THROWAWAY key for illustration. NOT published to the network; the RA… code and signature
+# are therefore not the production ones. Regenerate with: npx tsx pipeline/sign-example.ts
+@prefix this: <https://w3id.org/np/RAHUgJkJQhpVpJhKa1j7JLv3FwcNndCxfhROxc5z0Mmvc>.
+@prefix sub: <https://w3id.org/np/RAHUgJkJQhpVpJhKa1j7JLv3FwcNndCxfhROxc5z0Mmvc/>.
+@prefix np: <http://www.nanopub.org/nschema#>.
+@prefix npx: <http://purl.org/nanopub/x/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix dct: <http://purl.org/dc/terms/>.
+@prefix prov: <http://www.w3.org/ns/prov#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+sub:Head {
+this: np:hasAssertion sub:assertion;
+    np:hasProvenance sub:provenance;
+    np:hasPublicationInfo sub:pubinfo;
+    a np:Nanopublication
+}
+sub:assertion {
+sub:keyDeclaration npx:declaredBy <https://bioelectricitynexus.com/nanopub-system>;
+    npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyX7jl9/9LSjJQkRupa/6t9GRY3D524+YejevXtPpyR99020Bnezw+4I6QbzzG/wk9ch2HPznXlh1dg2WpKTOCiyvYnBRzAZ8/ABRPBX584qY3juwp1e8WOy5ZXPd5O7Evc4ViXXsMbHqB2zEjpqQn7oterGlb0Eug+4nfgXgF4yYiCRv+Zdmtm68Qp982EQgGWTcuYeUkQxxWtcDUGe3UmHN2D6zWrS0xnmoPzFM1pKB0ujTRn9X3vrqgB28he206blLljhUinQkGkRzIO1yPoRRFoRWKGHQtWSL9obX4HgSBrMJqj8q++vstbd+hjbEQYRL2htQT8jDRBGCPd8CzQIDAQAB".
+<https://bioelectricitynexus.com/nanopub-system> a npx:Bot, npx:SoftwareAgent;
+    rdfs:label "Bioelectricity Nexus KG Publisher";
+    foaf:homepage <https://bioelectricitynexus.com>;
+    foaf:name "Bioelectricity Nexus KG Publisher"
+}
+sub:provenance {
+sub:assertion prov:wasAttributedTo <https://bioelectricitynexus.com/nanopub-system>
+}
+sub:pubinfo {
+this: rdfs:label "Bioelectricity Nexus KG Publisher";
+    dct:created "2026-10-01T07:32:04.614Z"^^xsd:dateTime;
+    dct:creator <https://bioelectricitynexus.com/nanopub-system>;
+    dct:license <https://creativecommons.org/licenses/by/4.0/>;
+    npx:hasNanopubType npx:declaredBy;
+    npx:introduces <https://bioelectricitynexus.com/nanopub-system>.
+sub:sig npx:hasAlgorithm "RSA";
+    npx:hasPublicKey "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyX7jl9/9LSjJQkRupa/6t9GRY3D524+YejevXtPpyR99020Bnezw+4I6QbzzG/wk9ch2HPznXlh1dg2WpKTOCiyvYnBRzAZ8/ABRPBX584qY3juwp1e8WOy5ZXPd5O7Evc4ViXXsMbHqB2zEjpqQn7oterGlb0Eug+4nfgXgF4yYiCRv+Zdmtm68Qp982EQgGWTcuYeUkQxxWtcDUGe3UmHN2D6zWrS0xnmoPzFM1pKB0ujTRn9X3vrqgB28he206blLljhUinQkGkRzIO1yPoRRFoRWKGHQtWSL9obX4HgSBrMJqj8q++vstbd+hjbEQYRL2htQT8jDRBGCPd8CzQIDAQAB";
+    npx:hasSignatureTarget this:;
+    npx:signedBy <https://bioelectricitynexus.com/nanopub-system>;
+    npx:hasSignature "OAIq8he0Bnhm9v8GQCcWGmS51wxXNGWkiNxzBJIDab6I86AOjbcs4gEDhxMzzCM35/ly1Hhtt54w8vhFixNtJoUjprCXGYaUMTz3fCdsq5oTogOjIwgvVDCQrBA5vZZYXoBj35OZIiIR5cWSn5G2QQUt/kKtCUgSH81876WZ9ueNoLhb4LrRoyuuAS0SWMOdOOI7b4r3xGT/O3w2s8I4QugQTZTbFSWh6Dnf0+fPmUXoSn8Hwn89rTiQODCyC1TMAhKTFwp3RZB9JT+mhy0TuftXav90Ksnw9plydU9SJ/h1gIvPKL4KBxQunq2JVrSiU/tuRYTCD8NwmdvP4+PsNA=="
+}

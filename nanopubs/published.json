@@ -1,0 +1,108 @@
+{
+  "space-probknow": {
+    "nanopub": "https://w3id.org/np/RAh38EheT37uXQ-JUccqfgu_yjB51Zvoba8-5WD_udGk8",
+    "kind": null,
+    "published": "2026-10-01"
+  },
+  "provenance-probknow-extraction": {
+    "nanopub": "https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg",
+    "kind": "https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg/provenanceKind",
+    "published": "2026-10-01"
+  },
+  "pubinfo-probknow-domain": {
+    "nanopub": "https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0",
+    "kind": "https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0/domainKind",
+    "published": "2026-10-01"
+  },
+  "probknow-claim": {
+    "nanopub": "https://w3id.org/np/RAIVOEuhWNK4BuCbL_XRChRVlV6LKpFicBzwHpmuRxHWI",
+    "kind": "https://w3id.org/np/RACSW-97Ldd_hknVOLd2FEB6b8KwgRlp1DdlhR3uFGtt0/claimKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RACSW-97Ldd_hknVOLd2FEB6b8KwgRlp1DdlhR3uFGtt0"
+  },
+  "probknow-evidence-item": {
+    "nanopub": "https://w3id.org/np/RAk4kcX4zA_touv8CeKku9tTUnbR5xiTLSLwFbrKSl3BE",
+    "kind": "https://w3id.org/np/RAXGuXJtOBVqNAQswIpXkUHtrgY4NADQjIT2YYTpDbyd8/evidenceKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAXGuXJtOBVqNAQswIpXkUHtrgY4NADQjIT2YYTpDbyd8"
+  },
+  "probknow-bayesian-assessment": {
+    "nanopub": "https://w3id.org/np/RAnN-8bznTS-PsGIw8LMU4LA_jybOJ4THjLzMRy_W0rFc",
+    "kind": "https://w3id.org/np/RAF1nqvpxkLm8bS57YZWi_HILYUQJ157vz9RAqdtdx10Q/bayesianAssessmentKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAF1nqvpxkLm8bS57YZWi_HILYUQJ157vz9RAqdtdx10Q"
+  },
+  "probknow-llm-assessment": {
+    "nanopub": "https://w3id.org/np/RAku3DINcetdFUnyTLflyV-8ep3QOCuL-IpGdS984vw8s",
+    "kind": "https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY/llmAssessmentKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY"
+  },
+  "probknow-testable-hypothesis": {
+    "nanopub": "https://w3id.org/np/RAPZZB0fIwmSTnoiL9cBDSx9uRGI10J7gd9P42WmunbbA",
+    "kind": "https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI"
+  },
+  "space-role-helper": {
+    "nanopub": "https://w3id.org/np/RAhdjxoo9PxHQ2fdWuD6j3foOP4doL1Zj-vy8hrmgfpCQ",
+    "kind": null,
+    "published": "2026-10-01",
+    "note": "ProbKnow space has the Helper role (member tier)"
+  },
+  "space-helper-probknow-bot": {
+    "nanopub": "https://w3id.org/np/RA56ulZLQo5VSyBv7tpMsckXzQiLLxxJxsK5a8ICrsNv8",
+    "kind": null,
+    "published": "2026-10-01",
+    "note": "the pipeline bot https://bioelectricitynexus.com/nanopub-system is a helper of the ProbKnow space"
+  },
+  "maintained-provenance-probknow-extraction": {
+    "nanopub": "https://w3id.org/np/RAu7FZZ39nCWLe93Pagt0VKlhOw56oMiO32BEi03s-H-k",
+    "kind": "https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg/provenanceKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RA12NGAIhAnSl2x2o8YsZwuHlcFYfQduJLnKplyFDs2Bc",
+    "note": "maintained-resource declaration; v2 by a parallel session fixes the pubinfo label to the resource's own name"
+  },
+  "maintained-pubinfo-probknow-domain": {
+    "nanopub": "https://w3id.org/np/RA3PfBIMIW4KZT_Tt5cZqyvcb85jUZ2h4vxETuee6s7PA",
+    "kind": "https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0/domainKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RApDCXhbct-cNwBJ_LmqOHaMKBdhgMeVG8TaoB6jfTcy8",
+    "note": "maintained-resource declaration; v2 by a parallel session fixes the pubinfo label to the resource's own name"
+  },
+  "maintained-probknow-claim": {
+    "nanopub": "https://w3id.org/np/RALbBBIK9LSkqR6hxEKPtGKjfVmFrdDNetgLO5t8cH2uA",
+    "kind": "https://w3id.org/np/RACSW-97Ldd_hknVOLd2FEB6b8KwgRlp1DdlhR3uFGtt0/claimKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RArGgaZI-FfvcS374zn8E3TZTFGBtx9OhQ3SrpAuTVmCc",
+    "note": "maintained-resource declaration; v2 by a parallel session fixes the pubinfo label to the resource's own name"
+  },
+  "maintained-probknow-evidence-item": {
+    "nanopub": "https://w3id.org/np/RA_avHcUzcEuMxXs7lD3-RqvL0ST3jSm1v6oYOB9qtq8k",
+    "kind": "https://w3id.org/np/RAXGuXJtOBVqNAQswIpXkUHtrgY4NADQjIT2YYTpDbyd8/evidenceKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAI9jxZRlniV9UrkA4UFYjy9eb3_NF4Y2DgX--T0HafRA",
+    "note": "maintained-resource declaration; v2 by a parallel session fixes the pubinfo label to the resource's own name"
+  },
+  "maintained-probknow-bayesian-assessment": {
+    "nanopub": "https://w3id.org/np/RAlc8MAzLG411AqMhtYwNmznb6o5N7Otyc7PEVM_DTShQ",
+    "kind": "https://w3id.org/np/RAF1nqvpxkLm8bS57YZWi_HILYUQJ157vz9RAqdtdx10Q/bayesianAssessmentKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAK_I9vcirn_AqmVEjoZS5_k-o-Cp9HqBNxCMoNpWjQSY",
+    "note": "maintained-resource declaration; v2 by a parallel session fixes the pubinfo label to the resource's own name"
+  },
+  "maintained-probknow-llm-assessment": {
+    "nanopub": "https://w3id.org/np/RACB5WsAjGwFHR-MimIRZcqQ1DYzOeIbZ1CuHiT2rAS9g",
+    "kind": "https://w3id.org/np/RALyOabgB4coZ24ShEqg9VPlg-Kg6_R_9Q-4yfyVV4jRY/llmAssessmentKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAvUlUN92E01IDq3Jc658S37f7sOxSUTxmO2sAT9hewnQ",
+    "note": "maintained-resource declaration; v2 by a parallel session fixes the pubinfo label to the resource's own name"
+  },
+  "maintained-probknow-testable-hypothesis": {
+    "nanopub": "https://w3id.org/np/RA-DXbq-SUiJRhwOuE1pJnvJhKU_aj8kBUzv1ZMGJug7I",
+    "kind": "https://w3id.org/np/RAyFfdBACv8esczzhR700l_ehDqMdl5QVJ7XzPSno3ueI/testableHypothesisKind",
+    "published": "2026-10-01",
+    "supersedes": "https://w3id.org/np/RAH8opW1FyLNTj3Z6_Cbon5_ry9vdbnpWCo2EGUVG0LJA",
+    "note": "maintained-resource declaration; v2 by a parallel session fixes the pubinfo label to the resource's own name"
+  }
+}

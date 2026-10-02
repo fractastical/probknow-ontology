@@ -1,0 +1,34 @@
+{
+  "space-probknow": {
+    "nanopub": "https://w3id.org/np/RAh38EheT37uXQ-JUccqfgu_yjB51Zvoba8-5WD_udGk8",
+    "reference": "https://w3id.org/np/RAh38EheT37uXQ-JUccqfgu_yjB51Zvoba8-5WD_udGk8"
+  },
+  "provenance-probknow-extraction": {
+    "nanopub": "https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg",
+    "reference": "https://w3id.org/np/RA6svHudOcFjOo5Vr5kSCv1kVitLgngsx3xNQBeY_0bUg"
+  },
+  "pubinfo-probknow-domain": {
+    "nanopub": "https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0",
+    "reference": "https://w3id.org/np/RAtKj9bCnB4gUe0E9k-WhffQFSEWd9Ve2hrVllYoLuOB0"
+  },
+  "probknow-claim": {
+    "nanopub": "https://w3id.org/np/RAIVOEuhWNK4BuCbL_XRChRVlV6LKpFicBzwHpmuRxHWI",
+    "reference": "https://w3id.org/np/RAIVOEuhWNK4BuCbL_XRChRVlV6LKpFicBzwHpmuRxHWI/template"
+  },
+  "probknow-evidence-item": {
+    "nanopub": "https://w3id.org/np/RAk4kcX4zA_touv8CeKku9tTUnbR5xiTLSLwFbrKSl3BE",
+    "reference": "https://w3id.org/np/RAk4kcX4zA_touv8CeKku9tTUnbR5xiTLSLwFbrKSl3BE/template"
+  },
+  "probknow-bayesian-assessment": {
+    "nanopub": "https://w3id.org/np/RAnN-8bznTS-PsGIw8LMU4LA_jybOJ4THjLzMRy_W0rFc",
+    "reference": "https://w3id.org/np/RAnN-8bznTS-PsGIw8LMU4LA_jybOJ4THjLzMRy_W0rFc/template"
+  },
+  "probknow-llm-assessment": {
+    "nanopub": "https://w3id.org/np/RAku3DINcetdFUnyTLflyV-8ep3QOCuL-IpGdS984vw8s",
+    "reference": "https://w3id.org/np/RAku3DINcetdFUnyTLflyV-8ep3QOCuL-IpGdS984vw8s/template"
+  },
+  "probknow-testable-hypothesis": {
+    "nanopub": "https://w3id.org/np/RAPZZB0fIwmSTnoiL9cBDSx9uRGI10J7gd9P42WmunbbA",
+    "reference": "https://w3id.org/np/RAPZZB0fIwmSTnoiL9cBDSx9uRGI10J7gd9P42WmunbbA/template"
+  }
+}

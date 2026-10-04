@@ -1,97 +1,148 @@
-# probknow-ontology
+# Project Delphi — Probabilistic Knowledge Graph Ontology
 
-The **ProbKnow** ontology and signed nanopublication examples from [probknow.com](https://probknow.com) — a probabilistic knowledge graph that aggregates scientific research across frontier domains (bioelectricity, active inference, synthetic biology, BCI, and more).
+Project Delphi organizes scientific research into a **probabilistic knowledge graph (PKG)**: a connected map of claims, evidence, hypotheses, and assessments of uncertainty. The goal is to make it easier to ask what the evidence supports, find disagreements, and trace an answer back to its sources.
 
-This repo is the public, ecosystem-facing artifact for the knowledge model: the vocabulary (T-Box), worked examples of the nanopublications we publish to the network, and ready-to-run SPARQL queries. The triple-construction code that builds these nanopubs is in [`pipeline/`](./pipeline/); the cryptographic sealing is delegated to the official pure-TypeScript library [`@nanopub/nanopub-js`](https://github.com/Nanopublication/nanopub-js).
+Formerly branded **ProbKnow**, this repository contains the shared vocabulary, nanopublication examples, and export pipeline behind that knowledge model. It is not the complete Delphi web application or a download of its entire research database.
 
-> **Which form is current?** The `pk:` / `pkr:` form is what probknow's signing pipeline emits — the `examples/*.example.trig` files are fresh builder output. `examples/levin-claim-MURUGAN2022.trig` is a live nanopub from the previous builder generation (still carrying `example.org` subject IRIs), and `examples/levin-P1.legacy.trig` is from the earlier `urn:pkg:` wave; both stay fully queryable through the backward-compatibility crosswalk below.
+## What is a PKG?
 
-## The ontology
+A **knowledge graph** represents information as things and relationships between them. In a research graph, a paper reports a claim; that claim may support or challenge a hypothesis; another paper may test the same idea under different conditions.
 
-- **IRI:** `https://w3id.org/probknow/ontology` (current version IRI `https://w3id.org/probknow/ontology/1.1`)
-- **Term namespace** `pk:` → `https://w3id.org/probknow/ontology/` — slash-based and unversioned, so `pk:Claim` is `https://w3id.org/probknow/ontology/Claim` and each term can redirect on its own. Version 1.0 used hash terms under `…/ontology/1.0#`; the crosswalk maps them.
-- **Resource namespace** `pkr:` → `https://w3id.org/probknow/resource/`
+**Probabilistic** means the graph can represent uncertainty rather than treating every statement as an established fact. It records assessments alongside the claims and evidence they concern, so readers can distinguish a reported finding from an interpretation or a model's estimate.
 
-Design principle: **reuse standards, mint sparingly.** ProbKnow reuses PROV-O, SKOS, Dublin Core Terms, the SPAR ontologies (CiTO, FaBiO), and the Nanopublication schema wherever a settled term exists. It mints terms only for the probabilistic-evaluation layer (e.g. `pk:weightOfEvidence`), which has no established standard.
+For example, imagine a paper reports that a treatment improved an outcome in mice. The graph can keep track of:
 
-- [`probknow.ttl`](probknow.ttl) — the ontology (Turtle).
-- [`ONTOLOGY.md`](ONTOLOGY.md) — human-readable T-Box reference (classes, properties, design notes, and the legacy crosswalk).
+- what was measured, in which organism, and under what conditions;
+- the paper that reported it;
+- the broader hypothesis it might support;
+- other findings that agree or disagree;
+- how the evidence was assessed, and by whom or by which model.
 
-## Backward compatibility — nothing needs re-publishing
+That does **not** establish that the treatment works in humans. Keeping those distinctions visible is part of the point. This is an illustrative example, not a medical claim or a record from this repository.
 
-Earlier nanopublications were published under legacy identifiers: `urn:pkg:` / `urn:levin-kg:` terms in one wave, `https://example.org/levin-kg/` terms (plus a stray `https://w3id.org/levin-kg/`) in the Bayesian-assessment wave, and the hash terms of ontology version 1.0 (`https://w3id.org/probknow/ontology/1.0#…`) in the most recent one. A published nanopub is content-addressed and immutable, so it can never be edited — but it does **not** need to be. The ontology declares every legacy term `owl:equivalentProperty` / `owl:equivalentClass` of its current `pk:` term (see the *Backward-compatibility crosswalk* section of the TTL), and legacy individuals map by pattern to `pkr:` IRIs; the full tables are in [`ONTOLOGY.md`](ONTOLOGY.md#legacy--canonical-crosswalk).
+## How does it work?
 
-So every already-published nanopub is queryable through the current vocabulary: an OWL-aware store treats the pairs as identical, and a plain SPARQL endpoint can `UNION` the two. Old and new nanopubs coexist and are fully compatible.
+1. **Start with research sources.** Papers provide the material and source references.
+2. **Extract specific claims.** Findings are represented separately, preserving their context and connection to the source. Automated extraction can make mistakes and must remain inspectable.
+3. **Connect claims and hypotheses.** Relationships organize what supports an idea, challenges it, or still needs testing.
+4. **Attach assessments.** Evidence scores, model evaluations, and probabilistic assessments are represented explicitly, rather than silently replacing the underlying evidence.
+5. **Make records reusable.** The export pipeline packages records as nanopublications that other tools can inspect, verify, and query.
 
-New nanopubs never carry legacy identifiers: the builders rewrite them with `canonicalIri()` (the same table as the crosswalk) and refuse any `example.org` IRI that is left over, since that namespace is reserved for documentation and can never resolve.
+In the broader Delphi application, the graph supports research exploration and evidence-grounded answers. This repository documents the **data model and publication layer**, not every application feature.
 
-## Examples
+**A score is not proof.** A model-assigned score is not automatically a calibrated probability that a claim is true. Multiple models agreeing is not independent experimental replication. The source, method, scope, and limitations still matter.
 
-Signed nanopublications in [`examples/`](examples/). Two are live on the network; the `*.example.trig` files are fresh output of the current builders, signed with a throwaway key for illustration and **not published**:
+## What is a nanopublication?
 
-- [`examples/probknow-claim-entity.example.trig`](examples/probknow-claim-entity.example.trig) — a claim as an **entity nanopub** (the preferred granularity: one `pkr:claim/…` with its type, label, context, evidence link and weight, introduced by the nanopub).
-- [`examples/probknow-claim-statement.example.trig`](examples/probknow-claim-statement.example.trig) — the same row as a **single-statement nanopub** (the original granularity); note the legacy `example.org` input IRIs rewritten to `pkr:`, and the weight stated about the assertion in the provenance graph.
-- [`examples/probknow-intro.example.trig`](examples/probknow-intro.example.trig) — the publisher **introduction**: the agent typed `npx:Bot`, `npx:SoftwareAgent`, with its key declaration.
+A **nanopublication**, or **nanopub**, is a small, structured, machine-readable publication. Rather than replacing a whole paper, it makes a specific claim or research record independently referenceable and reusable, together with information about where it came from.
 
-- [`examples/levin-claim-MURUGAN2022.trig`](examples/levin-claim-MURUGAN2022.trig) — **current builder output**: an evidence-support claim under the `pk:`/`pkr:` ontology (note `pk:weightOfEvidence`, `pk:domain`, and the `pkr:claim/...` resource IRI), **live on the nanopub network** at <https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y>. This is the nanopub reconstructed by [`pipeline/reproduce-example.ts`](pipeline/reproduce-example.ts). It predates the current builders, so fresh output differs: its `example.org` IRIs are rewritten to `pkr:`, the weight is stated about the assertion in the provenance graph, and pubinfo carries label, license, type, a `pkr:domain/` IRI and `npx:signedBy`.
-- [`examples/levin-P1.legacy.trig`](examples/levin-P1.legacy.trig) — **earlier published wave**: a Levin-lab hypothesis **live on the nanopub network right now**, resolvable at <https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is>. It uses the legacy `urn:pkg:` terms, bridged by the crosswalk above.
+It has three main content parts, connected by a small structural header:
 
-All are valid trusty-URI nanopubs (RA hash + RSA-SHA256 signature). With nanopub-java 1.94 `check -v`, the fresh examples report no issues at all (they carry label, type, signer and template links); the two live ones lack `npx:signedBy`, a label, a type and template links, which is what the current builders fix.
+| Part | Plain-English meaning |
+| --- | --- |
+| Assertion | What is being stated: a claim, an entity and its properties, or an assessment. |
+| Provenance | Where the assertion came from and how it was derived. |
+| Publication information | Information about publishing this nanopub, such as creator, date, and license. |
+| Head | Links those three parts into one nanopublication. |
 
-## The ProbKnow Space and templates
+The signed examples here also carry a **digital signature** and a **trusty URI**, an identifier containing a hash derived from their content. These allow someone to check integrity and the signing key. They do **not** prove that the scientific claim is correct, that it was peer reviewed, or that the signer is a trustworthy expert.
 
-[`nanopubs/`](nanopubs/) holds the nanopublications that set ProbKnow up on the network: a **Space** (`https://w3id.org/spaces/probknow`, admins Tobias Kuhn and Joel Dietz) and seven **templates governed by it** — assertion templates for claims, evidence items, Bayesian assessments, LLM assessments and testable hypotheses, a provenance template for paper-derived extractions, and a pubinfo template for the domain — plus the declarations that make the Space maintain each template's kind. `generate.py` produces the sources, `sign.sh` signs them in order; see [`nanopubs/README.md`](nanopubs/README.md). Once published, every nanopub the pipeline emits links to its templates, so Nanodash renders it with its form and space members can evolve the templates without the original signing key.
+A published, content-addressed nanopub is not edited in place. A correction is a new publication that can reference or supersede the earlier one, preserving the history.
 
-## Queries
+## Why is this relevant?
 
-SPARQL queries in [`queries/`](queries/), runnable against a nanopub-network endpoint such as <https://query.knowledgepixels.com/> or <https://virtuoso.nps.petapico.org/sparql>:
+- **For researchers:** compare individual findings and their context instead of treating a paper's headline as the whole result.
+- **For readers of AI answers:** inspect the evidence behind a statement and distinguish missing evidence from strong support.
+- **For developers:** exchange structured records using shared identifiers and standard query tools instead of scraping prose.
+- **For open science:** cite, verify, and reuse a small research record outside the application that created it.
 
-- `all-probknow-nanopubs.rq` — every nanopub using a ProbKnow term or resource.
-- `claims-by-domain.rq` — nanopub counts grouped by frontier-science domain (IRI or legacy literal form).
-- `high-confidence-claims.rq` — claims with a high panel-assigned weight of evidence (0–1 score), wherever the weight is stated.
+The PKG organizes the relationships and uncertainty. Nanopublications make individual records portable and traceable. The ontology gives those records a shared meaning.
 
-## Open improvements (where collaboration helps)
+## What is an ontology, and what is in this repository?
 
-1. **Migrate the stored rows.** The application database still holds `example.org/levin-kg/…` IRIs. The builders rewrite them on export, but the rows should be migrated with the same rules (`canonicalIri()` / the crosswalk tables) so the guard never has to fire.
-2. **Republish the live wave.** Every builder takes a `supersedes` input; republishing the 183 nanopubs on the network with `npx:supersedes` (same key) makes the old URIs resolve to clean versions. Publish the new introduction first, then the data.
-3. **Publish the Space and templates** in [`nanopubs/`](nanopubs/); the builders already link every nanopub to them.
-4. **Dereferenceable terms.** Registering the `w3id.org/probknow` redirect; the ready-to-submit rules are in [`w3id/`](w3id/).
-5. **Linking claims to their source papers** via CiTO so a claim resolves to the paper it was extracted from (the DOI provenance is in place; typed citations are not).
+An **ontology** is a shared vocabulary that defines the kinds of things a system describes and how they relate. Here it defines concepts such as claims, evidence items, hypotheses, and assessments, so different tools can interpret the same data consistently.
 
-Done: every builder writes `rdfs:label`, `dct:license`, `npx:hasNanopubType`, `npx:introduces` and optional `npx:supersedes`; legacy IRIs are canonicalized and `example.org` is refused; `pk:weightOfEvidence` is defined as the 0–1 score it always carried, with `pk:weightOfEvidenceDeciban` for the deciban data; `pk:domain` points at a `pkr:domain/` IRI; the introduction follows the ecosystem's bot pattern.
+| Start here | What it contains |
+| --- | --- |
+| [Ontology reference](ONTOLOGY.md) | Human-readable definitions of classes, properties, and compatibility mappings. |
+| [Ontology source](probknow.ttl) | Machine-readable vocabulary in Turtle, a text format for RDF data. |
+| [Examples](examples/) | Signed nanopublications, including illustrative files and earlier published records. |
+| [Publication pipeline](pipeline/) | TypeScript code that constructs records and passes them to the signing library. |
+| [Queries](queries/) | SPARQL queries: searches over graph data. |
+| [Space and templates](nanopubs/) | Network templates and governance records, plus a [publication manifest](nanopubs/published.json). |
+| [Identifier redirect rules](w3id/) | Rules and notes for resolving the existing ontology identifiers. |
 
-## License
+If you are new to the project, read one [claim example](examples/probknow-claim-entity.example.trig) alongside the [ontology reference](ONTOLOGY.md). You do not need to run the application to read these public files.
 
-MIT — see [LICENSE](LICENSE).
+---
 
-## Nanopublication minting pipeline
+## Technical reference
 
-The exact code that builds the assertion / provenance / pubinfo triples for every ProbKnow nanopublication lives in [`pipeline/`](./pipeline/) — so the *construction* of published nanopubs is auditable, not just their signatures. The cryptographic sealing (trusty URI + RSA signing) is delegated to the official [`@nanopub/nanopub-js`](https://github.com/Nanopublication/nanopub-js) library, wrapped by [`pipeline/seal.ts`](./pipeline/seal.ts). See [`pipeline/README.md`](./pipeline/README.md), and run [`pipeline/reproduce-example.ts`](./pipeline/reproduce-example.ts) to rebuild a live nanopub's triples.
+### Branding and stable identifiers
 
+**Project Delphi** is the current project branding. **ProbKnow** remains in existing filenames, namespaces, and published network records for compatibility. The repository rename does not create a new ontology version or change the meaning of existing terms.
 
-  ## FAQ
+- Ontology IRI: `https://w3id.org/probknow/ontology`
+- Current version IRI: `https://w3id.org/probknow/ontology/1.1`
+- Term namespace: `pk: → https://w3id.org/probknow/ontology/`
+- Resource namespace: `pkr: → https://w3id.org/probknow/resource/`
 
-  ### Is this actually public? Can anyone view it without a GitHub login or token?
+An IRI is a globally unique identifier, usually written like a URL. Declaring one does not by itself guarantee that visiting it returns a document; see [redirect configuration](w3id/). The branding change does not assert that every namespace URL currently resolves.
 
-  Yes. The repo, the ontology, and the pipeline code are all public with no auth required. Verify yourself with a plain, unauthenticated request:
+The ontology reuses PROV-O, SKOS, Dublin Core Terms, CiTO, FaBiO, and the Nanopublication schema where possible. Project-specific terms cover the additional assessment layer.
 
-  ```bash
-  curl -s https://raw.githubusercontent.com/fractastical/probknow-ontology/main/pipeline/probknow-builders.ts
-  ```
+### Scores and probabilities
 
-  That returns the file directly — no login, no API key.
+- `pk:weightOfEvidence` is a 0–1 weight-of-evidence score, not a deciban value and not automatically a probability of truth.
+- `pk:weightOfEvidenceDeciban` is the separate property for deciban-valued evidence.
+- Probability and prior-probability properties describe the corresponding assessment; their interpretation depends on the method and assumptions used.
 
-  ### Why is the nanopub construction code (`pipeline/`) in this repo instead of its own repo?
+Consult [ONTOLOGY.md](ONTOLOGY.md) for the exact definitions before combining values across records.
 
-  It used to briefly exist as a separate repo (`probknow-nanopub-builders`). That was redundant — this repo already had a `pipeline/` folder with the same code, and splitting it out just meant two places to keep in sync for no benefit. The construction logic, the ontology it depends on (`probknow.ttl`), the worked examples, and the SPARQL queries are all one audit trail, so they live together here. The standalone repo is now archived with a pointer back to this one.
+### Examples and publication status
 
-  ### Where is the signing / cryptographic code, then?
+The three illustrative files below were signed with a throwaway key and are **not published**:
 
-  It isn't ProbKnow code at all. Sealing (trusty-URI hashing + RSA-SHA256 signing per the nanopub spec) is the one piece that's generic rather than ProbKnow-specific, so it's delegated to the official pure-TypeScript implementation maintained by the Nanopublication project: [`@nanopub/nanopub-js`](https://github.com/Nanopublication/nanopub-js). [`pipeline/seal.ts`](./pipeline/seal.ts) is a thin adapter that hands the builders' output to it. Everything else in `pipeline/` is ProbKnow-specific triple *construction*.
+- [Entity claim](examples/probknow-claim-entity.example.trig): one claim with its properties, context, evidence link, and weight.
+- [Single-statement claim](examples/probknow-claim-statement.example.trig): the alternative statement-level representation.
+- [Publisher introduction](examples/probknow-intro.example.trig): an agent and its key declaration.
 
-  ProbKnow previously sealed with its own standalone port (`nanopub-ts`); that has been retired in favour of the official library.
+Earlier published examples are retained as historical artifacts:
 
-  ### Is `pipeline/probknow-builders.ts` the real production code, or a simplified version for show?
+- [MURUGAN2022 claim](examples/levin-claim-MURUGAN2022.trig), [network identifier](https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y): uses pk:/pkr: vocabulary but retains some earlier identifiers and metadata conventions. It is **not** byte-identical to current builder output.
+- [Levin P1 hypothesis](examples/levin-P1.legacy.trig), [network identifier](https://w3id.org/np/RANokmO9j8qIxyBdirmYlJ_zKFtlQiWgeA86AavxiO-is): uses the older urn: vocabulary.
 
-  It's the exact construction logic used in production — not a re-implementation. `pipeline/reproduce-example.ts` proves it: it feeds the same inputs a real published nanopub was built from back into `buildAssertionNanopub()` and lets you diff the output against the live, resolvable nanopub at [w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y](https://w3id.org/np/RAzdRzAqBocJKLkN28FmiRA3njB3Yct4qXIU-FPTA6L2Y).
-  
+The [publication manifest](nanopubs/published.json) records the Space, templates, and maintenance declarations published under the ProbKnow identifiers. See [nanopubs/README.md](nanopubs/README.md) for their sources and maintenance workflow; they are not renamed or re-signed as part of the branding update.
+
+### Construction and signing
+
+The pipeline has two separately inspectable stages:
+
+1. [Construction](pipeline/probknow-builders.ts) assembles assertion, provenance, publication-information, and head graphs.
+2. [Sealing](pipeline/seal.ts) delegates content hashing and RSA-SHA256 signing to [@nanopub/nanopub-js](https://github.com/Nanopublication/nanopub-js).
+
+See [pipeline/README.md](pipeline/README.md) for setup, builders, the signing demo, and verification instructions. [reproduce-example.ts](pipeline/reproduce-example.ts) lets readers inspect construction from example inputs. Current builders add metadata and canonicalize legacy identifiers, so differences from an older published record are expected. Recreating its exact hash also requires the original timestamp and signing inputs; no private key is supplied here.
+
+### Backward compatibility
+
+Published nanopublications are content-addressed and remain unchanged. The ontology includes mappings from earlier urn:pkg:, urn:levin-kg:, example.org/levin-kg/, and version-1.0 hash terms to current pk: terms. See the [legacy-to-canonical crosswalk](ONTOLOGY.md#legacy--canonical-crosswalk).
+
+A store with the appropriate equivalence reasoning can use those mappings; a plain SPARQL endpoint needs explicit query alternatives or normalization. The mappings do not automatically rewrite historical data or enable reasoning on every endpoint. The builders canonicalize supported legacy inputs and reject leftover example.org identifiers.
+
+### Queries
+
+The [queries directory](queries/) contains:
+
+- [all-probknow-nanopubs.rq](queries/all-probknow-nanopubs.rq): records using the project's terms or resources.
+- [claims-by-domain.rq](queries/claims-by-domain.rq): nanopublication counts grouped by research domain.
+- [high-confidence-claims.rq](queries/high-confidence-claims.rq): records with high assigned evidence scores; the filename does not imply scientifically proven claims.
+
+Run them against a compatible nanopublication SPARQL endpoint, such as [Nanopub Query](https://query.knowledgepixels.com/) or [the Petapico endpoint](https://virtuoso.nps.petapico.org/sparql). Endpoint availability, indexing, and supported reasoning can vary.
+
+### Contributing
+
+Useful contributions include clearer definitions, worked examples, query improvements, stronger source-paper links, and compatibility checks. Check the source files and publication manifest before treating an older migration note as current. Changes to signed records require new publications, not edits to their existing content.
+
+### License
+
+Repository code is covered by the [MIT license](LICENSE). Ontology and nanopublication artifacts may declare their own license metadata, including CC BY 4.0; preserve and consult those declarations when reusing them.

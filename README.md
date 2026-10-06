@@ -4,6 +4,46 @@ Project Delphi organizes scientific research into a **probabilistic knowledge gr
 
 Formerly branded **ProbKnow**, this repository contains the shared vocabulary, nanopublication examples, and export pipeline behind that knowledge model. It is not the complete Delphi web application or a download of its entire research database.
 
+## Why this knowledge graph exists
+
+**A shared evidence base for understanding science—and deciding what to test next.**
+
+Scientific findings are scattered across papers, datasets, and laboratories. Finding a paper is not the same as knowing what its evidence supports, how it relates to conflicting findings, or which uncertainty is worth investigating next. A fluent AI answer does not solve that problem unless its reasoning can be traced back to evidence.
+
+Delphi's goal is to make that chain inspectable and reusable:
+
+1. **What does the available evidence support?**
+2. **Where do findings disagree, or leave important gaps?**
+3. **What experiment would most help resolve the uncertainty?**
+
+The graph connects source papers to specific claims, competing hypotheses, and explicit assessments of uncertainty. The ontology in this repository provides the shared vocabulary for those relationships; nanopublications make individual records portable and traceable. The point is not simply to store more research, but to give researchers and agents a common basis for comparing evidence and revising conclusions.
+
+### The longer-term research loop
+
+The vision is a global, agent-assisted system that connects hypothesis generation to experimental testing: identify promising questions from the evidence, test them through automated wet labs and other experimental systems, and return the results to the shared graph.
+
+~~~mermaid
+flowchart TD
+    A["Research papers"] --> B["Claims with source provenance"]
+    B --> C["Hypotheses and supporting or opposing evidence"]
+    C --> D["Evidence assessments and uncertainty"]
+    D --> E["Graph exploration and source-linked answers"]
+    D -.-> F["Prioritize testable hypotheses"]
+    F -.-> G["Design and run experiments"]
+    G -.-> H["Publish results with provenance"]
+    H -.-> B
+~~~
+
+**Solid arrows:** the existing research-ingestion and exploration workflow in the broader Delphi application. **Dashed arrows:** the intended closed-loop extension, including automated experimental execution. This repository supplies the ontology and publication layer; it is not a deployed autonomous laboratory network.
+
+### Why specialized, distributed agents?
+
+Literature discovery, Bayesian reasoning, experiment design, and laboratory automation require different capabilities. A shared evidence model lets specialized agents and participating laboratories contribute to the same research process without requiring every agent to perform every task or every lab to use identical internal tools.
+
+The intended benefit is coordination around explicit, revisable evidence rather than disconnected agent outputs. Findings can be exchanged with their provenance, disagreements can remain visible, and subsequent experiments can target unresolved questions. Human scrutiny and experimental validation remain necessary.
+
+This makes the research more accessible to **researchers** comparing findings, **laboratories and agent developers** coordinating work, **investors and research funders** examining the evidence behind frontier-science opportunities, and **the public** seeking source-linked explanations. Commercial forecasts remain distinct from scientific evidence.
+
 ## What is a PKG?
 
 A **knowledge graph** represents information as things and relationships between them. In a research graph, a paper reports a claim; that claim may support or challenge a hypothesis; another paper may test the same idea under different conditions.

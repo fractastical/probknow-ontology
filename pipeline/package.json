@@ -6,6 +6,7 @@
   "description": "ProbKnow nanopublication minting pipeline — construction (probknow-builders.ts) + sealing via @nanopub/nanopub-js (seal.ts).",
   "license": "MIT",
   "scripts": {
+    "test": "tsx --test test/*.test.ts",
     "reproduce": "tsx reproduce-example.ts",
     "sign-example": "tsx sign-example.ts"
   },

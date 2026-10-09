@@ -126,6 +126,13 @@ function esc(s: string): string {
 const lit = (s: string): string => `"${esc(s)}"`;
 const dbl = (n: number): string => `"${n.toFixed(4)}"^^${XSD}double`;
 
+// Reject invalid scores before rounding or sealing; null/undefined mean unscored.
+function boundedScore(value: number | null | undefined, field: string, max = 1): void {
+  if (value == null) return;
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > max)
+    throw new Error(`${field}: expected a finite number in [0, ${max}]`);
+}
+
 // Export a PEM public key as SPKI DER base64 (the format the nanopub network
 // expects in `npx:hasPublicKey`).
 function publicKeyDerBase64(publicKeyPem: string): string {
@@ -361,6 +368,7 @@ export interface EntityForNanopub {
 }
 
 export function buildEntityNanopub(e: EntityForNanopub): { triples: NpTriple[]; preUri: string } {
+  boundedScore(e.evidenceWeight, "entity.evidenceWeight");
   const preUri = NP_BASE + SPACE_AC;
   const { assertG, provG, pubG } = graphs(preUri);
   const type = assertIri(e.type, "entity.type");
@@ -425,6 +433,7 @@ export interface AssertionForNanopub {
 }
 
 export function buildAssertionNanopub(assertion: AssertionForNanopub): { triples: NpTriple[]; preUri: string } {
+  boundedScore(assertion.evidenceWeight, "assertion.evidenceWeight");
   const preUri = NP_BASE + SPACE_AC; // space placeholder — content uniquifies the trusty URI
   const { assertG, provG, pubG } = graphs(preUri);
   const now = (assertion.createdAt ?? new Date()).toISOString();
@@ -543,6 +552,8 @@ export interface AssessmentForNanopub {
 }
 
 export function buildAssessmentNanopub(a: AssessmentForNanopub): { triples: NpTriple[]; preUri: string } {
+  boundedScore(a.probability, "assessment.probability");
+  boundedScore(a.confidence, "assessment.confidence");
   const preUri = NP_BASE + SPACE_AC;
   const { assertG, provG, pubG } = graphs(preUri);
   const assessUri = resourceIri(`${PK}LLMClaimAssessment`, a.id);
@@ -619,6 +630,8 @@ export interface PlatonicForNanopub {
 const slug = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 export function buildPlatonicNanopub(p: PlatonicForNanopub): { triples: NpTriple[]; preUri: string } {
+  boundedScore(p.prior, "platonic.prior", 100);
+  boundedScore(p.resolvability, "platonic.resolvability", 100);
   const preUri = NP_BASE + SPACE_AC;
   const { assertG, provG, pubG } = graphs(preUri);
   const hypUri = resourceIri(`${PK}TestableHypothesis`, p.code);

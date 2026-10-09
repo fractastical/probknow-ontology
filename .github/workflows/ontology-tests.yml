@@ -1,0 +1,39 @@
+name: Ontology offline tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: pipeline/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: tests/requirements.txt
+      - name: Install locked pipeline dependencies
+        working-directory: pipeline
+        run: npm ci --ignore-scripts
+      - name: Install RDF test dependencies
+        run: python -m pip install -r tests/requirements.txt
+      - name: Builder contract tests (no network)
+        working-directory: pipeline
+        run: npm test
+      - name: RDF and SPARQL fixture tests (no network)
+        run: python -m unittest discover -s tests -v

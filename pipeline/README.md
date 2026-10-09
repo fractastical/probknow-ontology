@@ -154,6 +154,14 @@ sign with the original — secret — key. With public material alone you can st
 signature against the public key embedded in the nanopub's pubinfo graph using
 standard nanopub tooling (`np check`).
 
+## Offline regression tests
+
+Run `npm test` in this directory after installing the locked dependencies.
+The companion RDF/SPARQL tests and pull-request workflow are documented in
+[`../tests/README.md`](../tests/README.md). No production key, registry access,
+or database is needed. Invalid non-finite or out-of-range numeric scores now
+fail before construction rather than being silently omitted or serialized.
+
 ## License
 
 MIT.

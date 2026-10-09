@@ -1,0 +1,22 @@
+[
+  {"id":"sleep","question":"Why does our body need sleep?","query":"TITLE_ABS:\"sleep function\" AND HAS_ABSTRACT:Y"},
+  {"id":"dreams","question":"Why do we dream?","query":"TITLE_ABS:\"dreaming\" AND TITLE_ABS:\"function\" AND HAS_ABSTRACT:Y"},
+  {"id":"memory","question":"How does the brain make and store memories?","query":"TITLE:\"memory consolidation\" AND HAS_ABSTRACT:Y"},
+  {"id":"exercise-heart","question":"How does exercise help the heart?","query":"TITLE:\"exercise\" AND TITLE_ABS:\"cardiovascular\" AND PUB_TYPE:review AND HAS_ABSTRACT:Y"},
+  {"id":"muscles","question":"How do muscles get stronger with exercise?","query":"TITLE_ABS:\"resistance training\" AND TITLE_ABS:\"hypertrophy\" AND HAS_ABSTRACT:Y"},
+  {"id":"stress","question":"What does stress do to the body?","query":"TITLE:\"stress\" AND TITLE_ABS:\"allostasis\" AND HAS_ABSTRACT:Y"},
+  {"id":"fever","question":"Why do we get a fever when we are sick?","query":"TITLE:\"fever\" AND TITLE_ABS:\"immune\" AND HAS_ABSTRACT:Y"},
+  {"id":"vaccines","question":"How do vaccines help the immune system?","query":"TITLE:\"vaccines\" AND TITLE_ABS:\"immune memory\" AND HAS_ABSTRACT:Y"},
+  {"id":"antibiotics","question":"Why do antibiotics work on bacteria but not viruses?","query":"TITLE:\"antibiotics\" AND TITLE_ABS:\"mechanisms of action\" AND HAS_ABSTRACT:Y"},
+  {"id":"gut","question":"How do bacteria in our gut affect our health?","query":"TITLE:\"gut microbiota\" AND TITLE_ABS:\"human health\" AND HAS_ABSTRACT:Y"},
+  {"id":"water","question":"Why does our body need water?","query":"TITLE:\"Water hydration and health\" AND HAS_ABSTRACT:Y"},
+  {"id":"aging","question":"Why do our bodies change as we get older?","query":"TITLE:\"hallmarks of aging\" AND HAS_ABSTRACT:Y"},
+  {"id":"sky","question":"Why is the sky blue?","query":"Why is the sky blue Rayleigh scattering","provider":"crossref"},
+  {"id":"rainbows","question":"How do rainbows form?","query":"rainbow physics refraction reflection dispersion","provider":"crossref"},
+  {"id":"photosynthesis","question":"How do plants turn sunlight into food?","query":"TITLE:\"photosynthesis\" AND TITLE_ABS:\"light energy\" AND HAS_ABSTRACT:Y"},
+  {"id":"gravity","question":"How does gravity keep planets in orbit?","query":"Newton gravitation planetary orbits Kepler","provider":"crossref"},
+  {"id":"tides","question":"Why does the ocean have tides?","query":"ocean tides gravitational forcing moon sun","provider":"crossref"},
+  {"id":"climate","question":"Why is Earth's climate getting warmer?","query":"attribution global warming greenhouse gases","provider":"crossref"},
+  {"id":"battery","question":"How does a battery store and release energy?","query":"lithium ion batteries working principles electrochemical energy storage","provider":"crossref"},
+  {"id":"inheritance","question":"How do we inherit traits from our parents?","query":"TITLE:\"Mendelian inheritance\" AND HAS_ABSTRACT:Y"}
+]

@@ -1,0 +1,5 @@
+__pycache__/
+candidates*.json
+reviewed*.json
+ingestion*.json
+*.tmp

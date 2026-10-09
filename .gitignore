@@ -1,4 +1,6 @@
 /local
+__pycache__/
+*.pyc
 
 # unsigned intermediates written by nanopubs/sign.sh
 nanopubs/signed/tmp/
